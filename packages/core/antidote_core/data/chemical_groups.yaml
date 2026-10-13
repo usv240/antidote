@@ -1,0 +1,101 @@
+# Chemical groups and seed active-ingredient list for Antidote.
+# STATUS: seed. Every who_class value is marked verify: true until it has been checked against the WHO 2019
+# classification PDF (data/corpus/guidelines/who_pesticide_hazard_classification_2019.pdf) and the page recorded.
+# Clinical statements (toxidrome, antidote) are NOT in this file. They are verbatim quotes retrieved from the
+# indexed guideline pages at run time and verified by the citation checker. This file only routes.
+version: "2026-10-13.1"
+groups:
+  - id: organophosphate
+    name: Organophosphate insecticide
+    antidote_exists: true
+    gate: none
+    retrieval_terms: ["organophosphorus", "organophosphate", "atropine", "pralidoxime", "cholinergic", "muscarinic", "oximes"]
+  - id: carbamate
+    name: Carbamate insecticide
+    antidote_exists: true
+    gate: none
+    retrieval_terms: ["carbamate", "atropine", "cholinergic", "carbofuran", "pralidoxime controversial"]
+  - id: pyrethroid
+    name: Synthetic pyrethroid insecticide
+    antidote_exists: false
+    gate: atropine-for-pyrethroid
+    retrieval_terms: ["pyrethroid", "supportive", "paraesthesia", "no specific antidote"]
+  - id: paraquat
+    name: Paraquat (bipyridyl herbicide)
+    antidote_exists: false
+    gate: atropine-for-paraquat
+    retrieval_terms: ["paraquat", "fuller's earth", "activated charcoal", "oxygen", "pulmonary fibrosis", "no specific antidote"]
+  - id: glyphosate
+    name: Glyphosate and glyphosate-surfactant herbicides
+    antidote_exists: false
+    gate: none
+    retrieval_terms: ["glyphosate", "surfactant", "supportive", "no specific antidote"]
+  - id: metal_phosphide
+    name: Metal phosphides (aluminium phosphide, zinc phosphide)
+    antidote_exists: false
+    gate: atropine-for-phosphide
+    retrieval_terms: ["aluminium phosphide", "zinc phosphide", "phosphine", "celphos", "supportive", "no specific antidote"]
+  - id: anticoagulant_rodenticide
+    name: Anticoagulant rodenticides
+    antidote_exists: true
+    gate: none
+    retrieval_terms: ["rodenticide", "anticoagulant", "vitamin K", "prothrombin", "INR", "brodifacoum", "bromadiolone"]
+  - id: neonicotinoid
+    name: Neonicotinoid insecticide
+    antidote_exists: false
+    gate: none
+    retrieval_terms: ["neonicotinoid", "imidacloprid", "supportive"]
+  - id: organochlorine
+    name: Organochlorine insecticide (banned in India; still encountered)
+    antidote_exists: false
+    gate: none
+    retrieval_terms: ["organochlorine", "endosulfan", "seizures", "benzodiazepine", "supportive"]
+  - id: phenoxy_herbicide
+    name: Phenoxy herbicides (2,4-D)
+    antidote_exists: false
+    gate: none
+    retrieval_terms: ["2,4-D", "phenoxy", "urinary alkalinisation", "supportive"]
+  - id: not_pesticide
+    name: Not a pesticide
+    antidote_exists: false
+    gate: identify-before-antidote
+    retrieval_terms: ["general approach", "unknown poison", "supportive"]
+
+# Seed active ingredients. who_class per WHO 2019 scheme: Ia extremely, Ib highly, II moderately, III slightly,
+# U unlikely to present acute hazard, FM fumigant not classified, O obsolete. verify: true until checked.
+active_ingredients:
+  - {name: chlorpyrifos, group: organophosphate, who_class: II, verify: true, india_status: restricted}
+  - {name: monocrotophos, group: organophosphate, who_class: Ib, verify: true, india_status: restricted}
+  - {name: phorate, group: organophosphate, who_class: Ia, verify: true, india_status: banned}
+  - {name: methyl parathion, group: organophosphate, who_class: Ia, verify: true, india_status: banned}
+  - {name: dichlorvos, group: organophosphate, who_class: Ib, verify: true, india_status: banned}
+  - {name: malathion, group: organophosphate, who_class: III, verify: true, india_status: registered}
+  - {name: dimethoate, group: organophosphate, who_class: II, verify: true, india_status: registered}
+  - {name: profenofos, group: organophosphate, who_class: II, verify: true, india_status: registered}
+  - {name: quinalphos, group: organophosphate, who_class: II, verify: true, india_status: registered}
+  - {name: triazophos, group: organophosphate, who_class: Ib, verify: true, india_status: banned}
+  - {name: phosphamidon, group: organophosphate, who_class: Ia, verify: true, india_status: banned}
+  - {name: acephate, group: organophosphate, who_class: III, verify: true, india_status: registered}
+  - {name: carbofuran, group: carbamate, who_class: Ib, verify: true, india_status: restricted}
+  - {name: carbaryl, group: carbamate, who_class: II, verify: true, india_status: banned}
+  - {name: methomyl, group: carbamate, who_class: Ib, verify: true, india_status: banned}
+  - {name: cypermethrin, group: pyrethroid, who_class: II, verify: true, india_status: registered}
+  - {name: deltamethrin, group: pyrethroid, who_class: II, verify: true, india_status: registered}
+  - {name: lambda-cyhalothrin, group: pyrethroid, who_class: II, verify: true, india_status: registered}
+  - {name: permethrin, group: pyrethroid, who_class: II, verify: true, india_status: registered}
+  - {name: fenvalerate, group: pyrethroid, who_class: II, verify: true, india_status: registered}
+  - {name: paraquat dichloride, group: paraquat, who_class: II, verify: true, india_status: restricted}
+  - {name: glyphosate, group: glyphosate, who_class: III, verify: true, india_status: restricted}
+  - {name: aluminium phosphide, group: metal_phosphide, who_class: FM, verify: true, india_status: restricted}
+  - {name: zinc phosphide, group: metal_phosphide, who_class: Ib, verify: true, india_status: registered}
+  - {name: brodifacoum, group: anticoagulant_rodenticide, who_class: Ia, verify: true, india_status: registered}
+  - {name: bromadiolone, group: anticoagulant_rodenticide, who_class: Ia, verify: true, india_status: registered}
+  - {name: imidacloprid, group: neonicotinoid, who_class: II, verify: true, india_status: registered}
+  - {name: acetamiprid, group: neonicotinoid, who_class: II, verify: true, india_status: registered}
+  - {name: thiamethoxam, group: neonicotinoid, who_class: U, verify: true, india_status: registered}
+  - {name: endosulfan, group: organochlorine, who_class: II, verify: true, india_status: banned}
+  - {name: "2,4-D", group: phenoxy_herbicide, who_class: II, verify: true, india_status: registered}
+  - {name: fipronil, group: other, who_class: II, verify: true, india_status: registered}
+  - {name: mancozeb, group: other, who_class: U, verify: true, india_status: registered}
+  - {name: urea, group: not_pesticide, who_class: null, verify: false, india_status: fertiliser}
+  - {name: NPK fertiliser, group: not_pesticide, who_class: null, verify: false, india_status: fertiliser}

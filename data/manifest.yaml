@@ -1,0 +1,37 @@
+version: "2026-10-13.1"
+sources:
+  - id: who-hazard-2019
+    title: "WHO Recommended Classification of Pesticides by Hazard, 2019 edition"
+    url: https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf
+    local_dir: data/corpus/guidelines
+    device_class: guideline
+    licence: "WHO; confirm CC BY-NC-SA 3.0 IGO on copyright page"
+    redistributable: false
+  - id: nhsrc-poison-module
+    title: "NHSRC/MoHFW Emergency Care for MO: General Approach to Poison Management"
+    url: https://nhsrcindia.org/sites/default/files/2022-11/Emergency%20Care%20for%20MO-%20General%20Approach%20to%20Poison%20Management.pdf
+    local_dir: data/corpus/guidelines
+    device_class: guideline
+    licence: "Government of India training material; reproduce with acknowledgement"
+    redistributable: false
+  - id: isccm-2024
+    title: "ISCCM 2024 position statement on acute poisoning"
+    url: https://www.ijccm.org/doi/pdf/10.5005/jp-journals-10071-24697
+    local_dir: data/corpus/guidelines
+    device_class: guideline
+    licence: "Open access journal article; quote with attribution"
+    redistributable: false
+  - id: insecticides-rules-1971
+    title: "Insecticides Rules 1971 (Rule 19 labelling)"
+    url: https://nhsrcindia.org/sites/default/files/2021-05/The%20Insecticides%20rules%201971.pdf
+    local_dir: data/corpus/registries
+    device_class: registry
+    licence: "Government of India"
+    redistributable: false
+  - id: cibrc-major-uses
+    title: "CIB&RC Major Uses of Pesticides: Insecticides (as on 31.03.2024)"
+    url: https://ppqs.gov.in/divisions/cib-rc/major-uses-of-pesticides
+    local_dir: data/corpus/registries
+    device_class: registry
+    licence: "Government of India; reproduce with acknowledgement"
+    redistributable: false

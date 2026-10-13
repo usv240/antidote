@@ -1,0 +1,78 @@
+version: "2026-10-13.1"
+# Deterministic clinical safety gates for Antidote. These fire before and after any model output.
+# The model never decides whether a gate fires. Every rule cites the document that justifies it.
+# Chemical-group gates are applied by the pipeline from the matched group (see antidote_core.pipeline);
+# the text patterns below catch the same errors if they appear in any generated or user text.
+rules:
+  - id: atropine-for-paraquat
+    action: block
+    severity: stop
+    stage: output
+    patterns:
+      - '^(?=.*\bparaquat\b)(?=.*\batropine\b).*$'
+    message: "Paraquat is not an organophosphate. Atropine has no role. There is no specific antidote; management is supportive and decontamination-focused per the national module."
+    citation: "NHSRC Emergency Care for MO: General Approach to Poison Management; ISCCM 2024 position statement"
+
+  - id: paraquat-oxygen
+    action: annotate
+    severity: caution
+    stage: output
+    patterns:
+      - '\bparaquat\b'
+    message: "Paraquat: avoid supplemental oxygen unless the patient is hypoxic, because oxygen accelerates lung injury. Follow the cited guideline text."
+    citation: "ISCCM 2024 position statement on acute poisoning (paraquat section)"
+
+  - id: atropine-for-pyrethroid
+    action: block
+    severity: stop
+    stage: output
+    patterns:
+      - '^(?=.*\b(pyrethroid|cypermethrin|deltamethrin|lambda-?cyhalothrin|permethrin|fenvalerate)\b)(?=.*\b(atropine|pralidoxime|2-PAM)\b).*$'
+    message: "Pyrethroids are not organophosphates. Atropine and pralidoxime are not indicated. Management is supportive."
+    citation: "NHSRC Emergency Care for MO: General Approach to Poison Management"
+
+  - id: atropine-for-phosphide
+    action: block
+    severity: stop
+    stage: output
+    patterns:
+      - '^(?=.*\b(aluminium phosphide|aluminum phosphide|zinc phosphide|celphos|phosphine)\b)(?=.*\b(atropine|pralidoxime|2-PAM|antidote is)\b).*$'
+    message: "Metal phosphides release phosphine. There is no specific antidote. Atropine is not indicated. Urgent supportive and critical care referral."
+    citation: "NHSRC Emergency Care for MO: General Approach to Poison Management; ISCCM 2024"
+
+  - id: no-numeric-dose-from-model
+    action: block
+    severity: stop
+    stage: output
+    patterns:
+      - '\b\d+(\.\d+)?\s?(mg|mcg|microgram|g|ml|units?|iu)\b(?![^|]*\|quote)'
+    message: "Antidote never generates doses. Numeric doses are shown only as verbatim quotes from the cited guideline page."
+    citation: "Antidote design rule"
+
+  - id: always-abc-first
+    action: annotate
+    severity: info
+    stage: output
+    patterns:
+      - '.*'
+    message: "Airway, breathing, circulation first. Call the National Poisons Information Centre, AIIMS: 1800-116-117."
+    citation: "NHSRC Emergency Care for MO: General Approach to Poison Management"
+
+  - id: induced-vomiting
+    action: block
+    severity: stop
+    stage: both
+    patterns:
+      - '\b(induce|make|cause)\b[^.]{0,20}\bvomit'
+      - '\bipecac\b'
+    message: "Do not induce vomiting in pesticide ingestion. Risk of aspiration and, for hydrocarbon solvents, chemical pneumonitis."
+    citation: "NHSRC Emergency Care for MO: General Approach to Poison Management (decontamination section)"
+
+  - id: identify-before-antidote
+    action: annotate
+    severity: caution
+    stage: output
+    patterns:
+      - '\b(unknown|unidentified|could not (identify|read)|low confidence)\b'
+    message: "Product not confidently identified. Treat the patient, not the bottle: manage the toxidrome you see and call the poison centre before any specific antidote."
+    citation: "Antidote design rule; NHSRC module syndromic approach"

@@ -1,0 +1,43 @@
+[project]
+name = "antidote"
+version = "0.1.0"
+description = "Pesticide-label photo to cited poisoning guidance and medico-legal record, for emergency doctors. Nebius Token Factory + NVIDIA Nemotron 3."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "Apache-2.0" }
+dependencies = [
+    "openai>=1.60",
+    "pydantic>=2.9",
+    "pydantic-settings>=2.6",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "httpx>=0.27",
+    "pyyaml>=6.0",
+    "python-multipart>=0.0.12",
+    "tavily-python>=0.5",
+    "pymupdf>=1.24",
+    "lancedb>=0.15",
+    "rank-bm25>=0.2",
+    "rapidfuzz>=3.10",
+    "orjson>=3.10",
+    "rich>=13.9",
+    "typer>=0.12",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3", "pytest-asyncio>=0.24", "ruff>=0.7", "mypy>=1.13"]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+extend-ignore = ["B008"]  # typer.Option in defaults is the documented typer pattern
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["packages/llm", "packages/core", "packages/rules", "packages/retrieval", "packages/vision", "packages/eval", "apps/api"]
+asyncio_mode = "auto"
