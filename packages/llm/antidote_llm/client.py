@@ -101,7 +101,7 @@ class TokenFactoryClient:
         }
         if tools:
             kwargs["tools"] = tools
-            kwargs["tool_choice"] = tool_choice or "required"
+            kwargs["tool_choice"] = "required" if self.offline_base_url else (tool_choice or "required")
         t0 = time.perf_counter()
         resp = client.chat.completions.create(**kwargs)
         latency_ms = int((time.perf_counter() - t0) * 1000)
