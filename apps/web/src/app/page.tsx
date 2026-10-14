@@ -22,7 +22,7 @@ export default function Landing() {
         </div>
         <div className="flex flex-wrap gap-3">
           <Link href="/try?sample=chlorpyrifos" className="btn-primary">Try it on a sample bottle</Link>
-          <a href="https://youtube.com" className="btn-ghost" target="_blank" rel="noreferrer">Watch the 3-minute video</a>
+          {process.env.NEXT_PUBLIC_VIDEO_URL ? <a href={process.env.NEXT_PUBLIC_VIDEO_URL} className="btn-ghost" target="_blank" rel="noreferrer">Watch the 3-minute video</a> : null}
         </div>
         <p className="text-sm text-fg-muted">Decision support for trained clinicians. Airway, breathing, circulation first. National Poisons Information Centre, AIIMS: 1800-116-117.</p>
       </section>

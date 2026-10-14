@@ -1,4 +1,5 @@
 import { Info } from "@/components/info";
+import { UploadProtocol } from "@/components/upload-protocol";
 
 export const metadata = { title: "Data and bring your own" };
 
@@ -17,8 +18,8 @@ export default function DataPage() {
       </section>
       <section className="card space-y-3">
         <h2 className="font-semibold">Bring your own data</h2>
-        <p className="text-sm text-fg-muted">Three uploads make Antidote yours: the hospital antidote stock list (the card then says what is in stock here), a state or hospital protocol (cited beside the national one, labelled local), and a CSV of regional-language brand names to registration numbers. Workspace-scoped, exportable, deletable. Available once accounts are enabled on the hosted demo; locally, drop files into <code>data/corpus/</code> and run <code>make ingest</code>.</p>
-        <button className="btn-ghost" disabled aria-disabled>Upload (hosted accounts coming)</button>
+        <p className="text-sm text-fg-muted">Three uploads make Antidote yours: the hospital antidote stock list (the card then says what is in stock here), a state or hospital protocol (cited beside the national one, labelled local), and a CSV of regional-language brand names to registration numbers. Workspace-scoped, exportable, deletable. A protocol PDF is indexed and cited as a local source from the next card; a stock CSV (name,quantity) is stored for the workspace.</p>
+        <UploadProtocol />
       </section>
     </div>
   );

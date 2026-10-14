@@ -30,6 +30,59 @@ for _env in (ROOT / ".env", ROOT.parent / ".env"):
 app = FastAPI(title="Antidote API", version="0.1.0", description="Photograph a pesticide label; get the chemical, its WHO hazard class, cited poisoning guidance or an explicit stop, and a medico-legal register row. Decision support for trained clinicians.")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
+# --- API keys and rate limiting (simple, file-backed; enough for a hosted demo) ---
+import hashlib
+import secrets
+from collections import defaultdict, deque
+
+from fastapi import Request
+from fastapi.responses import JSONResponse
+
+KEYS_FILE = ROOT / "data/api_keys.json"
+REQUIRE_KEY = os.environ.get("ANTIDOTE_REQUIRE_KEY", "0") == "1"
+RATE_LIMIT_PER_MIN = int(os.environ.get("ANTIDOTE_RATE_LIMIT_PER_MIN", "30"))
+_hits: dict[str, deque] = defaultdict(deque)
+
+
+def _key_hashes() -> set[str]:
+    if not KEYS_FILE.exists():
+        return set()
+    return {k["hash"] for k in json.loads(KEYS_FILE.read_text(encoding="utf-8"))}
+
+
+@app.middleware("http")
+async def keys_and_limits(request: Request, call_next):
+    path = request.url.path
+    if path.startswith("/v1/"):
+        ident = request.headers.get("x-api-key") or (request.client.host if request.client else "anon")
+        if REQUIRE_KEY and path != "/v1/keys":
+            key = request.headers.get("x-api-key", "")
+            if hashlib.sha256(key.encode()).hexdigest() not in _key_hashes():
+                return JSONResponse({"error": "API key required: POST /v1/keys to create one, then send X-API-Key"}, status_code=401)
+        now = time.time()
+        q = _hits[ident]
+        while q and q[0] < now - 60:
+            q.popleft()
+        if len(q) >= RATE_LIMIT_PER_MIN:
+            return JSONResponse({"error": f"rate limit: {RATE_LIMIT_PER_MIN} requests per minute"}, status_code=429)
+        q.append(now)
+    return await call_next(request)
+
+
+class KeyBody(BaseModel):
+    label: str = "demo"
+
+
+@app.post("/v1/keys")
+def create_key(body: KeyBody) -> dict[str, Any]:
+    """Issue an API key. Only the SHA-256 hash is stored; the key is shown once."""
+    key = "antidote_" + secrets.token_urlsafe(24)
+    keys = json.loads(KEYS_FILE.read_text(encoding="utf-8")) if KEYS_FILE.exists() else []
+    keys.append({"label": body.label, "hash": hashlib.sha256(key.encode()).hexdigest(), "created_at": time.time()})
+    KEYS_FILE.write_text(json.dumps(keys, indent=1), encoding="utf-8")
+    return {"key": key, "label": body.label, "note": "Shown once. Send as X-API-Key. Required when ANTIDOTE_REQUIRE_KEY=1 on the server."}
+
+
 LEDGER = Ledger(ROOT / "data/ledger.db")
 STORE = PageStore(ROOT / "data/index/antidote.db")
 REGISTRY = ChemRegistry()
@@ -148,3 +201,34 @@ def evals_latest() -> dict[str, Any]:
 @app.get("/v1/costs")
 def costs() -> dict[str, Any]:
     return LEDGER.totals()
+
+
+@app.post("/v1/upload-protocol")
+async def upload_protocol(file: UploadFile = File(...), kind: str = "protocol", workspace: str = "demo") -> dict[str, Any]:
+    """Bring your own data: a state or hospital protocol (PDF) is indexed into the workspace and cited beside the national module, labelled local.
+    kind=stock accepts a CSV of antidote stock (name,quantity) that the card uses to say what is on the shelf here."""
+    import csv as _csv
+    import hashlib as _h
+    import io as _io
+    import re as _re
+
+    raw = await file.read()
+    dest = ROOT / "data/corpus/uploads" / workspace
+    dest.mkdir(parents=True, exist_ok=True)
+    safe = _re.sub(r"[^A-Za-z0-9._-]+", "-", file.filename or "upload")[:120]
+    (dest / safe).write_bytes(raw)
+    if kind == "stock":
+        rows = list(_csv.DictReader(_io.StringIO(raw.decode("utf-8", errors="replace"))))
+        (dest / "stock.json").write_text(json.dumps(rows, indent=1), encoding="utf-8")
+        return {"kind": "stock", "items": len(rows), "workspace": workspace}
+    if not safe.lower().endswith(".pdf"):
+        raise HTTPException(400, "upload a PDF protocol or a CSV stock list with kind=stock")
+    import fitz
+
+    pages: list[tuple[int, str]] = []
+    with fitz.open(dest / safe) as doc:
+        for i, pg in enumerate(doc, start=1):
+            pages.append((i, _re.sub(r"[ 	]+", " ", pg.get_text("text") or "").strip()))
+    doc_id = f"local-{workspace}-" + _re.sub(r"[^a-z0-9]+", "-", safe.lower().rsplit(".", 1)[0])[:60]
+    STORE.add_doc(doc_id=doc_id, title=f"{safe} (local protocol, workspace {workspace})", path=str(dest / safe), device_class="guideline", device_ids=[], licence="Uploaded by the workspace owner; indexed locally only", source_url="", sha256=_h.sha256(raw).hexdigest(), pages=pages, ingested_at=time.time())
+    return {"kind": "protocol", "doc_id": doc_id, "pages": len(pages), "workspace": workspace, "note": "Cited beside the national module as a local source from the next card onward."}
