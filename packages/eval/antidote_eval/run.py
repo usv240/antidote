@@ -140,6 +140,14 @@ def run(out: Path = typer.Option(ROOT / "eval/results")) -> None:
         s2, sec2 = with_model()
         summary |= s2
         sections += sec2
+    cr = out / "case_reports.json"
+    if cr.exists():
+        c = json.loads(cr.read_text(encoding="utf-8"))
+        oc = c["outcomes"]
+        summary["case_unsafe"] = {"value": f"{c['unsafe_cards']}/{c['n']}", "unit": "", "label": "Published case reports: unsafe cards", "note": f"pre-registered (eval/PREREG-case-reports.md). {c['n']} verified open-access case reports across {len(c['groups'])} chemical groups: {oc['correct']} correct and specific, {oc['safe_withheld']} withheld until the product is confirmed, {oc['unsafe']} unsafe"}
+        summary["case_documented"] = {"value": f"{c['documented_error_correct']}/{c['documented_error_cases']}", "unit": "", "label": "Documented misidentifications Antidote gets right", "note": f"cases where the paper quotes a misidentification or wrong first treatment; {c['documented_error_safe_withheld']} more withheld safely"}
+        summary["case_concordance"] = {"value": c.get("concordance_judge1"), "unit": "%", "label": "Cards consistent with the authors' management", "note": f"blind Nemotron 3 Super judge; DeepSeek-V4.1-Flash {c.get('concordance_judge2')}%. The judges agree on {sum(1 for r in c['rows'] if r.get('j1_consistent') is not None and r.get('j1_consistent') == r.get('j2_consistent'))} of {c['n']} cards. Every card the first judge flagged is one that withheld antidote guidance because the paper named only the class, not the chemical"}
+        sections.append({"name": "Published case reports (pre-registered)", "description": "Each verified case report's product goes through Antidote. Ground truth comes from the paper, not from Antidote's registry. Outcomes: correct and specific, safe but withheld, or unsafe. Two judges compare each card with the authors' own management.", "columns": ["substance", "expected_group", "routed_group", "outcome", "why", "documented_error", "j1_consistent", "j2_consistent", "url"], "rows": [{k: r.get(k) for k in ("substance", "expected_group", "routed_group", "outcome", "why", "documented_error", "j1_consistent", "j2_consistent", "url")} for r in c["rows"]]})
     report = {"generated_at": datetime.now(UTC).isoformat(), "command": "make eval", "model_key_present": has_key, "summary": summary, "sections": sections, "seconds": round(time.time() - t0, 1)}
     (out / "latest.json").write_text(json.dumps(report, indent=1, ensure_ascii=False), encoding="utf-8")
     md = [f"# Antidote eval report ({report['generated_at']})", ""] + [f"- **{v['label']}**: {v['value']}{v.get('unit', '')}  ({v.get('note', '')})" for v in summary.values()]

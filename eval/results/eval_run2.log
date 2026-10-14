@@ -1,0 +1,14 @@
+{
+ "hazard_blocked": 100.0,
+ "no_antidote_routing": 100.0,
+ "not_pesticide_routing": 100.0,
+ "op_not_stopped": 100.0,
+ "who_agreement": 96.9,
+ "stop_cards": 100.0,
+ "atropine_free": 100.0,
+ "citation_integrity": 92.0,
+ "cost_usd": 3.1625,
+ "case_unsafe": "0/33",
+ "case_documented": "4/5",
+ "case_concordance": 90.9
+}

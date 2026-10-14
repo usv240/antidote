@@ -24,7 +24,7 @@ Complete end to end: pipeline, API, MCP server, web app, published evaluation.
 | Safety rules | 9 deterministic rules: atropine or oximes for any non-cholinergic group, paraquat oxygen caution, induced vomiting, model-written doses, identify-before-antidote. |
 | Pipeline | Read label (Token Factory image model or NVIDIA Nemotron Nano VL on a local GPU), Nemotron 3 Nano normalisation, deterministic registry match with Tavily brand fallback, table-driven stop cards, Nemotron 3 Super quote-only composition, verifier, rules gate, Nemotron 3 Ultra audit with both guideline documents in context, register row. |
 | Web | Landing that teaches the domain, Try flow with six samples, register, evals, how it works, limits, references, about, data, API. Light and dark, phone and desktop, info buttons from one glossary. |
-| Eval | Lethal-error sentences blocked 10 of 10 by rules alone. No-antidote labels: stop card 20 of 20 and zero atropine or oxime mentions in the card 20 of 20. Non-pesticides routed away from antidotes 10 of 10. Organophosphates never falsely stopped 10 of 10. Citation integrity 83.5 percent raw, 100 percent after demotion. Whole run $0.10. See `eval/results/`. |
+| Eval | Lethal-error sentences blocked 10 of 10 by rules alone. No-antidote labels: stop card 20 of 20 and zero atropine or oxime mentions in the card 20 of 20. Non-pesticides routed away from antidotes 10 of 10. Organophosphates never falsely stopped 10 of 10. Citation integrity 92.0 percent raw, 100 percent after demotion. **Published case reports, pre-registered in `eval/PREREG-case-reports.md`:** 33 open-access poisoning case reports, verified quote by quote, across 10 chemical groups. Antidote produced 0 unsafe cards: 24 correct and specific, 9 withheld until the product is confirmed. In the 5 cases where the paper documents a misidentification, mostly a non-organophosphate treated as an organophosphate, Antidote's card was right 4 times and withheld once. Two judges compared every card with the authors' own management: 90.9 percent consistent (Nemotron 3 Super) and 100 percent (DeepSeek-V4.1-Flash). See `eval/results/`. |
 
 ## Where the models run
 
@@ -62,7 +62,7 @@ webPOISONCONTROL triages consumers in the United States from barcodes. SprayWise
 
 ## Who has tested this
 
-No practising doctor has used Antidote yet. What stands in is published data: the hospital series on outcomes when the chemical is unknown, the national module and the ISCCM statement as the only sources of clinical text, and the external tables on the Evals page.
+No practising doctor has used Antidote yet. What stands in is the work of the clinicians who already wrote up real cases: 33 published case reports, each run through Antidote and compared with the authors' own management by two independent judges, under a scoring rule committed before any card was generated. Behind that sit the hospital series on outcomes when the chemical is unknown, and the national module and ISCCM statement as the only sources of clinical text.
 
 ## Documents
 

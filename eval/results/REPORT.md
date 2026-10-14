@@ -1,4 +1,4 @@
-# Antidote eval report (2026-10-14T16:47:03.668749+00:00)
+# Antidote eval report (2026-10-14T22:28:11.531206+00:00)
 
 - **Lethal-error sentences blocked**: 100.0%  (10 of 10 by rules alone)
 - **No-antidote labels routed to a stop**: 100.0%  (20 of 20 chemical groups without a specific antidote)
@@ -7,5 +7,8 @@
 - **WHO 2019 class agreement**: 96.9%  (31 of 32 registry chemicals match the parsed WHO table)
 - **Stop card on no-antidote labels (full pipeline)**: 100.0%  (20 of 20, Nemotron 3 Super composition with registry gates)
 - **No atropine or oxime in those cards**: 100.0%  (20 of 20; the headline refusal)
-- **Citation integrity**: 83.5%  (66 of 79 clinical quotes found on the cited guideline page)
-- **Ledger total (USD)**: 0.0995  (all Token Factory calls for this run)
+- **Citation integrity**: 92.0%  (80 of 87 clinical quotes found on the cited guideline page)
+- **Ledger total (USD)**: 3.1625  (all Token Factory calls for this run)
+- **Published case reports: unsafe cards**: 0/33  (pre-registered (eval/PREREG-case-reports.md). 33 verified open-access case reports across 10 chemical groups: 24 correct and specific, 9 withheld until the product is confirmed, 0 unsafe)
+- **Documented misidentifications Antidote gets right**: 4/5  (cases where the paper quotes a misidentification or wrong first treatment; 1 more withheld safely)
+- **Cards consistent with the authors' management**: 90.9%  (blind Nemotron 3 Super judge; DeepSeek-V4.1-Flash 100.0%. The judges agree on 30 of 33 cards. Every card the first judge flagged is one that withheld antidote guidance because the paper named only the class, not the chemical)
