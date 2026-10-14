@@ -182,11 +182,10 @@ class AntidotePipeline:
     def _gate(self, card: ManagementCard, hits_out: list[RuleHit]) -> ManagementCard:
         for sec, _i, s in self._sentences(card):
             text = f"{s.text}"
-            if s.kind == "explanation":
-                # explanations may not carry doses or drug names; demote offenders
-                if re.search(r"\b\d+(\.\d+)?\s?(mg|mcg|g|ml|iu|units?)\b", text, re.IGNORECASE) or re.search(r"\b(atropine|pralidoxime|oxime|vitamin k|naloxone)\b", text, re.IGNORECASE):
-                    s.text = "(removed: explanation sentences may not contain drug names or doses)"
-                    continue
+            # explanations may not carry doses or drug names; demote offenders
+            if s.kind == "explanation" and (re.search(r"\b\d+(\.\d+)?\s?(mg|mcg|g|ml|iu|units?)\b", text, re.IGNORECASE) or re.search(r"\b(atropine|pralidoxime|oxime|vitamin k|naloxone)\b", text, re.IGNORECASE)):
+                s.text = "(removed: explanation sentences may not contain drug names or doses)"
+                continue
             hits = self.rules.check(text, "output")
             hits_out.extend(hits)
             if self.rules.blocks(hits):
