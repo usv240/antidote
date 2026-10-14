@@ -47,20 +47,26 @@ def _extract_pages(path: Path) -> list[tuple[int, str]]:
 
 
 def _text_pages(path: Path, size: int = 2500) -> list[tuple[int, str]]:
-    """Text fetched via Tavily extract (no page numbers): split into fixed chunks so citations stay checkable."""
+    """Tavily-extracted text: fixed-size chunks at paragraph or sentence boundaries, so citations stay checkable."""
     text = path.read_text(encoding="utf-8")
-    chunks: list[tuple[int, str]] = []
+    units: list[str] = []
+    for para in re.split(r"\n{2,}", text):
+        if len(para) <= size:
+            units.append(para)
+        else:
+            units.extend(s for s in re.split(r"(?<=[.!?])\s+", para) if s)
+    out: list[tuple[int, str]] = []
     buf: list[str] = []
     n = 0
-    for para in re.split(r"\n{2,}", text):
-        if n + len(para) > size and buf:
-            chunks.append((len(chunks) + 1, "\n\n".join(buf)))
+    for u in units:
+        if n + len(u) > size and buf:
+            out.append((len(out) + 1, " ".join(buf)))
             buf, n = [], 0
-        buf.append(para)
-        n += len(para)
+        buf.append(u)
+        n += len(u) + 1
     if buf:
-        chunks.append((len(chunks) + 1, "\n\n".join(buf)))
-    return chunks
+        out.append((len(out) + 1, " ".join(buf)))
+    return out
 
 
 def _guess_device_ids(title: str, registry: dict) -> list[str]:
