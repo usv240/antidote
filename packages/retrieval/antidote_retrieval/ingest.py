@@ -46,6 +46,28 @@ def _extract_pages(path: Path) -> list[tuple[int, str]]:
     return pages
 
 
+def _text_pages(path: Path, size: int = 2500) -> list[tuple[int, str]]:
+    """Text fetched via Tavily extract (no page numbers): split into fixed chunks so citations stay checkable."""
+    text = path.read_text(encoding="utf-8")
+    chunks: list[tuple[int, str]] = []
+    buf: list[str] = []
+    n = 0
+    for para in re.split(r"
+{2,}", text):
+        if n + len(para) > size and buf:
+            chunks.append((len(chunks) + 1, "
+
+".join(buf)))
+            buf, n = [], 0
+        buf.append(para)
+        n += len(para)
+    if buf:
+        chunks.append((len(chunks) + 1, "
+
+".join(buf)))
+    return chunks
+
+
 def _guess_device_ids(title: str, registry: dict) -> list[str]:
     """Map a document title to device ids using the alias lists in devices.yaml."""
     t = title.lower()
@@ -75,14 +97,14 @@ def run(
             continue
         if only_class and src.get("device_class") != only_class:
             continue
-        for pdf in sorted(Path(local_dir).glob("*.pdf")):
+        for pdf in sorted([*Path(local_dir).glob("*.pdf"), *Path(local_dir).glob("*.txt")]):
             try:
                 sha = _sha(pdf)
                 doc_id = _doc_id(pdf)
                 if store.has_doc(doc_id, sha):
                     report["skipped"] += 1
                     continue
-                pages = _extract_pages(pdf)
+                pages = _extract_pages(pdf) if pdf.suffix.lower() == ".pdf" else _text_pages(pdf)
                 empties = sum(1 for _, t in pages if len(t) < 40)
                 report["empty_text_pages"] += empties
                 store.add_doc(

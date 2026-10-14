@@ -35,3 +35,10 @@ sources:
     device_class: registry
     licence: "Government of India; reproduce with acknowledgement"
     redistributable: false
+  - id: tavily-extract-texts
+    title: "Text fetched via Tavily extract: WHO 2019 classification, CIB&RC Major Uses (insecticides, herbicides)"
+    url: https://docs.tavily.com/documentation/api-reference/endpoint/extract
+    local_dir: data/corpus/tavily_extract
+    device_class: registry
+    licence: "WHO (confirm CC BY-NC-SA 3.0 IGO); Government of India reproduce with acknowledgement"
+    redistributable: false

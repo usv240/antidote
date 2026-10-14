@@ -44,10 +44,24 @@ TRIANGLE = {
 
 
 class ChemRegistry:
-    def __init__(self, path: Path = DATA / "chemical_groups.yaml"):
+    def __init__(self, path: Path = DATA / "chemical_groups.yaml", who_csv: Path = DATA / "who_hazard_2019.csv"):
         doc = yaml.safe_load(path.read_text(encoding="utf-8"))
         self.groups = {g["id"]: g for g in doc["groups"]}
         self.ais = doc["active_ingredients"]
+        self.who: dict[str, dict] = {}
+        if who_csv.exists():
+            import csv
+
+            with who_csv.open(encoding="utf-8") as f:
+                for row in csv.DictReader(f):
+                    self.who[row["active_ingredient"].lower()] = row
+        # The parsed WHO 2019 table overrides the seed class and clears the verify flag, with a source line as citation.
+        for a in self.ais:
+            w = self.who.get(a["name"].lower()) or self.who.get(a["name"].lower().replace(" dichloride", ""))
+            if w:
+                a["who_class"] = w["who_class"]
+                a["verify"] = False
+                a["who_source"] = {"doc": "who-hazard-2019", "line": int(w["source_line"])}
         self.names = [a["name"].lower() for a in self.ais]
 
     def group(self, group_id: str) -> dict | None:
