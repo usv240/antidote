@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { apiUrl } from "@/lib/api";
+import { UPLOAD_LIMIT_BYTES, UPLOAD_LIMIT_NOTE } from "@/lib/image";
 
 export function UploadProtocol() {
   const [kind, setKind] = useState<"protocol" | "stock">("protocol");
@@ -9,6 +10,7 @@ export function UploadProtocol() {
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<{ doc_id?: string; pages?: number; items?: number; note?: string; error?: string; detail?: string } | null>(null);
   async function upload(file: File) {
+    if (file.size > UPLOAD_LIMIT_BYTES) { setResult({ error: UPLOAD_LIMIT_NOTE }); return; }
     setBusy(true); setResult(null);
     const fd = new FormData(); fd.append("file", file);
     try { const r = await fetch(apiUrl(`/v1/upload-protocol?kind=${kind}&workspace=${encodeURIComponent(workspace)}`), { method: "POST", body: fd }); setResult(await r.json()); }

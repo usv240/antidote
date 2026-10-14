@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { ShieldAlert, Phone, FileText } from "lucide-react";
 import { apiUrl } from "@/lib/api";
+import { downscaleImage } from "@/lib/image";
 import { SAMPLES } from "@/lib/samples";
 import { Info } from "@/components/info";
 
@@ -49,8 +50,10 @@ export function TryFlow() {
 
   async function readPhoto(file: File) {
     setBusy("Reading the label…");
-    const fd = new FormData(); fd.append("image", file);
-    const r = await fetch(apiUrl("/v1/read-label"), { method: "POST", body: fd }); const j = await r.json();
+    const fd = new FormData(); fd.append("image", await downscaleImage(file), "label.jpg");
+    const r = await fetch(apiUrl("/v1/read-label"), { method: "POST", body: fd });
+    if (!r.ok) { setReadMode(r.status === 413 ? "photo too large for the hosted API; type the label fields instead" : `label reader unavailable (${r.status})`); setBusy(null); return; }
+    const j = await r.json();
     setReadMode(j.mode);
     if (j.fields && Object.keys(j.fields).length) {
       setLabel(j.fields);
