@@ -52,19 +52,14 @@ def _text_pages(path: Path, size: int = 2500) -> list[tuple[int, str]]:
     chunks: list[tuple[int, str]] = []
     buf: list[str] = []
     n = 0
-    for para in re.split(r"
-{2,}", text):
+    for para in re.split(r"\n{2,}", text):
         if n + len(para) > size and buf:
-            chunks.append((len(chunks) + 1, "
-
-".join(buf)))
+            chunks.append((len(chunks) + 1, "\n\n".join(buf)))
             buf, n = [], 0
         buf.append(para)
         n += len(para)
     if buf:
-        chunks.append((len(chunks) + 1, "
-
-".join(buf)))
+        chunks.append((len(chunks) + 1, "\n\n".join(buf)))
     return chunks
 
 
