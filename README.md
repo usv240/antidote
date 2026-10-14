@@ -8,6 +8,10 @@ Built for the Nebius x NVIDIA Global AI Hackathon on **Nebius Token Factory** wi
 
 Decision support for trained clinicians. Airway, breathing, circulation first. National Poisons Information Centre, AIIMS: 1800-116-117.
 
+## Live
+
+Web: https://antidote-bay.vercel.app. API: https://antidote-api.vercel.app (OpenAPI docs at `/docs`). Both run on Vercel's free plan; the API is a Python function with a 300 second budget, enough for the Nemotron 3 Ultra audit.
+
 ## Status
 
 Complete end to end: pipeline, API, MCP server, web app, published evaluation.

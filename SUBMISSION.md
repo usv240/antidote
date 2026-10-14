@@ -33,7 +33,7 @@ Antidote stock lists per hospital, state protocols, regional-language brand alia
 See FEEDBACK.md in the repository.
 
 ## Links
-Repository: https://github.com/usv240/antidote (Apache-2.0). Demo: (hosted URL). Video: (YouTube URL).
+Repository: https://github.com/usv240/antidote (Apache-2.0). Demo: https://antidote-bay.vercel.app (API and OpenAPI docs: https://antidote-api.vercel.app/docs). Video: (YouTube URL).
 
 ## Built With
 nebius-token-factory, nvidia-nemotron-3-nano, nvidia-nemotron-3-super, nvidia-nemotron-3-ultra, nvidia-nemotron-nano-vl, tavily, hermes-agent, mcp, fastapi, nextjs, sqlite

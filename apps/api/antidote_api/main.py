@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 from antidote_core import ChemRegistry
+from antidote_core.paths import data_dir
 from antidote_core.pipeline import NPIC, AntidotePipeline
 from antidote_core.schemas import MLCRecord
 from antidote_llm import Ledger, TokenFactoryClient
@@ -20,6 +21,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 ROOT = Path(__file__).resolve().parents[3]
+DATA = data_dir()
 for _env in (ROOT / ".env", ROOT.parent / ".env"):
     if _env.exists():
         for line in _env.read_text(encoding="utf-8").splitlines():
@@ -38,7 +40,7 @@ from collections import defaultdict, deque
 from fastapi import Request
 from fastapi.responses import JSONResponse
 
-KEYS_FILE = ROOT / "data/api_keys.json"
+KEYS_FILE = DATA / "api_keys.json"
 REQUIRE_KEY = os.environ.get("ANTIDOTE_REQUIRE_KEY", "0") == "1"
 RATE_LIMIT_PER_MIN = int(os.environ.get("ANTIDOTE_RATE_LIMIT_PER_MIN", "30"))
 _hits: dict[str, deque] = defaultdict(deque)
@@ -83,15 +85,15 @@ def create_key(body: KeyBody) -> dict[str, Any]:
     return {"key": key, "label": body.label, "note": "Shown once. Send as X-API-Key. Required when ANTIDOTE_REQUIRE_KEY=1 on the server."}
 
 
-LEDGER = Ledger(ROOT / "data/ledger.db")
-STORE = PageStore(ROOT / "data/index/antidote.db")
+LEDGER = Ledger(DATA / "ledger.db")
+STORE = PageStore(DATA / "index/antidote.db")
 REGISTRY = ChemRegistry()
 try:
     CLIENT: TokenFactoryClient | None = TokenFactoryClient(ledger=LEDGER)
 except RuntimeError:
     CLIENT = None
 PIPE = AntidotePipeline(CLIENT, STORE, REGISTRY)
-RECORDS = ROOT / "data/mlc_register.jsonl"
+RECORDS = DATA / "mlc_register.jsonl"
 
 LABEL_PROMPT = (
     "You are reading a photo of a pesticide container label for a doctor. Return ONLY a JSON object with keys: product_name, "
@@ -129,6 +131,13 @@ def _result_json(res) -> dict[str, Any]:
         "npic": NPIC,
         "trace": LEDGER.trace(res.trace_id),
     }
+
+
+@app.get("/", include_in_schema=False)
+def root():
+    from fastapi.responses import RedirectResponse
+
+    return RedirectResponse("/docs", status_code=307)
 
 
 @app.get("/health")
@@ -213,7 +222,7 @@ async def upload_protocol(file: UploadFile = File(...), kind: str = "protocol", 
     import re as _re
 
     raw = await file.read()
-    dest = ROOT / "data/corpus/uploads" / workspace
+    dest = DATA / "uploads" / workspace
     dest.mkdir(parents=True, exist_ok=True)
     safe = _re.sub(r"[^A-Za-z0-9._-]+", "-", file.filename or "upload")[:120]
     (dest / safe).write_bytes(raw)
