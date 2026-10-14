@@ -196,7 +196,7 @@ def judge1(client: TokenFactoryClient, mgmt: str, card: str) -> bool | None:
 
 def judge2(key: str, mgmt: str, card: str) -> bool | None:
     try:
-        r = httpx.post(f"{SECOND_BASE}chat/completions", headers={"Authorization": f"Bearer {key}"}, timeout=120, json={"model": SECOND_JUDGE, "temperature": 0, "max_tokens": 400, "messages": _judge_prompt(mgmt, card)})
+        r = httpx.post(f"{SECOND_BASE}chat/completions", headers={"Authorization": f"Bearer {key}"}, timeout=120, json={"model": SECOND_JUDGE, "temperature": 0, "max_tokens": 2500, "messages": _judge_prompt(mgmt, card)})
         t = (r.json()["choices"][0]["message"]["content"] or "").strip().upper()
         return t.startswith("CONSISTENT") if t else None
     except Exception:  # noqa: BLE001
@@ -242,6 +242,7 @@ def run(out: Path = typer.Option(ROOT / "eval/results/case_reports.json"), audit
             "j1_consistent": judge1(client, c["management_quote"] + " " + c["authors_management"], card) if card else None,
             "j2_consistent": judge2(key, c["management_quote"] + " " + c["authors_management"], card) if card else None,
             "citations": f"{res.citation_report.get('verified', 0)}/{res.citation_report.get('total', 0)}",
+            "card": card,
         })
         print(f"  {i}/{len(cases)} {c['substance'][:24]:24s} {outcome:14s} {why[:60]}", flush=True)
     n = len(rows)
