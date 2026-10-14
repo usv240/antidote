@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { TryFlow } from "@/components/try-flow";
 
-export const metadata = { title: "Try Sieve" };
+export const metadata = { title: "Try Antidote" };
 
 export default function TryPage() {
   return (

@@ -8,6 +8,7 @@ import { StatusStrip } from "@/components/status-strip";
 const nav = [
   { href: "/try", label: "Try it" },
   { href: "/how-it-works", label: "How it works" },
+  { href: "/register", label: "Register" },
   { href: "/evals", label: "Evals" },
   { href: "/api", label: "API" },
   { href: "/limits", label: "Limits" },
