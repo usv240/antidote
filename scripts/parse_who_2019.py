@@ -16,10 +16,10 @@ from pathlib import Path
 SRC = Path("data/corpus/tavily_extract/who2019.txt")
 OUT = Path("packages/core/antidote_core/data/who_hazard_2019.csv")
 
-TABLE_RE = re.compile(r"^\s*>?\s*Table\s*(\d)?\.?\s*(EXTREMELY|HIGHLY|MODERATELY|SLIGHTLY|Technical grade active ingredients pesticides unlikely)", re.IGNORECASE)
-CLASS_BY_WORD = {"EXTREMELY": "Ia", "HIGHLY": "Ib", "MODERATELY": "II", "SLIGHTLY": "III", "TECHNICAL GRADE ACTIVE INGREDIENTS PESTICIDES UNLIKELY": "U"}
-ROW_RE = re.compile(r"^>\s*(?P<name>[A-Za-z][A-Za-z0-9,\-\(\)' /]+?)\s*\[ISO\]\s*(?P<cas>\d{2,7}-\d{2}-\d)\b(?P<rest>.*)$")
-WRAP_RE = re.compile(r"^>\s*\[ISO\]\s*(?P<cas>\d{2,7}-\d{2}-\d)\b(?P<rest>.*)$")
+TABLE_RE = re.compile(r"^\s*>?\s*Table\s*(\d)?\.?\s*(EXTREMELY|HIGHLY|MODERATELY|SLIGHTLY|Technical grade active ingredients (?:of )?pesticides unlikely)", re.IGNORECASE)
+CLASS_BY_WORD = {"EXTREMELY": "Ia", "HIGHLY": "Ib", "MODERATELY": "II", "SLIGHTLY": "III", "TECHNICAL GRADE ACTIVE INGREDIENTS PESTICIDES UNLIKELY": "U", "TECHNICAL GRADE ACTIVE INGREDIENTS OF PESTICIDES UNLIKELY": "U"}
+ROW_RE = re.compile(r"^>\s*(?P<name>[A-Za-z0-9][A-Za-z0-9,\-\(\)' /]+?)\s*(?:\[(?:ISO|C|BSI|ESA|ANSI|JMAF)\]\s*)?(?P<cas>\d{2,7}-\d{2}-\d)\b(?P<rest>.*)$")
+WRAP_RE = re.compile(r"^>\s*(?:\[(?:ISO|C|BSI|ESA|ANSI|JMAF)\]\s*)?(?P<cas>\d{2,7}-\d{2}-\d)\b(?P<rest>.*)$")
 GROUP_RE = re.compile(r"\b(OP|C|PY|OC|BP|CO|T|TC|NP|AS|OT|PAA|TU|IGR|GR|QA|M|N|PH)\b")
 STOP_RE = re.compile(r"^\s*>?\s*(Table\s*6|Annex|Guidelines to classification|References)", re.IGNORECASE)
 
@@ -37,7 +37,7 @@ def main() -> None:
             current = CLASS_BY_WORD.get(word)
             started = True
             continue
-        if started and STOP_RE.match(line) and current == "U":
+        if started and rows and STOP_RE.match(line) and current == "U":
             break
         if not current:
             continue

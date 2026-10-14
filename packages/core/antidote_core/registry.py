@@ -56,8 +56,24 @@ class ChemRegistry:
                 for row in csv.DictReader(f):
                     self.who[row["active_ingredient"].lower()] = row
         # The parsed WHO 2019 table overrides the seed class and clears the verify flag, with a source line as citation.
+        def _lookup(name: str):
+            n = name.lower()
+            cands = [n, n.replace(" dichloride", ""), n.replace(" ", "-"), n.replace("-", " ")]
+            parts = n.split()
+            if len(parts) == 2:
+                cands += [f"{parts[1]}-{parts[0]}", f"{parts[1]} {parts[0]}"]  # methyl parathion -> parathion-methyl
+            for c in cands:
+                if c in self.who:
+                    return self.who[c]
+            # last resort: alphanumeric-only comparison
+            key = re.sub(r"[^a-z0-9]", "", n)
+            for k, v in self.who.items():
+                if re.sub(r"[^a-z0-9]", "", k) == key:
+                    return v
+            return None
+
         for a in self.ais:
-            w = self.who.get(a["name"].lower()) or self.who.get(a["name"].lower().replace(" dichloride", ""))
+            w = _lookup(a["name"])
             if w:
                 a["who_class"] = w["who_class"]
                 a["verify"] = False

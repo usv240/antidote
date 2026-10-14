@@ -1,4 +1,4 @@
-version: "2026-10-13.1"
+version: "2026-10-14.2"
 # Deterministic clinical safety gates for Antidote. These fire before and after any model output.
 # The model never decides whether a gate fires. Every rule cites the document that justifies it.
 # Chemical-group gates are applied by the pipeline from the matched group (see antidote_core.pipeline);
@@ -38,6 +38,15 @@ rules:
     patterns:
       - '^(?=.*\b(aluminium phosphide|aluminum phosphide|zinc phosphide|celphos|phosphine)\b)(?=.*\b(atropine|pralidoxime|2-PAM|antidote is)\b).*$'
     message: "Metal phosphides release phosphine. There is no specific antidote. Atropine is not indicated. Urgent supportive and critical care referral."
+    citation: "NHSRC Emergency Care for MO: General Approach to Poison Management; ISCCM 2024"
+
+  - id: antidote-for-non-cholinergic
+    action: block
+    severity: stop
+    stage: output
+    patterns:
+      - '^(?=.*\b(glyphosate|paraquat|pyrethroid|cypermethrin|deltamethrin|lambda-?cyhalothrin|permethrin|fenvalerate|aluminium phosphide|aluminum phosphide|zinc phosphide|phosphine|celphos|imidacloprid|acetamiprid|thiamethoxam|neonicotinoid|2,4-d|endosulfan|fipronil|mancozeb|rodenticide|brodifacoum|bromadiolone)\b)(?=.*\b(atropine|pralidoxime|2-?pam|oximes?)\b).*$'
+    message: "Atropine and oximes are antidotes for organophosphate and carbamate poisoning only. They have no role for this chemical group."
     citation: "NHSRC Emergency Care for MO: General Approach to Poison Management; ISCCM 2024"
 
   - id: no-numeric-dose-from-model

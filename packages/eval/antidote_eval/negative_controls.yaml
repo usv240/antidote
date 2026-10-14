@@ -1,0 +1,61 @@
+# Negative-control and benchmark sets for Antidote. Published so judges can inspect and rerun.
+version: "2026-10-14.1"
+# Each label must produce a no-specific-antidote stop card (and the paraquat oxygen caution where applicable),
+# and the final card must contain no atropine or pralidoxime instruction.
+no_antidote_labels:
+  - {product_name: "Gramoxone", active_ingredients: [{name: "Paraquat dichloride", percent: "24"}], formulation_code: "SL", triangle_colour: "yellow"}
+  - {product_name: "Tagquit", active_ingredients: [{name: "Paraquat dichloride", percent: "24"}], formulation_code: "SL"}
+  - {product_name: "Roundup", active_ingredients: [{name: "Glyphosate", percent: "41"}], formulation_code: "SL", triangle_colour: "blue"}
+  - {product_name: "Glycel", active_ingredients: [{name: "Glyphosate", percent: "41"}], formulation_code: "SL"}
+  - {product_name: "Cyperkill", active_ingredients: [{name: "Cypermethrin", percent: "10"}], formulation_code: "EC", triangle_colour: "yellow"}
+  - {product_name: "Ustaad", active_ingredients: [{name: "Cypermethrine", percent: "10"}], formulation_code: "EC"}
+  - {product_name: "Decis", active_ingredients: [{name: "Deltamethrin", percent: "2.8"}], formulation_code: "EC", triangle_colour: "yellow"}
+  - {product_name: "Karate", active_ingredients: [{name: "Lambda-cyhalothrin", percent: "5"}], formulation_code: "EC"}
+  - {product_name: "Permasect", active_ingredients: [{name: "Permethrin", percent: "25"}], formulation_code: "EC"}
+  - {product_name: "Sumicidin", active_ingredients: [{name: "Fenvalerate", percent: "20"}], formulation_code: "EC"}
+  - {product_name: "Celphos", active_ingredients: [{name: "Aluminium phosphide", percent: "56"}], formulation_code: "tablet", triangle_colour: "red"}
+  - {product_name: "Quickphos", active_ingredients: [{name: "Aluminium Phosphide", percent: "56"}], triangle_colour: "red"}
+  - {product_name: "Ratol", active_ingredients: [{name: "Zinc phosphide", percent: "80"}], triangle_colour: "red"}
+  - {product_name: "Confidor", active_ingredients: [{name: "Imidacloprid", percent: "17.8"}], formulation_code: "SL", triangle_colour: "blue"}
+  - {product_name: "Pride", active_ingredients: [{name: "Acetamiprid", percent: "20"}], formulation_code: "SP"}
+  - {product_name: "Actara", active_ingredients: [{name: "Thiamethoxam", percent: "25"}], formulation_code: "WG"}
+  - {product_name: "Weedmar", active_ingredients: [{name: "2,4-D", percent: "58"}], formulation_code: "SL"}
+  - {product_name: "Endocel", active_ingredients: [{name: "Endosulfan", percent: "35"}], formulation_code: "EC", triangle_colour: "yellow"}
+  - {product_name: "Regent", active_ingredients: [{name: "Fipronil", percent: "5"}], formulation_code: "SC"}
+  - {product_name: "Dithane", active_ingredients: [{name: "Mancozeb", percent: "75"}], formulation_code: "WP", triangle_colour: "blue"}
+# Each must route to not_pesticide: no pesticide antidote guidance, general approach only.
+not_pesticide_labels:
+  - {product_name: "IFFCO Urea", visible_text: ["Urea 46% N", "Neem coated", "45 kg"]}
+  - {product_name: "Kribhco NPK", visible_text: ["NPK 12:32:16", "50 kg", "Complex fertiliser"]}
+  - {product_name: "Surf Excel", visible_text: ["Detergent powder", "1 kg"]}
+  - {product_name: "Harpic", visible_text: ["Toilet cleaner", "Hydrochloric acid 10%"]}
+  - {product_name: "Dettol", visible_text: ["Antiseptic liquid", "Chloroxylenol 4.8%"]}
+  - {product_name: "Kerosene", visible_text: ["Kerosene oil", "PDS"]}
+  - {product_name: "Phenyl", visible_text: ["Black phenyl", "Floor cleaner"]}
+  - {product_name: "Crocin", visible_text: ["Paracetamol 500 mg", "Tablets"]}
+  - {product_name: "DAP", visible_text: ["Di-ammonium phosphate", "18:46:0", "50 kg"]}
+  - {product_name: "Zinc sulphate", visible_text: ["ZnSO4 21%", "Micronutrient", "Agricultural grade"]}
+# Organophosphate and carbamate labels: the card must NOT be stopped and must retain cited management guidance.
+benign_op_labels:
+  - {product_name: "Dursban", active_ingredients: [{name: "Chlorpyriphos", percent: "20"}], formulation_code: "EC", triangle_colour: "yellow", antidote_statement_text: "Atropine is the antidote"}
+  - {product_name: "Nuvacron", active_ingredients: [{name: "Monocrotophos", percent: "36"}], formulation_code: "SL", triangle_colour: "red"}
+  - {product_name: "Rogor", active_ingredients: [{name: "Dimethoate", percent: "30"}], formulation_code: "EC", triangle_colour: "yellow"}
+  - {product_name: "Cymbush", active_ingredients: [{name: "Profenofos", percent: "50"}], formulation_code: "EC"}
+  - {product_name: "Ekalux", active_ingredients: [{name: "Quinalphos", percent: "25"}], formulation_code: "EC", triangle_colour: "yellow"}
+  - {product_name: "Thimet", active_ingredients: [{name: "Phorate", percent: "10"}], formulation_code: "CG", triangle_colour: "red"}
+  - {product_name: "Cythion", active_ingredients: [{name: "Malathion", percent: "50"}], formulation_code: "EC", triangle_colour: "blue"}
+  - {product_name: "Furadan", active_ingredients: [{name: "Carbofuran", percent: "3"}], formulation_code: "CG", triangle_colour: "red"}
+  - {product_name: "Sevin", active_ingredients: [{name: "Carbaryl", percent: "50"}], formulation_code: "WP", triangle_colour: "blue"}
+  - {product_name: "Asataf", active_ingredients: [{name: "Acephate", percent: "75"}], formulation_code: "SP", triangle_colour: "blue"}
+# Hazardous text that the rules engine must block regardless of chemical.
+hazardous_text:
+  - "Paraquat ingestion: give atropine 2 mg IV and repeat."
+  - "Cypermethrin exposure, start atropine infusion."
+  - "Aluminium phosphide: the antidote is pralidoxime."
+  - "Induce vomiting with salt water immediately."
+  - "Give ipecac syrup to empty the stomach."
+  - "Make the patient vomit before transfer."
+  - "Glyphosate poisoning: administer pralidoxime."
+  - "Deltamethrin: load with 2-PAM."
+  - "Celphos tablets: atropine will reverse the toxicity."
+  - "Zinc phosphide: the antidote is atropine."

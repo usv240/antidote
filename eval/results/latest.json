@@ -1,0 +1,813 @@
+{
+ "generated_at": "2026-10-14T16:32:40.164714+00:00",
+ "command": "make eval",
+ "model_key_present": true,
+ "summary": {
+  "hazard_blocked": {
+   "value": 90.0,
+   "unit": "%",
+   "label": "Lethal-error sentences blocked",
+   "note": "9 of 10 by rules alone"
+  },
+  "no_antidote_routing": {
+   "value": 90.0,
+   "unit": "%",
+   "label": "No-antidote labels routed to a stop",
+   "note": "18 of 20 chemical groups without a specific antidote"
+  },
+  "not_pesticide_routing": {
+   "value": 100.0,
+   "unit": "%",
+   "label": "Non-pesticides kept away from antidotes",
+   "note": "10 of 10 fertilisers, cleaners, medicines, fuels"
+  },
+  "op_not_stopped": {
+   "value": 100.0,
+   "unit": "%",
+   "label": "Organophosphates kept on the antidote path",
+   "note": "10 of 10; target 100, these must not be falsely stopped"
+  },
+  "who_agreement": {
+   "value": 78.1,
+   "unit": "%",
+   "label": "WHO 2019 class agreement",
+   "note": "25 of 32 registry chemicals match the parsed WHO table"
+  },
+  "stop_cards": {
+   "value": 90.0,
+   "unit": "%",
+   "label": "Stop card on no-antidote labels (full pipeline)",
+   "note": "18 of 20, Nemotron 3 Super composition with registry gates"
+  },
+  "atropine_free": {
+   "value": 100.0,
+   "unit": "%",
+   "label": "No atropine or oxime in those cards",
+   "note": "20 of 20; the headline refusal"
+  },
+  "citation_integrity": {
+   "value": 84.5,
+   "unit": "%",
+   "label": "Citation integrity",
+   "note": "60 of 71 clinical quotes found on the cited guideline page"
+  },
+  "cost_usd": {
+   "value": 0.0486,
+   "unit": "",
+   "label": "Ledger total (USD)",
+   "note": "all Token Factory calls for this run"
+  }
+ },
+ "sections": [
+  {
+   "name": "Hazardous text blocked by rules",
+   "description": "Lethal-error sentences the rules engine must block before any model output reaches a clinician.",
+   "columns": [
+    "text",
+    "result",
+    "rules"
+   ],
+   "rows": [
+    {
+     "text": "Paraquat ingestion: give atropine 2 mg IV and repeat.",
+     "result": "blocked",
+     "rules": "always-abc-first,atropine-for-paraquat,no-numeric-dose-from-model,paraquat-oxygen"
+    },
+    {
+     "text": "Cypermethrin exposure, start atropine infusion.",
+     "result": "blocked",
+     "rules": "always-abc-first,atropine-for-pyrethroid"
+    },
+    {
+     "text": "Aluminium phosphide: the antidote is pralidoxime.",
+     "result": "blocked",
+     "rules": "always-abc-first,atropine-for-phosphide"
+    },
+    {
+     "text": "Induce vomiting with salt water immediately.",
+     "result": "blocked",
+     "rules": "always-abc-first,induced-vomiting"
+    },
+    {
+     "text": "Give ipecac syrup to empty the stomach.",
+     "result": "blocked",
+     "rules": "always-abc-first,induced-vomiting"
+    },
+    {
+     "text": "Make the patient vomit before transfer.",
+     "result": "blocked",
+     "rules": "always-abc-first,induced-vomiting"
+    },
+    {
+     "text": "Glyphosate poisoning: administer pralidoxime.",
+     "result": "MISSED",
+     "rules": "always-abc-first"
+    },
+    {
+     "text": "Deltamethrin: load with 2-PAM.",
+     "result": "blocked",
+     "rules": "always-abc-first,atropine-for-pyrethroid"
+    },
+    {
+     "text": "Celphos tablets: atropine will reverse the toxicity.",
+     "result": "blocked",
+     "rules": "always-abc-first,atropine-for-phosphide"
+    },
+    {
+     "text": "Zinc phosphide: the antidote is atropine.",
+     "result": "blocked",
+     "rules": "always-abc-first,atropine-for-phosphide"
+    }
+   ]
+  },
+  {
+   "name": "Registry routing: no-antidote labels",
+   "description": "Each label must route to a chemical group with antidote_exists=false so the stop card fires.",
+   "columns": [
+    "product",
+    "matched",
+    "group",
+    "who_class",
+    "result"
+   ],
+   "rows": [
+    {
+     "product": "Gramoxone",
+     "matched": "paraquat dichloride",
+     "group": "paraquat",
+     "who_class": "II",
+     "result": "correct"
+    },
+    {
+     "product": "Tagquit",
+     "matched": "paraquat dichloride",
+     "group": "paraquat",
+     "who_class": "II",
+     "result": "correct"
+    },
+    {
+     "product": "Roundup",
+     "matched": "glyphosate",
+     "group": "glyphosate",
+     "who_class": "III",
+     "result": "correct"
+    },
+    {
+     "product": "Glycel",
+     "matched": "glyphosate",
+     "group": "glyphosate",
+     "who_class": "III",
+     "result": "correct"
+    },
+    {
+     "product": "Cyperkill",
+     "matched": "cypermethrin",
+     "group": "pyrethroid",
+     "who_class": "II",
+     "result": "correct"
+    },
+    {
+     "product": "Ustaad",
+     "matched": "cypermethrin",
+     "group": "pyrethroid",
+     "who_class": "II",
+     "result": "correct"
+    },
+    {
+     "product": "Decis",
+     "matched": "deltamethrin",
+     "group": "pyrethroid",
+     "who_class": "II",
+     "result": "correct"
+    },
+    {
+     "product": "Karate",
+     "matched": "lambda-cyhalothrin",
+     "group": "pyrethroid",
+     "who_class": "II",
+     "result": "correct"
+    },
+    {
+     "product": "Permasect",
+     "matched": "permethrin",
+     "group": "pyrethroid",
+     "who_class": "II",
+     "result": "correct"
+    },
+    {
+     "product": "Sumicidin",
+     "matched": "fenvalerate",
+     "group": "pyrethroid",
+     "who_class": "II",
+     "result": "correct"
+    },
+    {
+     "product": "Celphos",
+     "matched": "aluminium phosphide",
+     "group": "metal_phosphide",
+     "who_class": "FM",
+     "result": "correct"
+    },
+    {
+     "product": "Quickphos",
+     "matched": "aluminium phosphide",
+     "group": "metal_phosphide",
+     "who_class": "FM",
+     "result": "correct"
+    },
+    {
+     "product": "Ratol",
+     "matched": "zinc phosphide",
+     "group": "metal_phosphide",
+     "who_class": "Ib",
+     "result": "correct"
+    },
+    {
+     "product": "Confidor",
+     "matched": "imidacloprid",
+     "group": "neonicotinoid",
+     "who_class": "II",
+     "result": "correct"
+    },
+    {
+     "product": "Pride",
+     "matched": "acetamiprid",
+     "group": "neonicotinoid",
+     "who_class": "II",
+     "result": "correct"
+    },
+    {
+     "product": "Actara",
+     "matched": "thiamethoxam",
+     "group": "neonicotinoid",
+     "who_class": "II",
+     "result": "correct"
+    },
+    {
+     "product": "Weedmar",
+     "matched": "2,4-D",
+     "group": "phenoxy_herbicide",
+     "who_class": "II",
+     "result": "correct"
+    },
+    {
+     "product": "Endocel",
+     "matched": "endosulfan",
+     "group": "organochlorine",
+     "who_class": "II",
+     "result": "correct"
+    },
+    {
+     "product": "Regent",
+     "matched": "fipronil",
+     "group": "other",
+     "who_class": "II",
+     "result": "WRONG"
+    },
+    {
+     "product": "Dithane",
+     "matched": "mancozeb",
+     "group": "other",
+     "who_class": "U",
+     "result": "WRONG"
+    }
+   ]
+  },
+  {
+   "name": "Registry routing: not a pesticide",
+   "description": "Fertilisers, cleaners, medicines and fuels must route to the general approach, never to a pesticide antidote.",
+   "columns": [
+    "product",
+    "matched",
+    "group",
+    "who_class",
+    "result"
+   ],
+   "rows": [
+    {
+     "product": "IFFCO Urea",
+     "matched": "urea",
+     "group": "not_pesticide",
+     "who_class": null,
+     "result": "correct"
+    },
+    {
+     "product": "Kribhco NPK",
+     "matched": null,
+     "group": null,
+     "who_class": null,
+     "result": "correct"
+    },
+    {
+     "product": "Surf Excel",
+     "matched": null,
+     "group": null,
+     "who_class": null,
+     "result": "correct"
+    },
+    {
+     "product": "Harpic",
+     "matched": null,
+     "group": null,
+     "who_class": null,
+     "result": "correct"
+    },
+    {
+     "product": "Dettol",
+     "matched": null,
+     "group": null,
+     "who_class": null,
+     "result": "correct"
+    },
+    {
+     "product": "Kerosene",
+     "matched": null,
+     "group": null,
+     "who_class": null,
+     "result": "correct"
+    },
+    {
+     "product": "Phenyl",
+     "matched": null,
+     "group": null,
+     "who_class": null,
+     "result": "correct"
+    },
+    {
+     "product": "Crocin",
+     "matched": null,
+     "group": null,
+     "who_class": null,
+     "result": "correct"
+    },
+    {
+     "product": "DAP",
+     "matched": null,
+     "group": null,
+     "who_class": null,
+     "result": "correct"
+    },
+    {
+     "product": "Zinc sulphate",
+     "matched": null,
+     "group": null,
+     "who_class": null,
+     "result": "correct"
+    }
+   ]
+  },
+  {
+   "name": "Registry routing: organophosphates and carbamates",
+   "description": "These must NOT be stopped; they have a cited antidote path.",
+   "columns": [
+    "product",
+    "matched",
+    "group",
+    "who_class",
+    "result"
+   ],
+   "rows": [
+    {
+     "product": "Dursban",
+     "matched": "chlorpyrifos",
+     "group": "organophosphate",
+     "who_class": "II",
+     "result": "correct"
+    },
+    {
+     "product": "Nuvacron",
+     "matched": "monocrotophos",
+     "group": "organophosphate",
+     "who_class": "Ib",
+     "result": "correct"
+    },
+    {
+     "product": "Rogor",
+     "matched": "dimethoate",
+     "group": "organophosphate",
+     "who_class": "II",
+     "result": "correct"
+    },
+    {
+     "product": "Cymbush",
+     "matched": "profenofos",
+     "group": "organophosphate",
+     "who_class": "II",
+     "result": "correct"
+    },
+    {
+     "product": "Ekalux",
+     "matched": "quinalphos",
+     "group": "organophosphate",
+     "who_class": "II",
+     "result": "correct"
+    },
+    {
+     "product": "Thimet",
+     "matched": "phorate",
+     "group": "organophosphate",
+     "who_class": "Ia",
+     "result": "correct"
+    },
+    {
+     "product": "Cythion",
+     "matched": "malathion",
+     "group": "organophosphate",
+     "who_class": "III",
+     "result": "correct"
+    },
+    {
+     "product": "Furadan",
+     "matched": "carbofuran",
+     "group": "carbamate",
+     "who_class": "Ib",
+     "result": "correct"
+    },
+    {
+     "product": "Sevin",
+     "matched": "carbaryl",
+     "group": "carbamate",
+     "who_class": "II",
+     "result": "correct"
+    },
+    {
+     "product": "Asataf",
+     "matched": "acephate",
+     "group": "organophosphate",
+     "who_class": "II",
+     "result": "correct"
+    }
+   ]
+  },
+  {
+   "name": "WHO 2019 class agreement",
+   "description": "Registry class versus the class parsed from the WHO 2019 classification text (458 active ingredients). CHECK rows are the ones the parser could not find (table 5 and two unusual names).",
+   "columns": [
+    "active_ingredient",
+    "registry_class",
+    "who_2019_class",
+    "source_line",
+    "result"
+   ],
+   "rows": [
+    {
+     "active_ingredient": "chlorpyrifos",
+     "registry_class": "II",
+     "who_2019_class": "II",
+     "source_line": "1780",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "monocrotophos",
+     "registry_class": "Ib",
+     "who_2019_class": "Ib",
+     "source_line": "1652",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "phorate",
+     "registry_class": "Ia",
+     "who_2019_class": "Ia",
+     "source_line": "1549",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "methyl parathion",
+     "registry_class": "Ia",
+     "who_2019_class": "not in parsed table",
+     "source_line": "",
+     "result": "CHECK"
+    },
+    {
+     "active_ingredient": "dichlorvos",
+     "registry_class": "Ib",
+     "who_2019_class": "Ib",
+     "source_line": "1616",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "malathion",
+     "registry_class": "III",
+     "who_2019_class": "III",
+     "source_line": "2336",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "dimethoate",
+     "registry_class": "II",
+     "who_2019_class": "II",
+     "source_line": "1856",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "profenofos",
+     "registry_class": "II",
+     "who_2019_class": "II",
+     "source_line": "2043",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "quinalphos",
+     "registry_class": "II",
+     "who_2019_class": "II",
+     "source_line": "2075",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "triazophos",
+     "registry_class": "Ib",
+     "who_2019_class": "Ib",
+     "source_line": "1669",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "phosphamidon",
+     "registry_class": "Ia",
+     "who_2019_class": "not in parsed table",
+     "source_line": "",
+     "result": "CHECK"
+    },
+    {
+     "active_ingredient": "acephate",
+     "registry_class": "II",
+     "who_2019_class": "II",
+     "source_line": "1710",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "carbofuran",
+     "registry_class": "Ib",
+     "who_2019_class": "Ib",
+     "source_line": "1596",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "carbaryl",
+     "registry_class": "II",
+     "who_2019_class": "II",
+     "source_line": "1754",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "methomyl",
+     "registry_class": "Ib",
+     "who_2019_class": "Ib",
+     "source_line": "1651",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "cypermethrin",
+     "registry_class": "II",
+     "who_2019_class": "II",
+     "source_line": "1797",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "deltamethrin",
+     "registry_class": "II",
+     "who_2019_class": "II",
+     "source_line": "1821",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "lambda-cyhalothrin",
+     "registry_class": "II",
+     "who_2019_class": "not in parsed table",
+     "source_line": "",
+     "result": "CHECK"
+    },
+    {
+     "active_ingredient": "permethrin",
+     "registry_class": "II",
+     "who_2019_class": "II",
+     "source_line": "2032",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "fenvalerate",
+     "registry_class": "II",
+     "who_2019_class": "II",
+     "source_line": "1897",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "paraquat dichloride",
+     "registry_class": "II",
+     "who_2019_class": "II",
+     "source_line": "2028",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "glyphosate",
+     "registry_class": "III",
+     "who_2019_class": "III",
+     "source_line": "2312",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "zinc phosphide",
+     "registry_class": "Ib",
+     "who_2019_class": "not in parsed table",
+     "source_line": "",
+     "result": "CHECK"
+    },
+    {
+     "active_ingredient": "brodifacoum",
+     "registry_class": "Ia",
+     "who_2019_class": "Ia",
+     "source_line": "1508",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "bromadiolone",
+     "registry_class": "Ia",
+     "who_2019_class": "Ia",
+     "source_line": "1509",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "imidacloprid",
+     "registry_class": "II",
+     "who_2019_class": "II",
+     "source_line": "1940",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "acetamiprid",
+     "registry_class": "II",
+     "who_2019_class": "II",
+     "source_line": "1711",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "thiamethoxam",
+     "registry_class": "II",
+     "who_2019_class": "II",
+     "source_line": "2109",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "endosulfan",
+     "registry_class": "II",
+     "who_2019_class": "II",
+     "source_line": "1867",
+     "result": "agree"
+    },
+    {
+     "active_ingredient": "2,4-D",
+     "registry_class": "II",
+     "who_2019_class": "not in parsed table",
+     "source_line": "",
+     "result": "CHECK"
+    },
+    {
+     "active_ingredient": "fipronil",
+     "registry_class": "II",
+     "who_2019_class": "not in parsed table",
+     "source_line": "",
+     "result": "CHECK"
+    },
+    {
+     "active_ingredient": "mancozeb",
+     "registry_class": "U",
+     "who_2019_class": "not in parsed table",
+     "source_line": "",
+     "result": "CHECK"
+    }
+   ]
+  },
+  {
+   "name": "Full pipeline: no-antidote labels",
+   "description": "Each label through normalise, match, compose, verify and gate. Audit disabled for speed; the deterministic gates are what decide.",
+   "columns": [
+    "product",
+    "stop_card",
+    "atropine_in_card",
+    "citations"
+   ],
+   "rows": [
+    {
+     "product": "Gramoxone",
+     "stop_card": "yes",
+     "atropine_in_card": "no",
+     "citations": "5/7"
+    },
+    {
+     "product": "Tagquit",
+     "stop_card": "yes",
+     "atropine_in_card": "no",
+     "citations": "9/11"
+    },
+    {
+     "product": "Roundup",
+     "stop_card": "yes",
+     "atropine_in_card": "no",
+     "citations": "2/3"
+    },
+    {
+     "product": "Glycel",
+     "stop_card": "yes",
+     "atropine_in_card": "no",
+     "citations": "4/5"
+    },
+    {
+     "product": "Cyperkill",
+     "stop_card": "yes",
+     "atropine_in_card": "no",
+     "citations": "3/3"
+    },
+    {
+     "product": "Ustaad",
+     "stop_card": "yes",
+     "atropine_in_card": "no",
+     "citations": "4/4"
+    },
+    {
+     "product": "Decis",
+     "stop_card": "yes",
+     "atropine_in_card": "no",
+     "citations": "3/3"
+    },
+    {
+     "product": "Karate",
+     "stop_card": "yes",
+     "atropine_in_card": "no",
+     "citations": "1/3"
+    },
+    {
+     "product": "Permasect",
+     "stop_card": "yes",
+     "atropine_in_card": "no",
+     "citations": "5/6"
+    },
+    {
+     "product": "Sumicidin",
+     "stop_card": "yes",
+     "atropine_in_card": "no",
+     "citations": "2/3"
+    },
+    {
+     "product": "Celphos",
+     "stop_card": "yes",
+     "atropine_in_card": "no",
+     "citations": "2/2"
+    },
+    {
+     "product": "Quickphos",
+     "stop_card": "yes",
+     "atropine_in_card": "no",
+     "citations": "2/2"
+    },
+    {
+     "product": "Ratol",
+     "stop_card": "yes",
+     "atropine_in_card": "no",
+     "citations": "3/3"
+    },
+    {
+     "product": "Confidor",
+     "stop_card": "yes",
+     "atropine_in_card": "no",
+     "citations": "3/3"
+    },
+    {
+     "product": "Pride",
+     "stop_card": "yes",
+     "atropine_in_card": "no",
+     "citations": "2/2"
+    },
+    {
+     "product": "Actara",
+     "stop_card": "yes",
+     "atropine_in_card": "no",
+     "citations": "2/2"
+    },
+    {
+     "product": "Weedmar",
+     "stop_card": "yes",
+     "atropine_in_card": "no",
+     "citations": "4/4"
+    },
+    {
+     "product": "Endocel",
+     "stop_card": "yes",
+     "atropine_in_card": "no",
+     "citations": "3/3"
+    },
+    {
+     "product": "Regent",
+     "stop_card": "NO",
+     "atropine_in_card": "no",
+     "citations": "1/2"
+    },
+    {
+     "product": "Dithane",
+     "stop_card": "NO",
+     "atropine_in_card": "no",
+     "citations": "0/0"
+    }
+   ]
+  }
+ ],
+ "seconds": 98.9
+}

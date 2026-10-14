@@ -55,6 +55,11 @@ groups:
     antidote_exists: false
     gate: none
     retrieval_terms: ["2,4-D", "phenoxy", "urinary alkalinisation", "supportive"]
+  - id: other_pesticide
+    name: Other pesticide without a specific antidote (phenylpyrazoles, dithiocarbamates, fungicides)
+    antidote_exists: false
+    gate: none
+    retrieval_terms: ["supportive", "decontamination", "no specific antidote", "general approach"]
   - id: not_pesticide
     name: Not a pesticide
     antidote_exists: false
@@ -95,7 +100,7 @@ active_ingredients:
   - {name: thiamethoxam, group: neonicotinoid, who_class: U, verify: true, india_status: registered}
   - {name: endosulfan, group: organochlorine, who_class: II, verify: true, india_status: banned}
   - {name: "2,4-D", group: phenoxy_herbicide, who_class: II, verify: true, india_status: registered}
-  - {name: fipronil, group: other, who_class: II, verify: true, india_status: registered}
-  - {name: mancozeb, group: other, who_class: U, verify: true, india_status: registered}
+  - {name: fipronil, group: other_pesticide, who_class: II, verify: true, india_status: registered}
+  - {name: mancozeb, group: other_pesticide, who_class: U, verify: true, india_status: registered}
   - {name: urea, group: not_pesticide, who_class: null, verify: false, india_status: fertiliser}
   - {name: NPK fertiliser, group: not_pesticide, who_class: null, verify: false, india_status: fertiliser}

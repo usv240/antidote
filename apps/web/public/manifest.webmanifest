@@ -1,0 +1,10 @@
+{
+  "name": "Antidote",
+  "short_name": "Antidote",
+  "description": "Pesticide-label decision support for emergency doctors.",
+  "start_url": "/try",
+  "display": "standalone",
+  "background_color": "#f7f6f2",
+  "theme_color": "#2f7a4f",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
