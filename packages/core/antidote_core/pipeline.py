@@ -129,7 +129,9 @@ class AntidotePipeline:
         cit: dict[str, Any] = {}
         if self.client and hits:
             ctx = self.search.pack_context(hits, max_chars=18000)
-            user = (f"Chemical: {chosen.active_ingredient if chosen else 'unknown'} | group: {group['name'] if group else 'unknown'} | WHO class: {chosen.who_class if chosen else 'n/a'} | label antidote statement as printed: {label.antidote_statement_text or 'none'}\n"
+            allowed = sorted({h.doc_id for h in hits})
+            user = (f"Allowed doc_id values for cite (use only these, with the page numbers shown): {', '.join(allowed)}.\n"
+                    f"Chemical: {chosen.active_ingredient if chosen else 'unknown'} | group: {group['name'] if group else 'unknown'} | WHO class: {chosen.who_class if chosen else 'n/a'} | label antidote statement as printed: {label.antidote_statement_text or 'none'}\n"
                     f"Patient context: {json.dumps(context or {})}\n\nGuideline pages:\n{ctx}\n\nReturn the ManagementCard tool call.")
             try:
                 card = call_structured(self.client, Tier.MID, ManagementCard, [{"role": "system", "content": COMPOSE_SYSTEM}, {"role": "user", "content": user}], purpose="compose.card", trace_id=trace_id, max_tokens=2200)
