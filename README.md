@@ -34,6 +34,10 @@ Complete end to end: pipeline, API, MCP server, web app, published evaluation.
 
 Every call is written to a ledger (tier, model, tokens, USD, latency) and shown in the app's Trace panel.
 
+## Screenshots
+
+`docs/screenshots/landing-dark.jpg`, `docs/screenshots/landing-light.jpg`, and the paraquat stop cards in `docs/screenshots/try-paraquat-dark.jpg`.
+
 ## Quick start
 
 ```
