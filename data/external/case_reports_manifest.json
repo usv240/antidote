@@ -1,0 +1,361 @@
+{
+ "source": "Tavily search + extract, open-access case reports",
+ "items": [
+  {
+   "url": "https://journals.lww.com/njcp/_layouts/15/oaks.journals/downloadpdf.aspx?an=01253091-201922030-00025",
+   "title": "Pyrethroid Intoxication : Nigerian Journal of Clinical Practice",
+   "query": "cypermethrin pyrethroid poisoning case report India",
+   "file": "d81c5b56ea02.txt",
+   "chars": 19164
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10040141",
+   "title": "A Rare Presentation of Imidacloprid Poisoning - PMC - NIH",
+   "query": "imidacloprid neonicotinoid poisoning case report India",
+   "file": "37a56ecd86cc.txt",
+   "chars": 8223
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10041262",
+   "title": "Acute aluminium phosphide poisoning: A case report of rare survival with cardiac, metabolic, hepatic, and renal complications",
+   "query": "aluminium phosphide poisoning case report India",
+   "file": "13158fe86f35.txt",
+   "chars": 12187
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10614644",
+   "title": "Human Poisoning with Chlorpyrifos and Cypermethrin ... - PMC",
+   "query": "chlorpyrifos poisoning case report India",
+   "file": "4fa9ad7944a3.txt",
+   "chars": 40602
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10704273",
+   "title": "A Case of Zinc Phosphide-Induced Acute Fulminant Liver ...",
+   "query": "zinc phosphide poisoning case report India",
+   "file": "321de498be42.txt",
+   "chars": 14692
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10731128",
+   "title": "Resurgence to Life: A Case Report on Inpatient Rehabilitation ...",
+   "query": "organophosphate poisoning intermediate syndrome case report India",
+   "file": "5c1c669e3d11.txt",
+   "chars": 21393
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10882451",
+   "title": "Atypical organophosphate poisoning and a successful case of prolonged intubation in a low-resource newly developed intensive care unit in rural Zambia",
+   "query": "pesticide poisoning misdiagnosed as organophosphate case report",
+   "file": "a8fad016d51c.txt",
+   "chars": 1518
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10978098",
+   "title": "Comparative analysis of organophosphorus versus carbamate ...",
+   "query": "carbofuran carbamate poisoning case report India",
+   "file": "193187f7925c.txt",
+   "chars": 19070
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11268079",
+   "title": "Accidental Organophosphate Poisoning in a Toddler - PMC",
+   "query": "dichlorvos poisoning case report India",
+   "file": "1f96d7aef36b.txt",
+   "chars": 12466
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11396568",
+   "title": "Bromadiolone may cause severe acute kidney injury through ...",
+   "query": "bromadiolone rodenticide poisoning case report India",
+   "file": "9ad76d660030.txt",
+   "chars": 28812
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11455649",
+   "title": "Survival of Misdiagnosed 2,4-Dichlorophenoxyacetic Acid Poisoning Masquerading as Organophosphorus Poisoning: A Case Report",
+   "query": "pesticide poisoning misdiagnosed as organophosphate case report",
+   "file": "0c06f49eab2f.txt",
+   "chars": 12697
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11664077",
+   "title": "A systematic review of pesticide exposure, associated risks, and long-term human health impacts",
+   "query": "fipronil poisoning case report India",
+   "file": "c5b4bd536b98.txt",
+   "chars": 129397
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11755762",
+   "title": "A critical review on the potential impacts of neonicotinoid insecticide use: current knowledge of environmental fate, toxicity, and implications for human health",
+   "query": "imidacloprid neonicotinoid poisoning case report India",
+   "file": "2438361ad9e3.txt",
+   "chars": 156541
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11863480",
+   "title": "Herbicide-related health risks: key mechanisms and a guide to mitigation strategies",
+   "query": "glyphosate surfactant herbicide poisoning case report India",
+   "file": "0287ac1e2d0a.txt",
+   "chars": 132504
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11925154",
+   "title": "A case report of acetamiprid and fipronil self-poisoning - PMC",
+   "query": "fipronil poisoning case report India",
+   "file": "a320288fc69c.txt",
+   "chars": 15296
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11971900",
+   "title": "Multimodal therapy successfully treats methemoglobinemia ...",
+   "query": "emamectin benzoate poisoning case report India",
+   "file": "0a8e8e61078c.txt",
+   "chars": 22055
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12305092",
+   "title": "Organophosphate poisoning presenting with paralytic ileus: A case report",
+   "query": "dichlorvos poisoning case report India",
+   "file": "1f67cf6e0994.txt",
+   "chars": 17506
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12550317",
+   "title": "Meta-analysis of mortality burden due to Aluminum phosphide ...",
+   "query": "aluminium phosphide poisoning case report India",
+   "file": "358e3cd7ff96.txt",
+   "chars": 29502
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12768155",
+   "title": "Management of paraquat poisoning in an adolescent with progressive acute kidney injury: a case report",
+   "query": "paraquat poisoning case report India",
+   "file": "9afb82e562f0.txt",
+   "chars": 20327
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3097564",
+   "title": "A case of organophosphate poisoning presenting with seizure ...",
+   "query": "monocrotophos poisoning case report India",
+   "file": "848f9a850544.txt",
+   "chars": 13891
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3724086",
+   "title": "Clinical and radiological findings in chlorfenapyr poisoning",
+   "query": "chlorfenapyr poisoning case report India",
+   "file": "288c60c085a9.txt",
+   "chars": 10122
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3893949",
+   "title": "Revisiting Endosulfan - PMC - NIH",
+   "query": "endosulfan poisoning case report India",
+   "file": "3ff43db84f07.txt",
+   "chars": 9458
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3957175",
+   "title": "Paraquat poisoning: A case report and review of literature - PMC",
+   "query": "paraquat poisoning case report India",
+   "file": "a922a5c25822.txt",
+   "chars": 13491
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4047698",
+   "title": "Glyphosate surfactant herbicide poisoning and management",
+   "query": "glyphosate surfactant herbicide poisoning case report India",
+   "file": "75de568ddcf3.txt",
+   "chars": 10066
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4523965",
+   "title": "Hot charcoal vomitus in aluminum phosphide poisoning - PMC",
+   "query": "aluminium phosphide poisoning case report India",
+   "file": "15475d16f9c5.txt",
+   "chars": 12051
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5445288",
+   "title": "A case report of zinc phosphide poisoning - PMC - NIH",
+   "query": "zinc phosphide poisoning case report India",
+   "file": "84e6e89f192b.txt",
+   "chars": 28368
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5699009",
+   "title": "Imidacloprid Poisoning: An Emerging Cause of Potentially ...",
+   "query": "imidacloprid neonicotinoid poisoning case report India",
+   "file": "a4f90be30412.txt",
+   "chars": 12563
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5787979",
+   "title": "Paraquat poisoning: Case report of a survivor - PMC - NIH",
+   "query": "paraquat poisoning case report India",
+   "file": "8287f17a3700.txt",
+   "chars": 8003
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6236780",
+   "title": "Organophosphate\u2013pyrethroid combined poisoning may be associated with prolonged cholinergic symptoms compared to either poison alone",
+   "query": "cypermethrin pyrethroid poisoning case report India",
+   "file": "686fe037eb26.txt",
+   "chars": 9929
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6775716",
+   "title": "2,4-D Ethyl Ester Poisoning: A Case Report - PMC",
+   "query": "2,4-D herbicide poisoning case report India",
+   "file": "873a5495e7fe.txt",
+   "chars": 8344
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6857411",
+   "title": "Hepatotoxicity and neurotoxicity of Fipronil poisoning in ...",
+   "query": "fipronil poisoning case report India",
+   "file": "2c281aeafe67.txt",
+   "chars": 10863
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6996656",
+   "title": "Neonicotinoid Poisoning and Management",
+   "query": "imidacloprid neonicotinoid poisoning case report India",
+   "file": "858d8e40566e.txt",
+   "chars": 14078
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6996658",
+   "title": "Pyrethroid Poisoning",
+   "query": "cypermethrin pyrethroid poisoning case report India",
+   "file": "26f06f293666.txt",
+   "chars": 24026
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7225766",
+   "title": "Paraquat Poisoning: A Retrospective Study of 55 Patients ...",
+   "query": "paraquat poisoning case report India",
+   "file": "805aa668a673.txt",
+   "chars": 16814
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7872605",
+   "title": "Human Zinc Phosphide Exposure in Lebanon: A Case Report ...",
+   "query": "zinc phosphide poisoning case report India",
+   "file": "0d328bee134b.txt",
+   "chars": 39435
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7939157",
+   "title": "Reversible leukoencephalopathy caused by 2 rodenticides ...",
+   "query": "bromadiolone rodenticide poisoning case report India",
+   "file": "0415a94208eb.txt",
+   "chars": 18799
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8098880",
+   "title": "Glyphosate poisoning \u2013 a case report - PMC - NIH",
+   "query": "glyphosate surfactant herbicide poisoning case report India",
+   "file": "bc60131885ea.txt",
+   "chars": 11961
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8119778",
+   "title": "Case Report: Effective Treatment for Acute Chlorpyrifos ... - PMC",
+   "query": "chlorpyrifos poisoning case report India",
+   "file": "4d96bf6a18b3.txt",
+   "chars": 14719
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8132809",
+   "title": "A case of organophosphate poisoning with intermediate ...",
+   "query": "organophosphate poisoning intermediate syndrome case report India",
+   "file": "ac14f634991c.txt",
+   "chars": 12526
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8463823",
+   "title": "Successfully managed aluminum phosphide poisoning - PMC",
+   "query": "aluminium phosphide poisoning case report India",
+   "file": "8c412d75af8d.txt",
+   "chars": 18619
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8488412",
+   "title": "Successful management of a kitten with chlorpyrifos and cypermethrin toxicosis with pralidoxime and atropine",
+   "query": "chlorpyrifos poisoning case report India",
+   "file": "41bf896604ba.txt",
+   "chars": 24626
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9309617",
+   "title": "An accidental emamectin benzoate poisoning in child: A case ...",
+   "query": "emamectin benzoate poisoning case report India",
+   "file": "78f39a44ccf4.txt",
+   "chars": 13248
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9346413",
+   "title": "A Case of Severe 2,4-Dichlorophenoxyacetic Acid Poisoning ...",
+   "query": "2,4-D herbicide poisoning case report India",
+   "file": "2f369963efc0.txt",
+   "chars": 15687
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9483958",
+   "title": "A fatal case of chlorfenapyr poisoning and a review of ... - PMC",
+   "query": "chlorfenapyr poisoning case report India",
+   "file": "9aab44f67df0.txt",
+   "chars": 19781
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9547344",
+   "title": "Intermediate syndrome following organophosphate poisoning: A case report in a low resource and poor socio\u2010economic setting",
+   "query": "organophosphate poisoning intermediate syndrome case report India",
+   "file": "c24faa93d668.txt",
+   "chars": 10344
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9638031",
+   "title": "Case series: Diquat poisoning with acute kidney failure ... - PMC",
+   "query": "diquat poisoning case report India",
+   "file": "6a90b0bd4b4a.txt",
+   "chars": 36140
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9921357",
+   "title": "Imidacloprid poisoning in a young female: a case report - PMC",
+   "query": "imidacloprid neonicotinoid poisoning case report India",
+   "file": "ceab18ea0e6b.txt",
+   "chars": 14133
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9969900",
+   "title": "Deltamethrin Poisoning Mimicking Organophosphate Poisoning: A Case Report",
+   "query": "pesticide poisoning misdiagnosed as organophosphate case report",
+   "file": "f36568980e7d.txt",
+   "chars": 16664
+  },
+  {
+   "url": "https://www.cureus.com/articles/320212-accidental-organophosphate-poisoning-in-a-patient-due-to-a-bed-bug-pesticide-in-the-united-kingdom-a-case-report",
+   "title": "Accidental Organophosphate Poisoning in a Patient Due to a Bed Bug Pesticide in the United Kingdom: A Case Report",
+   "query": "monocrotophos poisoning case report India",
+   "file": "3763d06cf84d.txt",
+   "chars": 75059
+  },
+  {
+   "url": "https://www.cureus.com/articles/32283-aluminium-phosphide-poisoning-early-suspicion-of-cardiotoxicity-is-necessary-for-improved-outcomes",
+   "title": "Aluminium Phosphide Poisoning: Early Suspicion ...",
+   "query": "aluminium phosphide poisoning case report India",
+   "file": "ea48726af0f4.txt",
+   "chars": 69453
+  },
+  {
+   "url": "https://www.cureus.com/articles/503239-intravenous-lipid-emulsion-therapy-for-severe-emamectin-benzoate-poisoning-a-case-report#!/",
+   "title": "Intravenous Lipid Emulsion Therapy for Severe Emamectin ...",
+   "query": "emamectin benzoate poisoning case report India",
+   "file": null
+  }
+ ]
+}

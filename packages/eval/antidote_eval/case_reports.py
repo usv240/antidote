@@ -232,7 +232,7 @@ def run(out: Path = typer.Option(ROOT / "eval/results/case_reports.json"), audit
             continue
         outcome, why = _outcome(c["expected_group"], res)
         card = _card_text(res.card)
-        documented = bool(c.get("initially_unknown_or_misidentified") or c.get("wrong_or_harmful_first_treatment"))
+        documented = bool((c.get("initially_unknown_or_misidentified") and c.get("misidentification_quote")) or (c.get("wrong_or_harmful_first_treatment") and c.get("wrong_treatment_quote")))
         rows.append({
             "url": c["url"], "title": c["title"][:120], "substance": c["substance"], "brand": c.get("brand_or_product"),
             "expected_group": c["expected_group"], "routed_group": res.chosen.group if res.chosen else None,
