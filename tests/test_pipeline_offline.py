@@ -80,3 +80,29 @@ def test_registry_who_rows_have_source_lines():
     assert len(reg.who) > 600
     a = next(x for x in reg.ais if x["name"] == "chlorpyrifos")
     assert a["who_class"] == "II" and a.get("who_source", {}).get("line")
+
+
+def test_class_only_label_with_cholinergic_signs_gets_class_guidance():
+    from antidote_core.pipeline import class_level_match
+    from antidote_core.schemas import LabelRead
+
+    lab = LabelRead(product_name="Unknown insecticide", visible_text=["ORGANOPHOSPHATE INSECTICIDE", "POISON"])
+    m = class_level_match(lab, {"signs": "pinpoint pupils, excess secretions, bradycardia"})
+    assert m and m.group == "organophosphate" and m.confidence >= 0.75
+
+
+def test_class_only_without_signs_stays_withheld():
+    from antidote_core.pipeline import class_level_match
+    from antidote_core.schemas import LabelRead
+
+    lab = LabelRead(product_name="Unknown insecticide", visible_text=["ORGANOPHOSPHATE INSECTICIDE"])
+    assert class_level_match(lab, {"signs": ""}) is None
+    assert class_level_match(lab, {"signs": "drowsy, confused"}) is None
+
+
+def test_cholinergic_signs_without_a_class_word_never_route():
+    from antidote_core.pipeline import class_level_match
+    from antidote_core.schemas import LabelRead
+
+    lab = LabelRead(product_name="Gramoxone", active_ingredients=[{"name": "paraquat dichloride"}], visible_text=["GRAMOXONE"])
+    assert class_level_match(lab, {"signs": "pinpoint pupils, salivation"}) is None

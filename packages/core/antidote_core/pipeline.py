@@ -16,6 +16,7 @@ from typing import Any
 
 from antidote_llm import Tier, TokenFactoryClient, call_structured
 from antidote_retrieval import PageStore, Searcher
+from antidote_retrieval.sentences import SentenceIndex, pack_numbered
 from antidote_rules import RuleHit, RulesEngine, load_rules
 
 from .citations import verify_quote
@@ -27,6 +28,33 @@ ROOT = Path(__file__).resolve().parents[3]
 RULES_PATH = ROOT / "packages/rules/antidote_rules/antidote.yaml"
 NPIC = "National Poisons Information Centre, AIIMS New Delhi: 1800-116-117 (24x7)"
 CONFIDENCE_THRESHOLD = 0.75
+
+
+CLASS_WORDS = {
+    "organophosphate": re.compile(r"organo\s*-?\s*phosph|\bop\s*(compound|poison|insecticide)|\bopc\b", re.IGNORECASE),
+    "carbamate": re.compile(r"carbamate", re.IGNORECASE),
+}
+CHOLINERGIC_SIGNS = re.compile(
+    r"miosis|pin\s*-?\s*point|constricted pupil|small pupil|salivation|drool|lacrimation|sweating|diaphoresis|"
+    r"bronchorr|secretion|bradycard|slow (pulse|heart)|fasciculat|twitch|wheez|vomit|diarrh|urinat|incontinen|sludge|dumbels|cholinergic",
+    re.IGNORECASE,
+)
+
+
+def class_level_match(label: LabelRead, context: dict[str, str]) -> ChemMatch | None:
+    """A label that names only the class (no readable chemical) plus recorded cholinergic signs.
+
+    Guidance then follows the toxidrome, as the national module and the ISCCM statement direct. Without the signs
+    there is no class-level match and the card keeps withholding antidote guidance.
+    """
+    text = " ".join([label.product_name or "", *(a.get("name", "") for a in label.active_ingredients), *label.visible_text])
+    signs = f"{context.get('signs', '')} {context.get('toxidrome', '')}"
+    if not CHOLINERGIC_SIGNS.search(signs):
+        return None
+    for group, rx in CLASS_WORDS.items():
+        if rx.search(text):
+            return ChemMatch(f"{group} (class only)", group, None, "unknown", True, 0.8, "class named on the label and cholinergic signs recorded")
+    return None
 
 
 @dataclass
@@ -52,17 +80,18 @@ class AnalyzeResult:
 NORMALISE_SYSTEM = """You normalise text read from an Indian pesticide label. Map spellings to ISO common names (e.g. 'Chlorpyriphos' -> 'chlorpyrifos', 'Cypermethrine' -> 'cypermethrin'). Parse percentages and formulation codes (EC, SC, WP, SL, GR, DP, WG). Do not add anything not on the label. Return the LabelRead tool call."""
 
 COMPOSE_SYSTEM = """You assemble a bedside card for a trained doctor from the guideline pages provided. HARD RULES:
-1. Every clinical statement (signs, timing, treatment, antidote, dose, caution) must be kind=quote with a verbatim span copied from a provided page and a cite with that page's doc_id and page number.
+1. Every sentence on the guideline pages is numbered [S1], [S2] and so on. Every clinical statement (signs, timing, treatment, antidote, dose, caution) must be kind=quote with cite.sid set to the id of the guideline sentence that says it, plus its doc_id and page. Leave text empty for quotes: code copies the exact guideline sentence. You never write clinical text yourself.
 2. kind=explanation sentences may only connect ideas; they must contain NO drug names and NO numbers.
-3. If the pages say there is no specific antidote for this chemical group, set no_antidote=true and quote that statement.
-4. Never write a dose yourself. If a dose appears in a page, quote it verbatim with its page; otherwise say in an explanation that the dose is on the cited page.
+3. If the pages say there is no specific antidote for this chemical group, set no_antidote=true and cite that sentence.
+4. Never write a dose yourself. If a dose appears in a page, cite that sentence by id; otherwise say in an explanation that the dose is on the cited page.
 5. Keep each section to at most four sentences. Return the ManagementCard tool call."""
 
 AUDIT_SYSTEM = """You are an independent clinical auditor. You receive the complete national poison-management module, the ISCCM position statement, and a proposed card for a named chemical group. For each quote sentence decide approve (the quote is used for the correct chemical group and nothing in the documents contradicts it) or reject (wrong group, contradicted, or not clinical guidance). Be strict about atropine, pralidoxime, oxygen and decontamination statements. Return the AuditReport tool call."""
 
 
 class AntidotePipeline:
-    def __init__(self, client: TokenFactoryClient | None, store: PageStore, registry: ChemRegistry | None = None, rules: RulesEngine | None = None):
+    def __init__(self, client: TokenFactoryClient | None, store: PageStore, registry: ChemRegistry | None = None, rules: RulesEngine | None = None, cite_mode: str | None = None):
+        self.cite_mode = cite_mode or os.environ.get("ANTIDOTE_CITE_MODE", "sid")
         self.client = client
         self.store = store
         self.search = Searcher(store)
@@ -102,6 +131,13 @@ class AntidotePipeline:
         label = self.normalise(raw_label, trace_id)
         matches, web = self.match(label, trace_id)
         chosen = next((m for m in matches if chosen_ai and m.active_ingredient.lower() == chosen_ai.lower()), matches[0] if matches else None)
+        class_only = None
+        if not chosen or chosen.confidence < CONFIDENCE_THRESHOLD:
+            class_only = class_level_match(label, context or {})
+            if class_only:
+                matches = [class_only, *matches]
+                chosen = class_only
+                notes.append(f"class-level guidance: {class_only.reason}")
         group = self.registry.group(chosen.group) if chosen else self.registry.group("not_pesticide")
         triangle = self.registry.triangle(label.triangle_colour)
         guarded = (chosen is None) or (chosen.confidence < CONFIDENCE_THRESHOLD)
@@ -113,6 +149,8 @@ class AntidotePipeline:
             stops.append({"rule": "no-specific-antidote", "message": f"No specific antidote for {group['name']}. Do not give atropine for this exposure. Management is supportive per the cited guidance.", "citation": "Registry (chemical_groups.yaml) + cited guideline pages below"})
         if chosen and chosen.group == "paraquat":
             stops.append({"rule": "paraquat-oxygen", "message": "Paraquat: avoid supplemental oxygen unless the patient is hypoxic; oxygen accelerates lung injury. See the cited guidance.", "citation": "ISCCM 2024 position statement"})
+        if class_only:
+            stops.append({"rule": "class-level-guidance", "message": f"Chemical not identified; the label names the class ({class_only.group}) and cholinergic signs are recorded. The card gives the cited guidance for that toxidrome. Confirm the product with the family or the poison centre as soon as possible.", "citation": "NHSRC module and ISCCM 2024: treat the cholinergic toxidrome"})
         if guarded:
             stops.append({"rule": "identify-before-antidote", "message": "Product not confidently identified. Treat the patient, not the bottle: manage the toxidrome you see and call the poison centre before any specific antidote.", "citation": "NHSRC module, syndromic approach"})
         if chosen and chosen.india_status in ("banned", "restricted"):
@@ -128,7 +166,10 @@ class AntidotePipeline:
         audit_report: AuditReport | None = None
         cit: dict[str, Any] = {}
         if self.client and hits:
-            ctx = self.search.pack_context(hits, max_chars=18000)
+            if self.cite_mode == "sid":
+                ctx, sidx = pack_numbered(hits, 18000)
+            else:
+                ctx, sidx = self.search.pack_context(hits, max_chars=18000), None
             allowed = sorted({h.doc_id for h in hits})
             user = (f"Allowed doc_id values for cite (use only these, with the page numbers shown): {', '.join(allowed)}.\n"
                     f"Chemical: {chosen.active_ingredient if chosen else 'unknown'} | group: {group['name'] if group else 'unknown'} | WHO class: {chosen.who_class if chosen else 'n/a'} | label antidote statement as printed: {label.antidote_statement_text or 'none'}\n"
@@ -138,7 +179,7 @@ class AntidotePipeline:
             except Exception as e:  # noqa: BLE001
                 notes.append(f"compose failed: {type(e).__name__}")
         if card:
-            cit = self._verify(card)
+            cit = self._verify(card, sidx)
             card = self._gate(card, rule_hits)
             if guarded:
                 card.manage = [s for s in card.manage if s.kind == "explanation"] or [CardSentence(kind="explanation", text="Antidote guidance is withheld until the product is confidently identified.")]
@@ -156,7 +197,7 @@ class AntidotePipeline:
             for i, s in enumerate(getattr(card, sec)):
                 yield sec, i, s
 
-    def _verify(self, card: ManagementCard) -> dict[str, Any]:
+    def _verify(self, card: ManagementCard, sidx: SentenceIndex | None = None) -> dict[str, Any]:
         total = ok = 0
         tiers: dict[str, int] = {}
         failures = []
@@ -164,6 +205,18 @@ class AntidotePipeline:
             if s.kind != "quote":
                 continue
             total += 1
+            sent = sidx.resolve(s.cite.sid) if (sidx and s.cite) else None
+            if sent:
+                s.cite.doc, s.cite.page, s.cite.quote, s.cite.sid = sent.doc, sent.page, sent.text, sent.sid
+                s.text = sent.text
+                ok += 1
+                tiers["id"] = tiers.get("id", 0) + 1
+                continue
+            if sidx and s.cite and s.cite.sid:
+                failures.append({"section": sec, "index": i, "reason": f"sentence id {s.cite.sid} does not exist"})
+                s.text = "(removed: cited sentence id does not exist)"
+                s.kind = "explanation"
+                continue
             if not s.cite:
                 failures.append({"section": sec, "index": i, "reason": "quote without cite"})
                 s.kind = "explanation"

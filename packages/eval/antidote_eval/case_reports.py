@@ -26,6 +26,9 @@ ROOT = Path(__file__).resolve().parents[3]
 RAW = ROOT / "data/corpus/case_reports"
 MANIFEST = ROOT / "data/external/case_reports_manifest.json"
 CASES = ROOT / "data/external/case_reports.json"
+MANIFEST_V2 = ROOT / "data/external/case_reports_manifest_v2.json"
+CASES_V2 = ROOT / "data/external/case_reports_v2.json"
+CLASS_ONLY_RE = re.compile(r"^(organo\s*-?\s*phosph\w*|op|opc|carbamate|organophosphorus|organophosphate)(\s+(compound|insecticide|pesticide|poisoning))*s?$", re.IGNORECASE)
 SECOND_JUDGE = "deepseek-ai/DeepSeek-V4.1-Flash"
 SECOND_BASE = "https://api.tokenfactory.nebius.com/v1/"
 
@@ -81,6 +84,8 @@ class CaseExtract(BaseModel):
     management_quote: str
     antidote_given: Literal["atropine", "atropine_and_oxime", "vitamin_k", "none", "other"]
     outcome: Literal["survived", "died", "unknown"]
+    presenting_signs: list[str] = Field(default_factory=list, description="Signs on arrival as the authors describe them, short phrases")
+    signs_quote: str | None = Field(default=None, description="Verbatim sentence from the paper describing the presenting signs")
 
 
 def expected_group(substance: str, authors_class: str) -> str | None:
@@ -95,9 +100,9 @@ def expected_group(substance: str, authors_class: str) -> str | None:
 
 
 @app.command()
-def extract() -> None:
+def extract(held_out: bool = typer.Option(False, "--held-out")) -> None:
     client = TokenFactoryClient(ledger=Ledger(ROOT / "data/ledger_eval.db"))
-    items = json.loads(MANIFEST.read_text(encoding="utf-8"))["items"]
+    items = json.loads((MANIFEST_V2 if held_out else MANIFEST).read_text(encoding="utf-8"))["items"]
     out: list[dict[str, Any]] = []
     for m in items:
         if not m.get("file"):
@@ -121,6 +126,9 @@ def extract() -> None:
                 rec[k] = None
                 rec[k.replace("_quote", "") + "_dropped"] = "quote not found in paper"
         rec["quotes_verified"] = checks
+        if x.signs_quote and not verify_quote(x.signs_quote, text).ok:
+            rec["presenting_signs"], rec["signs_quote"] = [], None
+            rec["signs_dropped"] = "quote not found in paper"
         rec["expected_group"] = expected_group(x.substance, x.authors_class)
         if not x.is_human_case_report:
             rec["excluded"] = "not a human case report"
@@ -138,7 +146,7 @@ def extract() -> None:
         if "excluded" not in r and key in seen_urls:
             r["excluded"] = "duplicate of another URL"
         seen_urls.add(key)
-    CASES.write_text(json.dumps({"n_papers": len(out), "kept": sum(1 for r in out if "excluded" not in r), "cases": out}, indent=1, ensure_ascii=False), encoding="utf-8")
+    (CASES_V2 if held_out else CASES).write_text(json.dumps({"held_out": held_out, "n_papers": len(out), "kept": sum(1 for r in out if "excluded" not in r), "cases": out}, indent=1, ensure_ascii=False), encoding="utf-8")
     print("kept", sum(1 for r in out if "excluded" not in r), "of", len(out))
 
 
@@ -214,19 +222,27 @@ def _kappa(a: list[bool], b: list[bool]) -> float | None:
 
 
 @app.command()
-def run(out: Path = typer.Option(ROOT / "eval/results/case_reports.json"), audit: bool = typer.Option(True)) -> None:
+def run(out: Path = typer.Option(ROOT / "eval/results/case_reports.json"), audit: bool = typer.Option(True), held_out: bool = typer.Option(False, "--held-out")) -> None:
     key = os.environ["NEBIUS_API_KEY"]
     ledger = Ledger(ROOT / "data/ledger_eval.db")
     usd0 = sum(v["usd"] for v in ledger.totals().values())
     client = TokenFactoryClient(ledger=ledger)
     pipe = AntidotePipeline(client, PageStore(ROOT / "data/index/antidote.db"), ChemRegistry())
-    cases = [c for c in json.loads(CASES.read_text(encoding="utf-8"))["cases"] if "excluded" not in c]
+    cases = [c for c in json.loads((CASES_V2 if held_out else CASES).read_text(encoding="utf-8"))["cases"] if "excluded" not in c]
     rows: list[dict[str, Any]] = []
     t0 = time.time()
     for i, c in enumerate(cases, 1):
-        label = {"product_name": c.get("brand_or_product") or c["substance"], "active_ingredients": [{"name": c["substance"]}], "visible_text": [c.get("brand_or_product") or "", c["substance"]]}
+        class_only = bool(CLASS_ONLY_RE.match(c["substance"].strip()))
+        if class_only:
+            # a bottle whose chemical name cannot be read: only the class words reach the label
+            label = {"product_name": c.get("brand_or_product") or "unknown insecticide", "active_ingredients": [], "visible_text": [c["substance"], c.get("authors_class") or ""]}
+        else:
+            label = {"product_name": c.get("brand_or_product") or c["substance"], "active_ingredients": [{"name": c["substance"]}], "visible_text": [c.get("brand_or_product") or "", c["substance"]]}
+        ctx = {"route": "ingested"}
+        if held_out and c.get("presenting_signs"):
+            ctx["signs"] = ", ".join(c["presenting_signs"])
         try:
-            res = pipe.analyze(raw_label=label, context={"route": "ingested"}, audit=audit)
+            res = pipe.analyze(raw_label=label, context=ctx, audit=audit)
         except Exception as e:  # noqa: BLE001
             rows.append({"url": c["url"], "substance": c["substance"], "expected_group": c["expected_group"], "outcome": "error", "why": type(e).__name__})
             continue
@@ -243,6 +259,7 @@ def run(out: Path = typer.Option(ROOT / "eval/results/case_reports.json"), audit
             "j2_consistent": judge2(key, c["management_quote"] + " " + c["authors_management"], card) if card else None,
             "citations": f"{res.citation_report.get('verified', 0)}/{res.citation_report.get('total', 0)}",
             "card": card,
+            "class_only": class_only,
         })
         print(f"  {i}/{len(cases)} {c['substance'][:24]:24s} {outcome:14s} {why[:60]}", flush=True)
     n = len(rows)
@@ -261,6 +278,8 @@ def run(out: Path = typer.Option(ROOT / "eval/results/case_reports.json"), audit
         "kappa": _kappa([a for a, _ in pairs], [b for _, b in pairs]),
         "judge": "nvidia/nemotron-3-super-120b-a12b", "second_judge": SECOND_JUDGE,
         "groups": sorted({r["expected_group"] for r in rows}),
+        "class_only_cases": sum(1 for r in rows if r.get("class_only")),
+        "class_only_correct": sum(1 for r in rows if r.get("class_only") and r["outcome"] == "correct"),
         "usd": round(sum(v["usd"] for v in ledger.totals().values()) - usd0, 4), "seconds": round(time.time() - t0),
         "rows": rows,
     }

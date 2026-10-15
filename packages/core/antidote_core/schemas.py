@@ -8,9 +8,10 @@ from pydantic import BaseModel, Field
 
 
 class Cite(BaseModel):
-    doc: str
-    page: int
-    quote: str = Field(description="Verbatim span from the cited page. Never paraphrase inside quote.")
+    sid: str = Field(default="", description="The [S#] id of the numbered guideline sentence, for example S12.")
+    doc: str = Field(default="", description="doc_id of the page holding that sentence")
+    page: int = Field(default=0, description="page number of that sentence")
+    quote: str = Field(default="", description="Leave empty when sid is given; code copies the exact sentence.")
 
 
 class LabelRead(BaseModel):
@@ -32,8 +33,8 @@ class LabelRead(BaseModel):
 
 
 class CardSentence(BaseModel):
-    kind: Literal["quote", "explanation"] = Field(description="quote = verbatim clinical text with cite; explanation = connective plain sentence with NO drug names and NO numbers")
-    text: str
+    kind: Literal["quote", "explanation"] = Field(description="quote = a guideline sentence chosen by its [S#] id in cite.sid; explanation = connective plain sentence with NO drug names and NO numbers")
+    text: str = Field(default="", description="For quote: leave empty, code fills the exact guideline sentence from cite.sid. For explanation: your plain sentence.")
     cite: Cite | None = None
 
 

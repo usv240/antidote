@@ -1,0 +1,269 @@
+{
+ "source": "Tavily search + extract, open-access case reports",
+ "held_out": true,
+ "items": [
+  {
+   "url": "https://europepmc.org/article/med/34074083",
+   "title": "[A case of glufosinate-ammonium poisoning in a patient ...",
+   "query": "glufosinate poisoning case report",
+   "file": null
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10143879",
+   "title": "Human Poisoning with Methomyl and Cypermethrin Pesticide ...",
+   "query": "methomyl poisoning case report",
+   "file": "f053b8f3904c.txt",
+   "chars": 24631
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10285569",
+   "title": "Intermediate Syndrome Due to Organophosphate Poisoning: A Case Report",
+   "query": "unknown insecticide poisoning case report cholinergic",
+   "file": "a1d473ac70fc.txt",
+   "chars": 15700
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10338736",
+   "title": "Diagnostic Dilemma in Fatal Paraquat Poisoning: An Autopsy Case Report",
+   "query": "paraquat ingestion case report survival India",
+   "file": "42a102e32e4b.txt",
+   "chars": 1759
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10505946",
+   "title": "Acetamiprid and pyridaben poisoning: A case report",
+   "query": "acetamiprid poisoning case report",
+   "file": "b671c5314e5b.txt",
+   "chars": 17685
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10553105",
+   "title": "Lambda-cyhalothrin ingestion: an infrequent yet concerning presentation of pyrethroid poisoning",
+   "query": "lambda cyhalothrin poisoning case report",
+   "file": "2fdd567659fa.txt",
+   "chars": 21716
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10767630",
+   "title": "Acute cypermethrin and other pyrethroid poisoning \u2013 An organophosphate-like poisoning: A case report and review",
+   "query": "lambda cyhalothrin poisoning case report",
+   "file": "31f7f4dd1988.txt",
+   "chars": 24980
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11684319",
+   "title": "Survival after aluminum phosphide poisoning with cardiotoxicity: a case report",
+   "query": "celphos aluminium phosphide case report survival",
+   "file": "c071232283b6.txt",
+   "chars": 31598
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12055129",
+   "title": "Paraquat poisoning: a case series of 15 survivors and narrative review",
+   "query": "paraquat ingestion case report survival India",
+   "file": "fa70d6821543.txt",
+   "chars": 57648
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12098374",
+   "title": "Case report: Treatment of severe phorate poisoning",
+   "query": "dichlorvos inhalation poisoning case report",
+   "file": "661f9ca73822.txt",
+   "chars": 39456
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12356379",
+   "title": "Delayed-onset status epilepticus without cholinergic features in organophosphate poisoning: a case report",
+   "query": "profenofos poisoning case report",
+   "file": "35731c06b82b.txt",
+   "chars": 17543
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12495735",
+   "title": "Successful management of paraquat poisoning: a case report",
+   "query": "paraquat ingestion case report survival India",
+   "file": "428c0b3ea3df.txt",
+   "chars": 25113
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12500516",
+   "title": "Organophosphate Poisoning: Insights From a Case Report of Acute Cholinergic Syndrome",
+   "query": "unknown insecticide poisoning case report cholinergic",
+   "file": "8753a4c02072.txt",
+   "chars": 19331
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12745886",
+   "title": "A Whiff of Garlic, a Turn of Fate: Recognizing Organophosphorus Poisoning Amid Diagnostic Uncertainty: A Case Report",
+   "query": "organophosphorus poisoning case report atropine pralidoxime ICU",
+   "file": "4a913b96aeb5.txt",
+   "chars": 19813
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13084015",
+   "title": "Severe organophosphate intoxication without classic cholinergic signs: A case report and updated literature review",
+   "query": "phorate poisoning case report",
+   "file": "85f2127d9c1d.txt",
+   "chars": 39149
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2658248",
+   "title": "Oh! Drat!\u2014A case of transcutaneous superwarfarin poisoning ...",
+   "query": "rodenticide superwarfarin poisoning case report",
+   "file": "3572c49a5d84.txt",
+   "chars": 1686
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2696321",
+   "title": "Pralidoxime in Acute Organophosphorus Insecticide Poisoning\u2014A Randomised Controlled Trial",
+   "query": "quinalphos poisoning case report",
+   "file": "e70caa621a08.txt",
+   "chars": 57501
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2766103",
+   "title": "Poisoning with the S-Alkyl organophosphorus insecticides profenofos and prothiofos",
+   "query": "profenofos poisoning case report",
+   "file": "114fb481bc54.txt",
+   "chars": 29383
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3162709",
+   "title": "Managing aluminum phosphide poisonings",
+   "query": "celphos aluminium phosphide case report survival",
+   "file": "a69a0d710265.txt",
+   "chars": 39922
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3835516",
+   "title": "Glufosinate Herbicide Intoxication Causing Unconsciousness ...",
+   "query": "glufosinate poisoning case report",
+   "file": "a27dd3f1c116.txt",
+   "chars": 12923
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3975180",
+   "title": "Organophosphate poisoning presenting with muscular weakness and abdominal pain- a case report",
+   "query": "unknown insecticide poisoning case report cholinergic",
+   "file": "6bdfb1f8d2c7.txt",
+   "chars": 11960
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3980147",
+   "title": "Methomyl Poisoning Presenting with Decorticate Posture and ...",
+   "query": "methomyl poisoning case report",
+   "file": "e4e518c720d3.txt",
+   "chars": 10074
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4010042",
+   "title": "Two Cases of Paraquat Poisoning from Kota, Rajasthan, INDIA",
+   "query": "paraquat ingestion case report survival India",
+   "file": "8576a74b9fd4.txt",
+   "chars": 12978
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4122673",
+   "title": "Severe oral and intravenous insecticide mixture poisoning with diabetic ketoacidosis: a case report",
+   "query": "unknown insecticide poisoning case report cholinergic",
+   "file": "488ed24fc04d.txt",
+   "chars": 17999
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4339895",
+   "title": "Aluminum phosphide poisoning: Possible role of supportive measures in the absence of specific antidote",
+   "query": "celphos aluminium phosphide case report survival",
+   "file": "01334dc718ed.txt",
+   "chars": 16820
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4961899",
+   "title": "Fatal aluminium phosphide poisoning",
+   "query": "celphos aluminium phosphide case report survival",
+   "file": "dcac2100c59f.txt",
+   "chars": 13646
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6361594",
+   "title": "Accidental acetamiprid poisoning in a buffalo",
+   "query": "acetamiprid poisoning case report",
+   "file": null
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6892705",
+   "title": "Superwarfarin (Long-Acting Anticoagulant Rodenticides ...",
+   "query": "rodenticide superwarfarin poisoning case report",
+   "file": "6caf8c0cfe8b.txt",
+   "chars": 1578
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7968493",
+   "title": "Cholinergic Syndrome: a Case Report of Acute Organophosphate and Carbamate Poisoning",
+   "query": "carbamate insecticide poisoning case report",
+   "file": "4bd7dc57a18a.txt",
+   "chars": 15577
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7991770",
+   "title": "Dichlorvos Poisoning: A Mystery Case of Distributive Shock Unraveling with Atropine",
+   "query": "dichlorvos inhalation poisoning case report",
+   "file": "6d5ecd8bee9b.txt",
+   "chars": 16784
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8207540",
+   "title": "An 80-Year-Old Woman with Alzheimer Disease and Accidental Poisoning with Pyrethroid Pesticide Successfully Treated with Intravenous Lipid Emulsion",
+   "query": "lambda cyhalothrin poisoning case report",
+   "file": "efc58b1eff82.txt",
+   "chars": 22950
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8631070",
+   "title": "Organophosphate poisoning in a young child: a case report",
+   "query": "phorate poisoning case report",
+   "file": "de90784c3a86.txt",
+   "chars": 6259
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9067480",
+   "title": "Fipronil and Acetamiprid Poisoning: New Perils",
+   "query": "acetamiprid poisoning case report",
+   "file": "b17b61d6f834.txt",
+   "chars": 10529
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9119149",
+   "title": "Superwarfarin poisoning: challenges still remain - PMC",
+   "query": "rodenticide superwarfarin poisoning case report",
+   "file": null
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9609388",
+   "title": "Clinical Assessment of Acute Organophosphorus Pesticide Poisoning in Pediatric Patients Admitted to the Toxicology Emergency Department",
+   "query": "quinalphos poisoning case report",
+   "file": "5902d747fd45.txt",
+   "chars": 45591
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9716027",
+   "title": "Accidental organophosphate poisoning: A case series of 2 pediatric coumaphos exposures",
+   "query": "organophosphorus poisoning case report atropine pralidoxime ICU",
+   "file": "e85fa82c3668.txt",
+   "chars": 17899
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9750163",
+   "title": "A Rare Presentation of Severe Organophosphate Poisoning: A Case Report and Review of Literature",
+   "query": "organophosphorus poisoning case report atropine pralidoxime ICU",
+   "file": "0f3495a82ede.txt",
+   "chars": 28852
+  },
+  {
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9851568",
+   "title": "Management of Lambda-Cyhalothrin Poisoning in a North Indian Healthcare Setup: A Rare Case",
+   "query": "lambda cyhalothrin poisoning case report",
+   "file": "0f0b4cc2b532.txt",
+   "chars": 11370
+  }
+ ]
+}
