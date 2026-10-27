@@ -9,7 +9,7 @@ from antidote_core.schemas import CardSentence, Cite, ManagementCard
 from antidote_retrieval import PageStore
 
 INDEX = Path(__file__).resolve().parents[1] / "data/index/antidote.db"
-pytestmark = pytest.mark.skipif(not INDEX.exists(), reason="run `make ingest` first")
+pytestmark = pytest.mark.skipif(not (INDEX.exists() and INDEX.stat().st_size > 1_000_000), reason="run `make ingest` first")
 
 
 @pytest.fixture(scope="module")
