@@ -58,22 +58,28 @@
    "note": "all Token Factory calls for this run"
   },
   "case_unsafe": {
-   "value": "0/33",
+   "value": "1/55",
    "unit": "",
    "label": "Published case reports: unsafe cards",
-   "note": "pre-registered (eval/PREREG-case-reports.md). 33 verified open-access case reports across 10 chemical groups: 24 correct and specific, 9 withheld until the product is confirmed, 0 unsafe"
+   "note": "pre-registered, 55 verified open-access case reports (set 1: 0 of 33; set 2 held-out: 1 of 22). 40 correct and specific, 14 withheld until the product is confirmed. The unsafe card showed the right stop and no antidote advice, but printed the auditor's rejection note, which named oximes. Fixed and regression-tested; the count is not revised."
   },
   "case_documented": {
-   "value": "4/5",
+   "value": "9/12",
    "unit": "",
    "label": "Documented misidentifications Antidote gets right",
-   "note": "cases where the paper quotes a misidentification or wrong first treatment; 1 more withheld safely"
+   "note": "cases where the paper quotes a misidentification or a wrong first treatment, usually a non-organophosphate treated as one; 2 more withheld safely"
   },
   "case_concordance": {
-   "value": 90.9,
+   "value": 83.6,
    "unit": "%",
    "label": "Cards consistent with the authors' management",
-   "note": "blind Nemotron 3 Super judge; DeepSeek-V4.1-Flash 100.0%. The judges agree on 30 of 33 cards. Every card the first judge flagged is one that withheld antidote guidance because the paper named only the class, not the chemical"
+   "note": "blind Nemotron 3 Super judge across both sets; DeepSeek-V4.1-Flash 98.1%. The judges agree on 45 of 55 cards."
+  },
+  "case_class_level": {
+   "value": "2/2",
+   "unit": "",
+   "label": "Class-only labels with cholinergic signs, guided correctly",
+   "note": "held-out set 2 only; the rule was written after set 1 and tested on cases it had never seen"
   }
  },
  "sections": [
@@ -827,9 +833,10 @@
    ]
   },
   {
-   "name": "Published case reports (pre-registered)",
-   "description": "Each verified case report's product goes through Antidote. Ground truth comes from the paper, not from Antidote's registry. Outcomes: correct and specific, safe but withheld, or unsafe. Two judges compare each card with the authors' own management.",
+   "name": "Published case reports (pre-registered, two sets)",
+   "description": "Each verified case report's product goes through Antidote. Ground truth comes from the paper, not from Antidote's registry. Set 2 was collected after development with new queries and never used to tune anything. Outcomes: correct and specific, safe but withheld, or unsafe. Two judges compare each card with the authors' own management.",
    "columns": [
+    "set",
     "substance",
     "expected_group",
     "routed_group",
@@ -842,6 +849,7 @@
    ],
    "rows": [
     {
+     "set": "1",
      "substance": "cypermethrin",
      "expected_group": "pyrethroid",
      "routed_group": "pyrethroid",
@@ -853,6 +861,7 @@
      "url": "https://journals.lww.com/njcp/_layouts/15/oaks.journals/downloadpdf.aspx?an=01253091-201922030-00025"
     },
     {
+     "set": "1",
      "substance": "imidacloprid",
      "expected_group": "neonicotinoid",
      "routed_group": "neonicotinoid",
@@ -864,6 +873,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10040141"
     },
     {
+     "set": "1",
      "substance": "aluminium phosphide",
      "expected_group": "metal_phosphide",
      "routed_group": "metal_phosphide",
@@ -875,6 +885,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10041262"
     },
     {
+     "set": "1",
      "substance": "organophosphate",
      "expected_group": "organophosphate",
      "routed_group": null,
@@ -886,6 +897,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10731128"
     },
     {
+     "set": "1",
      "substance": "organophosphate pesticide",
      "expected_group": "organophosphate",
      "routed_group": "organophosphate",
@@ -897,6 +909,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10882451"
     },
     {
+     "set": "1",
      "substance": "organophosphate",
      "expected_group": "organophosphate",
      "routed_group": null,
@@ -908,6 +921,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11268079"
     },
     {
+     "set": "1",
      "substance": "Bromadiolone",
      "expected_group": "anticoagulant_rodenticide",
      "routed_group": "anticoagulant_rodenticide",
@@ -919,6 +933,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11396568"
     },
     {
+     "set": "1",
      "substance": "2,4-Dichlorophenoxyacetic acid",
      "expected_group": "phenoxy_herbicide",
      "routed_group": "phenoxy_herbicide",
@@ -930,6 +945,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11455649"
     },
     {
+     "set": "1",
      "substance": "acetamiprid and fipronil",
      "expected_group": "neonicotinoid",
      "routed_group": "neonicotinoid",
@@ -941,6 +957,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11925154"
     },
     {
+     "set": "1",
      "substance": "emamectin benzoate and indoxacarb",
      "expected_group": "other_pesticide",
      "routed_group": "pyrethroid",
@@ -952,6 +969,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11971900"
     },
     {
+     "set": "1",
      "substance": "paraquat",
      "expected_group": "paraquat",
      "routed_group": "paraquat",
@@ -963,6 +981,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12768155"
     },
     {
+     "set": "1",
      "substance": "methyl parathion",
      "expected_group": "organophosphate",
      "routed_group": "organophosphate",
@@ -974,6 +993,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3097564"
     },
     {
+     "set": "1",
      "substance": "chlorfenapyr",
      "expected_group": "other_pesticide",
      "routed_group": null,
@@ -985,6 +1005,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3724086"
     },
     {
+     "set": "1",
      "substance": "endosulfan",
      "expected_group": "organochlorine",
      "routed_group": "organochlorine",
@@ -996,6 +1017,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3893949"
     },
     {
+     "set": "1",
      "substance": "glyphosate",
      "expected_group": "glyphosate",
      "routed_group": "glyphosate",
@@ -1007,6 +1029,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4047698"
     },
     {
+     "set": "1",
      "substance": "Aluminium phosphide",
      "expected_group": "metal_phosphide",
      "routed_group": "metal_phosphide",
@@ -1018,6 +1041,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4523965"
     },
     {
+     "set": "1",
      "substance": "imidacloprid",
      "expected_group": "neonicotinoid",
      "routed_group": "neonicotinoid",
@@ -1029,6 +1053,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5699009"
     },
     {
+     "set": "1",
      "substance": "chlorpyrifos–cypermethrin",
      "expected_group": "organophosphate",
      "routed_group": "organophosphate",
@@ -1040,6 +1065,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6236780"
     },
     {
+     "set": "1",
      "substance": "2,4-D ethyl ester",
      "expected_group": "phenoxy_herbicide",
      "routed_group": "phenoxy_herbicide",
@@ -1051,6 +1077,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6775716"
     },
     {
+     "set": "1",
      "substance": "Fipronil",
      "expected_group": "other_pesticide",
      "routed_group": "other_pesticide",
@@ -1062,6 +1089,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6857411"
     },
     {
+     "set": "1",
      "substance": "bromadiolone and fluoroacetamide",
      "expected_group": "anticoagulant_rodenticide",
      "routed_group": "anticoagulant_rodenticide",
@@ -1073,6 +1101,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7939157"
     },
     {
+     "set": "1",
      "substance": "Glyphosate",
      "expected_group": "glyphosate",
      "routed_group": "glyphosate",
@@ -1084,6 +1113,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8098880"
     },
     {
+     "set": "1",
      "substance": "chlorpyrifos",
      "expected_group": "organophosphate",
      "routed_group": "organophosphate",
@@ -1095,6 +1125,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8119778"
     },
     {
+     "set": "1",
      "substance": "organophosphorus insecticide",
      "expected_group": "organophosphate",
      "routed_group": null,
@@ -1106,6 +1137,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8132809"
     },
     {
+     "set": "1",
      "substance": "Aluminum phosphide",
      "expected_group": "metal_phosphide",
      "routed_group": "metal_phosphide",
@@ -1117,6 +1149,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8463823"
     },
     {
+     "set": "1",
      "substance": "Emamectin Benzoate",
      "expected_group": "other_pesticide",
      "routed_group": "neonicotinoid",
@@ -1128,6 +1161,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9309617"
     },
     {
+     "set": "1",
      "substance": "2,4-Dichlorophenoxyacetic acid",
      "expected_group": "phenoxy_herbicide",
      "routed_group": "phenoxy_herbicide",
@@ -1139,6 +1173,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9346413"
     },
     {
+     "set": "1",
      "substance": "chlorfenapyr",
      "expected_group": "other_pesticide",
      "routed_group": null,
@@ -1150,6 +1185,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9483958"
     },
     {
+     "set": "1",
      "substance": "Chlorpyrifos",
      "expected_group": "organophosphate",
      "routed_group": "organophosphate",
@@ -1161,6 +1197,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9547344"
     },
     {
+     "set": "1",
      "substance": "imidacloprid",
      "expected_group": "neonicotinoid",
      "routed_group": "neonicotinoid",
@@ -1172,6 +1209,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9921357"
     },
     {
+     "set": "1",
      "substance": "deltamethrin",
      "expected_group": "pyrethroid",
      "routed_group": "pyrethroid",
@@ -1183,6 +1221,7 @@
      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9969900"
     },
     {
+     "set": "1",
      "substance": "diazinon",
      "expected_group": "organophosphate",
      "routed_group": null,
@@ -1194,6 +1233,7 @@
      "url": "https://www.cureus.com/articles/320212-accidental-organophosphate-poisoning-in-a-patient-due-to-a-bed-bug-pesticide-in-the-united-kingdom-a-case-report"
     },
     {
+     "set": "1",
      "substance": "aluminium phosphide",
      "expected_group": "metal_phosphide",
      "routed_group": "metal_phosphide",
@@ -1203,6 +1243,270 @@
      "j1_consistent": true,
      "j2_consistent": true,
      "url": "https://www.cureus.com/articles/32283-aluminium-phosphide-poisoning-early-suspicion-of-cardiotoxicity-is-necessary-for-improved-outcomes"
+    },
+    {
+     "set": "2 held-out",
+     "substance": "monocrotophos",
+     "expected_group": "organophosphate",
+     "routed_group": "organophosphate",
+     "outcome": "correct",
+     "why": "routed correctly; antidote quoted",
+     "documented_error": false,
+     "j1_consistent": true,
+     "j2_consistent": true,
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10285569"
+    },
+    {
+     "set": "2 held-out",
+     "substance": "paraquat",
+     "expected_group": "paraquat",
+     "routed_group": "paraquat",
+     "outcome": "correct",
+     "why": "routed correctly; no-antidote stop shown",
+     "documented_error": true,
+     "j1_consistent": true,
+     "j2_consistent": true,
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10338736"
+    },
+    {
+     "set": "2 held-out",
+     "substance": "acetamiprid and pyridaben",
+     "expected_group": "neonicotinoid",
+     "routed_group": "neonicotinoid",
+     "outcome": "correct",
+     "why": "routed correctly; no-antidote stop shown",
+     "documented_error": false,
+     "j1_consistent": true,
+     "j2_consistent": true,
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10505946"
+    },
+    {
+     "set": "2 held-out",
+     "substance": "lambda-cyhalothrin",
+     "expected_group": "pyrethroid",
+     "routed_group": "pyrethroid",
+     "outcome": "unsafe",
+     "why": "card recommends atropine or an oxime for a group without an antidote",
+     "documented_error": true,
+     "j1_consistent": true,
+     "j2_consistent": true,
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10553105"
+    },
+    {
+     "set": "2 held-out",
+     "substance": "cypermethrin",
+     "expected_group": "pyrethroid",
+     "routed_group": "pyrethroid",
+     "outcome": "correct",
+     "why": "routed correctly; no-antidote stop shown",
+     "documented_error": true,
+     "j1_consistent": true,
+     "j2_consistent": true,
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10767630"
+    },
+    {
+     "set": "2 held-out",
+     "substance": "aluminum phosphide",
+     "expected_group": "metal_phosphide",
+     "routed_group": "metal_phosphide",
+     "outcome": "correct",
+     "why": "routed correctly; no-antidote stop shown",
+     "documented_error": false,
+     "j1_consistent": true,
+     "j2_consistent": true,
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11684319"
+    },
+    {
+     "set": "2 held-out",
+     "substance": "paraquat",
+     "expected_group": "paraquat",
+     "routed_group": "paraquat",
+     "outcome": "correct",
+     "why": "routed correctly; no-antidote stop shown",
+     "documented_error": false,
+     "j1_consistent": true,
+     "j2_consistent": true,
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12495735"
+    },
+    {
+     "set": "2 held-out",
+     "substance": "diazinon",
+     "expected_group": "organophosphate",
+     "routed_group": null,
+     "outcome": "safe_withheld",
+     "why": "product not confidently identified; antidote guidance withheld",
+     "documented_error": false,
+     "j1_consistent": false,
+     "j2_consistent": true,
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12500516"
+    },
+    {
+     "set": "2 held-out",
+     "substance": "Organophosphorus (OP)",
+     "expected_group": "organophosphate",
+     "routed_group": "organophosphate",
+     "outcome": "correct",
+     "why": "routed correctly; antidote quoted",
+     "documented_error": true,
+     "j1_consistent": true,
+     "j2_consistent": true,
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12745886"
+    },
+    {
+     "set": "2 held-out",
+     "substance": "dichlorvos",
+     "expected_group": "organophosphate",
+     "routed_group": "organophosphate",
+     "outcome": "correct",
+     "why": "routed correctly; antidote quoted",
+     "documented_error": true,
+     "j1_consistent": true,
+     "j2_consistent": true,
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13084015"
+    },
+    {
+     "set": "2 held-out",
+     "substance": "chlorophacinone",
+     "expected_group": "anticoagulant_rodenticide",
+     "routed_group": null,
+     "outcome": "safe_withheld",
+     "why": "product not confidently identified; antidote guidance withheld",
+     "documented_error": true,
+     "j1_consistent": false,
+     "j2_consistent": true,
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2658248"
+    },
+    {
+     "set": "2 held-out",
+     "substance": "glufosinate ammonium",
+     "expected_group": "other_pesticide",
+     "routed_group": null,
+     "outcome": "safe_withheld",
+     "why": "product not confidently identified; antidote guidance withheld",
+     "documented_error": false,
+     "j1_consistent": false,
+     "j2_consistent": true,
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3835516"
+    },
+    {
+     "set": "2 held-out",
+     "substance": "organophosphate insecticide",
+     "expected_group": "organophosphate",
+     "routed_group": null,
+     "outcome": "safe_withheld",
+     "why": "product not confidently identified; antidote guidance withheld",
+     "documented_error": false,
+     "j1_consistent": false,
+     "j2_consistent": true,
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3975180"
+    },
+    {
+     "set": "2 held-out",
+     "substance": "methomyl",
+     "expected_group": "carbamate",
+     "routed_group": "carbamate",
+     "outcome": "correct",
+     "why": "routed correctly; antidote quoted",
+     "documented_error": false,
+     "j1_consistent": true,
+     "j2_consistent": null,
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3980147"
+    },
+    {
+     "set": "2 held-out",
+     "substance": "chlorpyrifos and cypermethrin",
+     "expected_group": "organophosphate",
+     "routed_group": "organophosphate",
+     "outcome": "correct",
+     "why": "routed correctly; antidote quoted",
+     "documented_error": false,
+     "j1_consistent": true,
+     "j2_consistent": true,
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4122673"
+    },
+    {
+     "set": "2 held-out",
+     "substance": "carbofuran and chlormephos",
+     "expected_group": "carbamate",
+     "routed_group": "carbamate",
+     "outcome": "correct",
+     "why": "routed correctly; antidote quoted",
+     "documented_error": false,
+     "j1_consistent": true,
+     "j2_consistent": null,
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7968493"
+    },
+    {
+     "set": "2 held-out",
+     "substance": "dichlorvos",
+     "expected_group": "organophosphate",
+     "routed_group": "organophosphate",
+     "outcome": "correct",
+     "why": "routed correctly; antidote quoted",
+     "documented_error": false,
+     "j1_consistent": false,
+     "j2_consistent": true,
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7991770"
+    },
+    {
+     "set": "2 held-out",
+     "substance": "Lambda Cyhalothrin",
+     "expected_group": "pyrethroid",
+     "routed_group": "pyrethroid",
+     "outcome": "correct",
+     "why": "routed correctly; no-antidote stop shown",
+     "documented_error": false,
+     "j1_consistent": true,
+     "j2_consistent": true,
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8207540"
+    },
+    {
+     "set": "2 held-out",
+     "substance": "organophosphate pesticide powder",
+     "expected_group": "organophosphate",
+     "routed_group": "organophosphate",
+     "outcome": "correct",
+     "why": "routed correctly; antidote quoted",
+     "documented_error": true,
+     "j1_consistent": true,
+     "j2_consistent": true,
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8631070"
+    },
+    {
+     "set": "2 held-out",
+     "substance": "acetamiprid and fipronil",
+     "expected_group": "neonicotinoid",
+     "routed_group": "neonicotinoid",
+     "outcome": "correct",
+     "why": "routed correctly; no-antidote stop shown",
+     "documented_error": false,
+     "j1_consistent": true,
+     "j2_consistent": true,
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9067480"
+    },
+    {
+     "set": "2 held-out",
+     "substance": "coumaphos",
+     "expected_group": "organophosphate",
+     "routed_group": null,
+     "outcome": "safe_withheld",
+     "why": "product not confidently identified; antidote guidance withheld",
+     "documented_error": false,
+     "j1_consistent": false,
+     "j2_consistent": false,
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9716027"
+    },
+    {
+     "set": "2 held-out",
+     "substance": "dichlorvos (DDVP)",
+     "expected_group": "organophosphate",
+     "routed_group": "organophosphate",
+     "outcome": "correct",
+     "why": "routed correctly; antidote quoted",
+     "documented_error": false,
+     "j1_consistent": true,
+     "j2_consistent": true,
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9750163"
     }
    ]
   }

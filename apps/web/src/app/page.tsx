@@ -8,23 +8,45 @@ import { ShieldAlert, Camera, Search, ClipboardCheck, FileText, Phone, WifiOff }
 export default function Landing() {
   return (
     <div className="space-y-20 pt-10">
-      <section className="space-y-6">
-        <p className="eyebrow">Pesticide-label decision support for emergency doctors</p>
-        <h1 className="max-w-3xl text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
-          The chemical was never identified in 94 percent of cases. It was printed on the bottle in the family&apos;s hand.
-        </h1>
-        <p className="max-w-2xl text-lg text-fg-muted">
-          Antidote reads a pesticide label and gives the doctor the chemical, its hazard class, what the poisoning will look like, and the cited antidote guidance, or a clear stop when there is none.
-        </p>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Stat n="110,000 to 168,000" text="pesticide self-poisoning deaths a year worldwide, 14 to 20 percent of all suicides" k="who_class" href="https://files.givewell.org/files/DWDA%202009/Centre_for_Pesticide_Suicide_Prevention/Mew_et_al_2017.pdf" src="Mew et al., Journal of Affective Disorders, 2017" />
-          <Stat n="50 to 90%" text="of paraquat patients die in Indian hospitals; the first error is treating it like something else" k="paraquat" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12532245/" src="Indian tertiary-hospital series, 2023 to 2025" />
+      <section className="grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-start">
+        <div className="space-y-6">
+          <h1 className="max-w-3xl text-balance text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
+            The chemical was never identified in 94 percent of cases. It was printed on the bottle in the family&apos;s hand.
+          </h1>
+          <p className="max-w-xl text-lg text-fg">
+            In July 2013, 23 children in Bihar died after a school lunch cooked in oil kept in a pesticide container. A forensic report confirmed the poison, monocrotophos, four days later.{" "}
+            <a className="text-sm text-accent underline underline-offset-2" href="https://en.wikipedia.org/wiki/Bihar_school_meal_poisoning_incident" target="_blank" rel="noreferrer">Record</a>
+          </p>
+          <p className="max-w-xl text-fg-muted">
+            When the bottle comes with the patient, the answer should take seconds, not days. Antidote reads the label from a photo and gives the doctor the chemical, its hazard class and guidance quoted from the national module, or a stop card when no antidote exists. About 20 seconds from photo to card. Tested on 55 published poisoning cases, and every result is public, including the one card we got wrong.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/try?sample=chlorpyrifos" className="btn-primary">Try it on a sample bottle</Link>
+            {process.env.NEXT_PUBLIC_VIDEO_URL ? <a href={process.env.NEXT_PUBLIC_VIDEO_URL} className="btn-ghost" target="_blank" rel="noreferrer">Watch the 3-minute video</a> : null}
+          </div>
+          <p className="text-sm text-fg-muted">Decision support for trained clinicians. Airway, breathing, circulation first. National Poisons Information Centre, AIIMS: 1800-116-117.</p>
         </div>
-        <div className="flex flex-wrap gap-3">
-          <Link href="/try?sample=chlorpyrifos" className="btn-primary">Try it on a sample bottle</Link>
-          {process.env.NEXT_PUBLIC_VIDEO_URL ? <a href={process.env.NEXT_PUBLIC_VIDEO_URL} className="btn-ghost" target="_blank" rel="noreferrer">Watch the 3-minute video</a> : null}
-        </div>
-        <p className="text-sm text-fg-muted">Decision support for trained clinicians. Airway, breathing, circulation first. National Poisons Information Centre, AIIMS: 1800-116-117.</p>
+        <figure className="card space-y-4 lg:mt-2">
+          <p className="text-lg font-semibold leading-snug">Gramoxone: paraquat dichloride 24%</p>
+          <div role="note" className="rounded-xl border-2 border-stop p-3">
+            <p className="font-semibold text-stop">Stop: no specific antidote</p>
+            <p className="mt-1 text-sm">Do not give atropine for this exposure. Management is supportive per the cited guidance.</p>
+          </div>
+          <blockquote className="quote text-sm">
+            &ldquo;Administration of excessive oxygen should be avoided in paraquat poisoning because it may worsen its toxicity.&rdquo;
+            <footer className="mt-1 text-xs text-fg-muted">ISCCM 2024 position statement, page 10</footer>
+          </blockquote>
+          <figcaption className="border-t border-border pt-3 text-xs text-fg-muted">
+            From a live run on the Gramoxone sample. The stop comes from the registry, not the model; every clinical sentence is the guideline&apos;s own words.{" "}
+            <Link href="/try?sample=paraquat" className="text-accent underline underline-offset-2">Run it yourself</Link>
+          </figcaption>
+        </figure>
+      </section>
+
+      <section aria-labelledby="stakes" className="grid gap-4 sm:grid-cols-2">
+        <h2 id="stakes" className="sr-only">Why it matters</h2>
+        <p className="text-fg-muted"><span className="font-semibold text-fg">110,000 to 168,000</span> pesticide self-poisoning deaths a year worldwide, 14 to 20 percent of all suicides. <a className="text-sm text-accent underline underline-offset-2" href="https://files.givewell.org/files/DWDA%202009/Centre_for_Pesticide_Suicide_Prevention/Mew_et_al_2017.pdf" target="_blank" rel="noreferrer">Mew et al., 2017</a></p>
+        <p className="text-fg-muted"><span className="font-semibold text-fg">50 to 90 percent</span> of paraquat patients die in Indian hospitals, and the first error is treating it like something else. <a className="text-sm text-accent underline underline-offset-2" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12532245/" target="_blank" rel="noreferrer">Indian hospital series, 2023 to 2025</a> <Info k="paraquat" /></p>
       </section>
 
       <section aria-labelledby="what" className="space-y-4">
@@ -112,15 +134,6 @@ export default function Landing() {
   );
 }
 
-function Stat({ n, text, k, href, src }: { n: string; text: string; k: "who_class" | "paraquat"; href: string; src: string }) {
-  return (
-    <div className="card">
-      <p className="text-3xl font-semibold tracking-tight">{n} <Info k={k} /></p>
-      <p className="mt-2 text-fg">{text}</p>
-      <a className="mt-2 inline-block text-sm text-accent underline-offset-2 hover:underline" href={href} target="_blank" rel="noreferrer">{src}</a>
-    </div>
-  );
-}
 function Card({ title, icon, children }: { title: React.ReactNode; icon?: React.ReactNode; children: React.ReactNode }) {
   return (<div className="card"><div className="flex items-center gap-2 text-fg"><span className="text-accent">{icon}</span><h3 className="font-semibold">{title}</h3></div><div className="mt-2 text-fg-muted">{children}</div></div>);
 }
