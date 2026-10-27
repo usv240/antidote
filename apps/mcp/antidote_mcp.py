@@ -82,5 +82,27 @@ def file_mlc_record(alleged_history: str, substance_product: str | None = None, 
     return row
 
 
+@mcp.tool()
+def surveillance_alerts() -> dict[str, Any]:
+    """Clusters (three or more cases of one chemical group within seven days; spraying clusters), banned chemicals still
+    reaching patients, and restricted-use chemicals in the poisoning register. Fixed rules, no model, instant."""
+    from antidote_core.surveillance import detect_alerts, load_rows, status_map
+
+    rows = load_rows(ROOT / "data/mlc_register.jsonl", ROOT / "data/samples/register_demo.jsonl")
+    return {"register_rows": len(rows), "demo_rows": sum(1 for r in rows if r.get("demo")), "alerts": detect_alerts(rows, status_map(REGISTRY))}
+
+
+@mcp.tool()
+def surveillance_brief() -> dict[str, Any]:
+    """District surveillance brief written by NVIDIA Nemotron 3.5 Lightning after reading the whole register and the full
+    text of every published case report for the chemicals in it. It explains the rule-based alerts; it cannot change them."""
+    from antidote_core.surveillance import build_brief, load_rows
+
+    if not CLIENT:
+        return {"error": "model key required"}
+    rows = load_rows(ROOT / "data/mlc_register.jsonl", ROOT / "data/samples/register_demo.jsonl")
+    return build_brief(CLIENT, rows, REGISTRY, PIPE.rules)
+
+
 if __name__ == "__main__":
     mcp.run(transport=os.environ.get("ANTIDOTE_MCP_TRANSPORT", "stdio"))
