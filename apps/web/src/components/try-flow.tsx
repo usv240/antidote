@@ -82,7 +82,7 @@ export function TryFlow() {
   }
 
   const S = ({ s }: { s: Sentence }) => s.kind === "quote" && s.cite ? (
-    <blockquote className="quote text-sm">“{s.text}”<footer className="mt-1 text-xs text-fg-muted">{s.cite.doc}, page {s.cite.page} · <a className="text-accent" href={apiUrl(`/v1/page/${s.cite.doc}/${s.cite.page}`)} target="_blank" rel="noreferrer">Show page</a></footer></blockquote>
+    <blockquote className="quote text-sm">“{s.text}”<footer className="mt-1 text-xs text-fg-muted">{s.cite.doc}, page {s.cite.page} · <a className="text-accent underline underline-offset-2" href={apiUrl(`/v1/page/${s.cite.doc}/${s.cite.page}`)} target="_blank" rel="noreferrer">Show page</a></footer></blockquote>
   ) : <p className="text-sm text-fg-muted">{s.text}</p>;
 
   return (
@@ -151,7 +151,7 @@ export function TryFlow() {
               <h3 className="font-semibold">4. Medico-legal register <Info k="mlc" /></h3>
               <p className="mt-1 text-sm text-fg-muted">Substance fields are pre-filled from the label; identifiers and findings are entered by staff in the register.</p>
               <button className="btn-primary mt-3" onClick={save}>Save register row</button>
-              {saved && <p className="mt-2 text-sm text-ok">Saved. Row {saved.slice(0, 8)}. <a className="text-accent" href="/register">Open the register</a>.</p>}
+              {saved && <p className="mt-2 text-sm text-ok">Saved. Row {saved.slice(0, 8)}. <a className="text-accent underline underline-offset-2" href="/register">Open the register</a>.</p>}
             </div>
           </section>
         )}
@@ -160,7 +160,7 @@ export function TryFlow() {
         {result ? (<>
           <div className="card text-sm"><p className="font-semibold">Trace <Info k="trace" /></p><ul className="mt-1 space-y-1">{result.trace.map((t, i) => <li key={i} className="flex justify-between gap-2 text-fg-muted"><span>{t.model} · {t.purpose}</span><span>{t.tokens_in + t.tokens_out} tok · ${t.usd.toFixed(4)}</span></li>)}</ul></div>
           <div className="card text-sm"><p className="flex items-center gap-2 font-semibold"><FileText className="h-4 w-4" /> Guideline pages used</p><ul className="mt-1 space-y-1 text-fg-muted">{result.retrieved.map((r) => <li key={`${r.doc}-${r.page}`}>{r.title}, p{r.page}</li>)}</ul></div>
-          {result.web?.results?.length ? <div className="card text-sm"><p className="font-semibold">Brand lookup via Tavily (unverified)</p><ul className="mt-1 space-y-1">{result.web.results.slice(0, 3).map((r) => <li key={r.url}><a className="text-accent" href={r.url} target="_blank" rel="noreferrer">{r.title}</a></li>)}</ul></div> : null}
+          {result.web?.results?.length ? <div className="card text-sm"><p className="font-semibold">Brand lookup via Tavily (unverified)</p><ul className="mt-1 space-y-1">{result.web.results.slice(0, 3).map((r) => <li key={r.url}><a className="text-accent underline underline-offset-2" href={r.url} target="_blank" rel="noreferrer">{r.title}</a></li>)}</ul></div> : null}
         </>) : <div className="card text-sm text-fg-muted">The card, the Trace and the guideline pages appear here.</div>}
       </aside>
     </div>
