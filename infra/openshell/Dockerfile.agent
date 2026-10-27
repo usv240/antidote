@@ -1,0 +1,18 @@
+# Antidote agent image for the OpenShell sandbox: repo, dependencies, guideline index, demo register and the
+# published case-report texts used by the surveillance brief. No credentials are baked in.
+FROM python:3.12-slim
+ENV PYTHONIOENCODING=utf-8 PIP_NO_CACHE_DIR=1
+RUN pip install uv
+WORKDIR /workspace
+COPY pyproject.toml uv.lock ./
+RUN uv sync --no-dev --frozen
+COPY packages ./packages
+COPY apps/mcp ./apps/mcp
+COPY scripts ./scripts
+COPY data/index ./data/index
+COPY data/external ./data/external
+COPY data/samples ./data/samples
+COPY data/corpus/case_reports ./data/corpus/case_reports
+# OpenShell runs the workload as a non-root sandbox identity: make the workspace usable by any uid.
+RUN chmod -R a+rwX /workspace
+CMD ["sleep", "infinity"]
