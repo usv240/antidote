@@ -280,6 +280,13 @@ class AntidotePipeline:
             if self.rules.blocks(hits):
                 s.text = "STOP: " + "; ".join(h.message for h in hits if h.action == "block")
                 s.kind = "explanation"
+        # Clinical sections carry only the guideline's own sentences. A model-written sentence there (for example
+        # "early irritation presents with vomiting") is clinical content without a source, so it is removed.
+        system_notes = ("STOP:", "Removed by", "See ", "(removed", "Antidote guidance is withheld")
+        for sec in ("expect", "manage", "cautions"):
+            kept = [s for s in getattr(card, sec) if s.kind == "quote" or s.text.startswith(system_notes)]
+            if len(kept) < len(getattr(card, sec)):
+                setattr(card, sec, kept)
         return card
 
     def _audit(self, card: ManagementCard, group: str, trace_id: str) -> AuditReport | None:

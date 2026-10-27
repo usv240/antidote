@@ -176,3 +176,21 @@ def test_truncated_label_json_is_salvaged():
     f = parse_label_fields(raw)
     assert f["product_name"] == "Gramoxone" and f["active_ingredients"][0]["name"] == "Paraquat dichloride"
     assert "Syngenta" in f["visible_text"]
+
+
+def test_clinical_sections_hold_only_quoted_sentences():
+    from pathlib import Path
+
+    from antidote_core import ChemRegistry
+    from antidote_core.pipeline import AntidotePipeline
+    from antidote_core.schemas import CardSentence, Cite, ManagementCard
+    from antidote_retrieval import PageStore
+
+    pipe = AntidotePipeline(None, PageStore(Path(__file__).resolve().parents[1] / "data/index/antidote.db"), ChemRegistry())
+    card = ManagementCard(identity=[CardSentence(kind="explanation", text="It is a bipyridyl herbicide.")],
+                          expect=[CardSentence(kind="explanation", text="Early gastrointestinal irritation often presents with vomiting."),
+                                  CardSentence(kind="quote", text="Oral ulcers are common.", cite=Cite(doc="d", page=2, quote="Oral ulcers are common."))],
+                          manage=[], cautions=[], no_antidote=True)
+    out = pipe._gate(card, [])
+    assert [s.text for s in out.expect] == ["Oral ulcers are common."]
+    assert out.identity[0].text == "It is a bipyridyl herbicide."  # identity may explain
