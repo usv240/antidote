@@ -153,3 +153,26 @@ def test_telegram_unreadable_photo_asks_for_a_better_one():
     did = handle_update({"message": {"chat": {"id": 1}, "photo": [{"file_id": "a"}, {"file_id": "b"}]}},
                         analyze=lambda f: None, read_photo=lambda _id: {}, send=lambda _c, t: sent.append(t), npic="x")
     assert did == "photo unreadable" and "could not read" in sent[-1]
+
+
+def test_normaliser_never_invents_a_chemical():
+    """Regression: the label-photo benchmark found empty reads normalised to 'chlorpyrifos', the prompt's own example."""
+    from antidote_core.pipeline import grounded, label_source_text
+
+    assert label_source_text({}) == ""
+    assert not grounded("chlorpyrifos", label_source_text({"product_name": "Gramoxone", "visible_text": ["Syngenta", "Herbicide"]}))
+    assert grounded("chlorpyrifos", label_source_text({"visible_text": ["Chlorpyriphos 20% EC"]}))
+    assert grounded("paraquat dichloride", label_source_text({"active_ingredients": [{"name": "Paraquat Dichloride 24% SL"}]}))
+
+
+def test_truncated_label_json_is_salvaged():
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "apps/api"))
+    from antidote_api.main import parse_label_fields
+
+    raw = '{"product_name": "Gramoxone", "active_ingredients": [{"name": "Paraquat dichloride", "percent": "24"}], "visible_text": ["GRAMOXONE", "Syngenta", "1 Litre", "Chemical Comp'
+    f = parse_label_fields(raw)
+    assert f["product_name"] == "Gramoxone" and f["active_ingredients"][0]["name"] == "Paraquat dichloride"
+    assert "Syngenta" in f["visible_text"]

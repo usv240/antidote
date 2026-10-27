@@ -161,14 +161,31 @@ async def read_label(image: UploadFile = File(...)) -> dict[str, Any]:
 
 
 def parse_label_fields(raw: str) -> dict[str, Any]:
+    """Parse the vision reply; when the JSON is cut off or malformed, salvage what was printed rather than return nothing."""
+    import re
+
     start, end = raw.find("{"), raw.rfind("}")
-    fields: dict[str, Any] = {}
     if start >= 0 and end > start:
         try:
             fields = json.loads(raw[start : end + 1])
-        except Exception:  # noqa: BLE001
-            fields = {}
-    return fields
+            if isinstance(fields, dict):
+                return fields
+        except Exception:  # noqa: BLE001, S110 - fall through to salvage
+            pass
+    out: dict[str, Any] = {}
+    for k in ("product_name", "formulation_code", "registration_number", "manufacturer", "triangle_colour", "signal_word", "antidote_statement_text"):
+        m = re.search(rf'"{k}"\s*:\s*"([^"]*)"', raw)
+        if m and m.group(1).strip():
+            out[k] = m.group(1).strip()
+    m = re.search(r'"active_ingredients"\s*:\s*\[(.*?)(\]|$)', raw, re.DOTALL)
+    if m:
+        ais = [{"name": n.strip(), **({"percent": p} if p else {})} for n, p in re.findall(r'"name"\s*:\s*"([^"]+)"(?:\s*,\s*"percent"\s*:\s*"?([^",}]*)"?)?', m.group(1))]
+        if ais:
+            out["active_ingredients"] = ais
+    m = re.search(r'"visible_text"\s*:\s*\[(.*?)(\]|$)', raw, re.DOTALL)
+    if m:
+        out["visible_text"] = re.findall(r'"([^"]{2,80})"', m.group(1))[:20]
+    return out
 
 
 @app.post("/v1/analyze")

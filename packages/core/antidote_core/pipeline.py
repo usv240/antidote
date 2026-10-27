@@ -30,6 +30,32 @@ NPIC = "National Poisons Information Centre, AIIMS New Delhi: 1800-116-117 (24x7
 CONFIDENCE_THRESHOLD = 0.75
 
 
+def label_source_text(raw: dict[str, Any]) -> str:
+    """Everything the reader actually saw on the label, as one string."""
+    parts: list[str] = []
+    for k in ("product_name", "manufacturer", "antidote_statement_text", "registration_number", "formulation_code"):
+        if raw.get(k):
+            parts.append(str(raw[k]))
+    for a in raw.get("active_ingredients") or []:
+        parts.append(str(a.get("name", "")) if isinstance(a, dict) else str(a))
+    parts += [str(t) for t in raw.get("visible_text") or []]
+    return " ".join(p for p in parts if p and p.lower() != "none")
+
+
+def grounded(name: str, source: str, threshold: float = 80.0) -> bool:
+    """True if `name` (or a spelling variant of it) appears in what was read. Catches 'Chlorpyriphos' to
+    'chlorpyrifos'; rejects a chemical the model brought from nowhere."""
+    from rapidfuzz import fuzz
+
+    n, s = re.sub(r"[^a-z0-9 ]", " ", name.lower()).strip(), re.sub(r"[^a-z0-9 ]", " ", source.lower())
+    if not n or not s.strip():
+        return False
+    if n in s:
+        return True
+    head = n.split()[0]
+    return len(head) >= 4 and fuzz.partial_ratio(head, s) >= threshold
+
+
 CLASS_WORDS = {
     "organophosphate": re.compile(r"organo\s*-?\s*phosph|\bop\s*(compound|poison|insecticide)|\bopc\b", re.IGNORECASE),
     "carbamate": re.compile(r"carbamate", re.IGNORECASE),
@@ -101,13 +127,23 @@ class AntidotePipeline:
     # ---------- 1 + 2: read and normalise ----------
     def normalise(self, raw: dict[str, Any], trace_id: str) -> LabelRead:
         base = LabelRead.model_validate({k: v for k, v in raw.items() if k in LabelRead.model_fields})
-        if not self.client:
+        source = label_source_text(raw)
+        if not self.client or not source.strip():
+            # Nothing was read: never ask a model to fill the gap. An empty label stays empty and the card is withheld.
             return base
         try:
-            return call_structured(self.client, Tier.FAST, LabelRead, [{"role": "system", "content": NORMALISE_SYSTEM}, {"role": "user", "content": json.dumps(raw, ensure_ascii=False)}], purpose="normalise.label", trace_id=trace_id, max_tokens=700)
+            out = call_structured(self.client, Tier.FAST, LabelRead, [{"role": "system", "content": NORMALISE_SYSTEM}, {"role": "user", "content": json.dumps(raw, ensure_ascii=False)}], purpose="normalise.label", trace_id=trace_id, max_tokens=700)
         except Exception as e:  # noqa: BLE001
             base.visible_text.append(f"normalise_error:{type(e).__name__}")
             return base
+        # Grounding gate: a normalised chemical survives only if something like it was actually read from the label.
+        kept = [a for a in out.active_ingredients if grounded(a.get("name", ""), source)]
+        if len(kept) < len(out.active_ingredients):
+            out.visible_text.append(f"dropped_ungrounded:{len(out.active_ingredients) - len(kept)}")
+        out.active_ingredients = kept
+        if out.product_name and not grounded(out.product_name, source):
+            out.product_name = base.product_name
+        return out
 
     # ---------- 3: match ----------
     def match(self, label: LabelRead, trace_id: str) -> tuple[list[ChemMatch], dict[str, Any]]:
