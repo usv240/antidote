@@ -38,3 +38,21 @@ def resolve_brand(brand: str, *, ledger: Ledger | None = None, trace_id: str | N
         return {"available": True, "query": q, "unverified": True, "results": [{"title": x.get("title"), "url": x.get("url"), "snippet": (x.get("content") or "")[:300]} for x in r.get("results", [])]}
     except Exception as e:  # noqa: BLE001
         return {"available": False, "reason": type(e).__name__, "results": []}
+
+
+def brand_votes(web: dict[str, Any], ais: list[dict[str, Any]]) -> list[tuple[dict[str, Any], int]]:
+    """Registry chemicals mentioned in brand search results, most-mentioned first. Pages often list other products,
+    so a single mention is weak evidence; callers act only on a clear winner."""
+    import re
+
+    blob = " ".join((r.get("title") or "") + " " + (r.get("snippet") or "") for r in web.get("results", [])).lower()
+    votes = [(a, len(re.findall(rf"(?<![a-z]){re.escape(a['name'].lower())}(?![a-z])", blob))) for a in ais]
+    return sorted([v for v in votes if v[1]], key=lambda v: v[1], reverse=True)
+
+
+def clear_winner(votes: list[tuple[dict[str, Any], int]]) -> dict[str, Any] | None:
+    if not votes:
+        return None
+    if len(votes) == 1 or votes[0][1] > votes[1][1]:
+        return votes[0][0]
+    return None

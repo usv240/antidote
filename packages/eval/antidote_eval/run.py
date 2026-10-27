@@ -140,9 +140,10 @@ def run(out: Path = typer.Option(ROOT / "eval/results")) -> None:
         s2, sec2 = with_model()
         summary |= s2
         sections += sec2
-    from .fold_cases import fold
+    from .fold_cases import fold, fold_labels
 
     fold(summary, sections)
+    fold_labels(summary, sections)
     report = {"generated_at": datetime.now(UTC).isoformat(), "command": "make eval", "model_key_present": has_key, "summary": summary, "sections": sections, "seconds": round(time.time() - t0, 1)}
     (out / "latest.json").write_text(json.dumps(report, indent=1, ensure_ascii=False), encoding="utf-8")
     md = [f"# Antidote eval report ({report['generated_at']})", ""] + [f"- **{v['label']}**: {v['value']}{v.get('unit', '')}  ({v.get('note', '')})" for v in summary.values()]

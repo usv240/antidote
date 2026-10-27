@@ -64,3 +64,12 @@ def test_triangle_mapping_follows_rule_19(reg):
     assert reg.triangle("red")["label"] == "Extremely toxic"
     assert reg.triangle("green")["signal"] == "CAUTION"
     assert reg.triangle(None) is None
+
+
+def test_mixture_led_by_the_component_with_an_antidote():
+    from antidote_core import ChemRegistry, LabelFields
+
+    m = ChemRegistry().match(LabelFields(active_ingredients=[{"name": "Cypermethrin"}, {"name": "Chlorpyrifos"}]))
+    assert m[0].group == "organophosphate"
+    m = ChemRegistry().match(LabelFields(active_ingredients=[{"name": "Chlorpyrifos"}, {"name": "Cypermethrin"}]))
+    assert m[0].group == "organophosphate"

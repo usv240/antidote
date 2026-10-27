@@ -53,16 +53,38 @@ def fold(summary: dict[str, Any], sections: list[dict[str, Any]]) -> None:
                      "columns": COLS, "rows": [{"set": name, **{k: r.get(k) for k in COLS if k != "set"}} for name, c in sets for r in c["rows"]]})
 
 
+def fold_labels(summary: dict[str, Any], sections: list[dict[str, Any]]) -> None:
+    for k in [k for k in summary if k.startswith("label_photo_")]:
+        del summary[k]
+    sections[:] = [s for s in sections if not s["name"].startswith("Real label photos")]
+    now, before = OUT / "label_bench.json", OUT / "label_bench_before.json"
+    if not now.exists():
+        return
+    a = json.loads(now.read_text(encoding="utf-8"))
+    b = json.loads(before.read_text(encoding="utf-8")) if before.exists() else None
+    oc = a["outcomes"]
+    note = f"{a['n']} photos of real Indian pesticide labels from product pages and listings, annotated by eye before any run: {oc.get('correct', 0)} correct, {oc.get('safe_withheld', 0)} withheld for the clinician to confirm, {oc.get('wrong_group_same_advice', 0)} wrong group with the same advice."
+    if b:
+        note += f" The first run found {b['unsafe']} unsafe cards: an empty read was normalised to a chemical the model invented. Fixed with a grounding gate and two independent reads."
+    summary["label_photo_unsafe"] = {"value": f"{a['unsafe']}/{a['n']}", "unit": "", "label": "Real label photos: unsafe cards", "note": note}
+    summary["label_photo_correct"] = {"value": a.get("correct_when_chemical_legible"), "unit": "%", "label": "Real label photos read correctly when the chemical is legible",
+                                      "note": f"{a['legible_n']} photos where the chemical name is readable at photo resolution; {a.get('correct')}% across all {a['n']}"}
+    cols = ["index", "expected_group", "chemical", "chemical_legible", "read_ingredients", "routed_group", "confidence", "agreed", "outcome"]
+    sections.append({"name": "Real label photos (two independent reads)", "description": "Photos of real Indian pesticide containers, not our own. NVIDIA Nemotron 3.5 Super VL and a second model read each label; the chemical is used only when both reads point to the same chemical group and it appears in the text read.",
+                     "columns": cols, "rows": [{k: r.get(k) for k in cols} for r in a["rows"]]})
+
+
 def main() -> None:
     p = OUT / "latest.json"
     report = json.loads(p.read_text(encoding="utf-8"))
     fold(report["summary"], report["sections"])
+    fold_labels(report["summary"], report["sections"])
     p.write_text(json.dumps(report, indent=1, ensure_ascii=False), encoding="utf-8")
     md = [f"# Antidote eval report ({report['generated_at']})", ""]
     for v in report["summary"].values():
         md.append(f"- **{v['label']}**: {v['value']}{v.get('unit', '')}  ({v.get('note', '')})")
     (OUT / "REPORT.md").write_text("\n".join(md) + "\n", encoding="utf-8")
-    print({k: v["value"] for k, v in report["summary"].items() if k.startswith("case_")})
+    print({k: v["value"] for k, v in report["summary"].items() if k.startswith(("case_", "label_photo_"))})
 
 
 if __name__ == "__main__":

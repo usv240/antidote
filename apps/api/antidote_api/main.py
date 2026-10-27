@@ -164,6 +164,16 @@ def _group_of(fields: dict[str, Any]) -> str | None:
     return m[0].group if m and m[0].confidence >= 0.75 else None
 
 
+def _brand_group(product_name: str | None) -> str | None:
+    """The chemical group the web says a brand contains (Tavily over Indian agrochemical sources), or None if unclear."""
+    from antidote_core.tavily_tools import brand_votes, clear_winner, resolve_brand
+
+    if not product_name or not os.environ.get("TAVILY_API_KEY"):
+        return None
+    win = clear_winner(brand_votes(resolve_brand(product_name), REGISTRY.ais))
+    return win["group"] if win else None
+
+
 def read_label_checked(image: bytes) -> dict[str, Any]:
     """Two different vision models read the label in parallel. If their reads point to different chemical groups, the
     chemical is left blank for the doctor to confirm from the bottle: a vision model can invent small print."""
@@ -173,13 +183,18 @@ def read_label_checked(image: bytes) -> dict[str, Any]:
     vr, second = av.describe_pair(image)
     fields = parse_label_fields(vr.raw)
     check: dict[str, Any] = {"second_read": second is not None}
-    if fields.get("active_ingredients"):
+    if fields.get("active_ingredients") or fields.get("visible_text"):
         g1 = _group_of(fields)
         g2 = _group_of(parse_label_fields(second.raw)) if second else None
         check.update({"first": g1, "second": g2, "agreed": g1 is not None and g1 == g2})
+        web_group = _brand_group(fields.get("product_name")) if check["agreed"] else None
+        if web_group and web_group != g1:
+            # Two reads agree but the brand's registered composition on the web points elsewhere: trust neither.
+            check.update({"agreed": False, "web": web_group})
         if not check["agreed"]:
-            check["first_read_ingredients"] = [a.get("name") for a in fields["active_ingredients"] if isinstance(a, dict)]
-            fields = {**fields, "active_ingredients": []}
+            check["first_read_ingredients"] = [a.get("name") for a in fields.get("active_ingredients", []) if isinstance(a, dict)]
+            # Keep the brand and maker; drop every chemical-bearing line, so no invented name can reach the registry.
+            fields = {k: v for k, v in fields.items() if k in ("product_name", "manufacturer", "triangle_colour", "signal_word", "registration_number")}
     return {"mode": vr.mode, "fields": fields, "cross_check": check, "notes": vr.notes + (second.notes if second else ["no second read"])}
 
 

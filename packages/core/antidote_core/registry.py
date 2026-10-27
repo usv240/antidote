@@ -103,7 +103,16 @@ class ChemRegistry:
                     cands.append((n, 0.8, "found in visible text"))
         out: list[ChemMatch] = []
         seen = set()
-        for n, conf, why in sorted(cands, key=lambda c: c[1], reverse=True):
+        # In a mixture the component with a specific antidote leads the card: missing atropine in an organophosphate
+        # and pyrethroid mixture is the lethal error, giving the cholinergic guidance with a pyrethroid present is not.
+        def lead(c: tuple[str, float, str]) -> tuple[int, float]:
+            grp = next((x["group"] for x in self.ais if x["name"].lower() == c[0]), "")
+            return (1 if grp in ("organophosphate", "carbamate") else 0, c[1])
+
+        if len({c[0] for c in cands}) > 1:
+            top_conf = max(c[1] for c in cands)
+            cands = [(n, conf if lead((n, conf, w))[0] == 0 else max(conf, top_conf), w + ("; leads the mixture" if lead((n, conf, w))[0] else "")) for n, conf, w in cands]
+        for n, conf, why in sorted(cands, key=lead, reverse=True):
             if n in seen:
                 continue
             seen.add(n)

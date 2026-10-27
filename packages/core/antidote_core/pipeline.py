@@ -22,7 +22,7 @@ from antidote_rules import RuleHit, RulesEngine, load_rules
 from .citations import verify_quote
 from .registry import ChemMatch, ChemRegistry, LabelFields
 from .schemas import AuditReport, CardSentence, LabelRead, ManagementCard
-from .tavily_tools import resolve_brand
+from .tavily_tools import brand_votes, clear_winner, resolve_brand
 
 ROOT = Path(__file__).resolve().parents[3]
 RULES_PATH = ROOT / "packages/rules/antidote_rules/antidote.yaml"
@@ -182,11 +182,9 @@ class AntidotePipeline:
         if (not matches or matches[0].confidence < CONFIDENCE_THRESHOLD) and label.product_name and os.environ.get("TAVILY_API_KEY"):
             web = resolve_brand(label.product_name, ledger=self.client.ledger if self.client else None, trace_id=trace_id)
             # Scan web snippets for a known active ingredient; cap confidence so the antidote row stays suppressed until confirmed.
-            blob = " ".join((r.get("title") or "") + " " + (r.get("snippet") or "") for r in web.get("results", [])).lower()
-            for a in self.registry.ais:
-                if re.search(rf"(?<![a-z]){re.escape(a['name'].lower())}(?![a-z])", blob):
-                    matches = [ChemMatch(a["name"], a["group"], a.get("who_class"), a.get("india_status", "unknown"), bool(a.get("verify", True)), 0.6, "web-sourced via Tavily (unverified)")] + matches
-                    break
+            a = clear_winner(brand_votes(web, self.registry.ais))
+            if a:
+                matches = [ChemMatch(a["name"], a["group"], a.get("who_class"), a.get("india_status", "unknown"), bool(a.get("verify", True)), 0.6, "web-sourced via Tavily (unverified)"), *matches]
         return matches, web
 
     # ---------- full analysis ----------
