@@ -15,7 +15,6 @@ from antidote_core.pipeline import NPIC, AntidotePipeline
 from antidote_core.schemas import MLCRecord
 from antidote_llm import Ledger, TokenFactoryClient
 from antidote_retrieval import PageStore
-from antidote_vision import describe
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -153,11 +152,35 @@ def chemicals() -> list[dict[str, Any]]:
 @app.post("/v1/read-label")
 async def read_label(image: UploadFile = File(...)) -> dict[str, Any]:
     """Vision reads the label fields; nothing clinical is asked of the vision model."""
+    return read_label_checked(await image.read())
+
+
+def _group_of(fields: dict[str, Any]) -> str | None:
+    """The registry chemical group a read points to, without web lookups. Used only to compare two reads."""
+    from antidote_core import LabelFields
+
+    lab = PIPE.normalise(fields, str(uuid.uuid4()))
+    m = REGISTRY.match(LabelFields(product_name=lab.product_name, active_ingredients=lab.active_ingredients, raw_text=lab.visible_text))
+    return m[0].group if m and m[0].confidence >= 0.75 else None
+
+
+def read_label_checked(image: bytes) -> dict[str, Any]:
+    """Two different vision models read the label in parallel. If their reads point to different chemical groups, the
+    chemical is left blank for the doctor to confirm from the bottle: a vision model can invent small print."""
     import antidote_vision as av
 
     av.PROMPT = LABEL_PROMPT
-    vr = describe(await image.read())
-    return {"mode": vr.mode, "fields": parse_label_fields(vr.raw), "notes": vr.notes}
+    vr, second = av.describe_pair(image)
+    fields = parse_label_fields(vr.raw)
+    check: dict[str, Any] = {"second_read": second is not None}
+    if fields.get("active_ingredients"):
+        g1 = _group_of(fields)
+        g2 = _group_of(parse_label_fields(second.raw)) if second else None
+        check.update({"first": g1, "second": g2, "agreed": g1 is not None and g1 == g2})
+        if not check["agreed"]:
+            check["first_read_ingredients"] = [a.get("name") for a in fields["active_ingredients"] if isinstance(a, dict)]
+            fields = {**fields, "active_ingredients": []}
+    return {"mode": vr.mode, "fields": fields, "cross_check": check, "notes": vr.notes + (second.notes if second else ["no second read"])}
 
 
 def parse_label_fields(raw: str) -> dict[str, Any]:
@@ -283,15 +306,13 @@ async def telegram_webhook(request: Request) -> dict[str, Any]:
         httpx.post(f"{api}/sendMessage", json={"chat_id": chat, "text": text[:4000]}, timeout=20)
 
     def read_photo(file_id: str) -> dict[str, Any]:
-        import antidote_vision as av
 
         info = httpx.get(f"{api}/getFile", params={"file_id": file_id}, timeout=20).json()
         path = (info.get("result") or {}).get("file_path")
         if not path:
             return {}
         img = httpx.get(f"https://api.telegram.org/file/bot{token}/{path}", timeout=30).content
-        av.PROMPT = LABEL_PROMPT
-        return parse_label_fields(describe(img).raw)
+        return read_label_checked(img)["fields"]
 
     def analyze_label(fields: dict[str, Any]):
         return PIPE.analyze(raw_label=fields, context={}, audit=False)

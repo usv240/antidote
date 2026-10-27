@@ -54,7 +54,10 @@ export function TryFlow() {
     const r = await fetch(apiUrl("/v1/read-label"), { method: "POST", body: fd });
     if (!r.ok) { setReadMode(r.status === 413 ? "photo too large for the hosted API; type the label fields instead" : `label reader unavailable (${r.status})`); setBusy(null); return; }
     const j = await r.json();
-    setReadMode(j.mode);
+    const cc = j.cross_check as { agreed?: boolean | null; first?: string | null; second?: string | null } | undefined;
+    setReadMode(cc && cc.agreed === false
+      ? `Two independent reads of this label disagreed (${cc.first ?? "unclear"} and ${cc.second ?? "unclear"}). Type the chemical exactly as printed on the bottle.`
+      : cc && cc.agreed ? `${j.mode}; two independent reads agree` : j.mode);
     if (j.fields && Object.keys(j.fields).length) {
       setLabel(j.fields);
       const ais = (j.fields.active_ingredients as { name: string; percent?: string }[] | undefined) ?? [];
@@ -91,7 +94,7 @@ export function TryFlow() {
           <h1 className="text-2xl font-semibold">1. Read the label <Info k="registration" /></h1>
           <p className="text-sm text-fg-muted">Photograph the bottle, use a sample, or type what is printed. The vision model only reads; the registry decides.</p>
           <label className="btn-ghost cursor-pointer">Upload a label photo<input type="file" accept="image/*" className="sr-only" onChange={(e) => e.target.files?.[0] && readPhoto(e.target.files[0])} /></label>
-          {readMode && <p className="text-xs text-fg-muted">Read with: {readMode}</p>}
+          {readMode && (readMode.startsWith("Two independent") ? <p role="alert" className="rounded-xl border border-caution p-2 text-sm">{readMode}</p> : <p className="text-xs text-fg-muted">Read with: {readMode}</p>)}
           <div className="grid gap-3 sm:grid-cols-2">
             <L label="Product name"><input className="inp" value={String(label.product_name ?? "")} onChange={(e) => setLabel({ ...label, product_name: e.target.value })} /></L>
             <L label="Active ingredient and percent, as printed"><input className="inp" placeholder="Chlorpyriphos 20%" value={aiText} onChange={(e) => setAiText(e.target.value)} /></L>

@@ -27,13 +27,11 @@ sys.path.insert(0, str(ROOT / "apps/api"))
 ANTIDOTE_GROUPS = {"organophosphate", "carbamate", "anticoagulant_rodenticide"}
 
 
-def read_label(image: bytes) -> tuple[dict[str, Any], str]:
-    import antidote_vision as av
-    from antidote_api import main as api  # the endpoint's own prompt and parser
+def read_label(image: bytes) -> tuple[dict[str, Any], str, dict[str, Any]]:
+    from antidote_api import main as api  # the endpoint's own two-read path
 
-    av.PROMPT = api.LABEL_PROMPT
-    vr = av.describe(image)
-    return api.parse_label_fields(vr.raw), vr.mode
+    r = api.read_label_checked(image)
+    return r["fields"], r["mode"], r["cross_check"]
 
 
 def outcome(expected: str, routed: str | None, confident: bool) -> str:
@@ -56,7 +54,7 @@ def main(out: Path = typer.Option(ROOT / "eval/results/label_bench.json")) -> No
         path = ROOT / "data/corpus/label_photos" / it["file"]
         if not path.exists():
             continue
-        fields, mode = read_label(path.read_bytes())
+        fields, mode, check = read_label(path.read_bytes())
         label = pipe.normalise(fields, str(uuid.uuid4()))
         matches, web = pipe.match(label, str(uuid.uuid4()))
         top = matches[0] if matches else None
@@ -66,7 +64,7 @@ def main(out: Path = typer.Option(ROOT / "eval/results/label_bench.json")) -> No
             "index": it["index"], "expected_group": it["expected_group"], "chemical": it["chemical"], "chemical_legible": it["chemical_legible"],
             "read_product": fields.get("product_name"), "read_ingredients": ", ".join(a.get("name", "") for a in label.active_ingredients),
             "routed_group": top.group if top else None, "confidence": round(top.confidence, 2) if top else None, "via": top.reason if top else None,
-            "tavily_used": bool(web.get("results")), "outcome": oc, "mode": mode, "url": it["url"],
+            "tavily_used": bool(web.get("results")), "outcome": oc, "mode": mode, "agreed": check.get("agreed"), "first_read": check.get("first"), "second_read": check.get("second"), "url": it["url"],
         })
         print(f"  #{it['index']:>2} {oc:24s} read={rows[-1]['read_ingredients'][:30]!s:30s} -> {rows[-1]['routed_group']} {rows[-1]['confidence']}", flush=True)
     c = Counter(r["outcome"] for r in rows)
