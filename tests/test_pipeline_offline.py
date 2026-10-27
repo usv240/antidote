@@ -194,3 +194,16 @@ def test_clinical_sections_hold_only_quoted_sentences():
     out = pipe._gate(card, [])
     assert [s.text for s in out.expect] == ["Oral ulcers are common."]
     assert out.identity[0].text == "It is a bipyridyl herbicide."  # identity may explain
+
+
+def test_nulls_from_the_vision_model_do_not_crash_normalisation():
+    from pathlib import Path
+
+    from antidote_core import ChemRegistry
+    from antidote_core.pipeline import AntidotePipeline
+    from antidote_retrieval import PageStore
+
+    pipe = AntidotePipeline(None, PageStore(Path(__file__).resolve().parents[1] / "data/index/antidote.db"), ChemRegistry())
+    lab = pipe.normalise({"product_name": "Gramoxone", "active_ingredients": [{"name": "Paraquat dichloride", "percent": None}, None, "Water"],
+                          "batch": None, "confidence": None, "visible_text": ["GRAMOXONE", None]}, "t")
+    assert lab.product_name == "Gramoxone" and lab.active_ingredients[0] == {"name": "Paraquat dichloride"}

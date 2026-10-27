@@ -30,6 +30,34 @@ NPIC = "National Poisons Information Centre, AIIMS New Delhi: 1800-116-117 (24x7
 CONFIDENCE_THRESHOLD = 0.75
 
 
+def clean_label(raw: dict[str, Any] | None) -> dict[str, Any]:
+    """Vision models return null for fields they cannot see and sometimes numbers or nested lists. Keep what was read
+    and drop what was not, so a partly read label never fails validation."""
+    out: dict[str, Any] = {}
+    for k, v in (raw or {}).items():
+        if v is None or v == "" or v == []:
+            continue
+        if k == "active_ingredients" and isinstance(v, list):
+            ais = []
+            for a in v:
+                if isinstance(a, dict) and a.get("name"):
+                    ais.append({kk: str(vv) for kk, vv in a.items() if vv not in (None, "")})
+                elif isinstance(a, str) and a.strip():
+                    ais.append({"name": a.strip()})
+            if ais:
+                out[k] = ais
+        elif k in ("visible_text", "languages_seen") and isinstance(v, list):
+            out[k] = [str(x) for x in v if x not in (None, "")]
+        elif k == "confidence":
+            try:
+                out[k] = float(v)
+            except (TypeError, ValueError):
+                continue
+        else:
+            out[k] = v if isinstance(v, (str, list, dict)) else str(v)
+    return out
+
+
 def label_source_text(raw: dict[str, Any]) -> str:
     """Everything the reader actually saw on the label, as one string."""
     parts: list[str] = []
@@ -126,6 +154,7 @@ class AntidotePipeline:
 
     # ---------- 1 + 2: read and normalise ----------
     def normalise(self, raw: dict[str, Any], trace_id: str) -> LabelRead:
+        raw = clean_label(raw)
         base = LabelRead.model_validate({k: v for k, v in raw.items() if k in LabelRead.model_fields})
         source = label_source_text(raw)
         if not self.client or not source.strip():
