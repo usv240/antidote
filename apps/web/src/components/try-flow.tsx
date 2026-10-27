@@ -134,7 +134,7 @@ export function TryFlow() {
               {result.card ? (
                 <>
                   {(["identity", "expect", "manage", "cautions"] as const).map((sec) => (
-                    <div key={sec} className="space-y-2"><p className="eyebrow">{sec === "identity" ? "What it is" : sec === "expect" ? "What to expect" : sec === "manage" ? "Management, quoted" : "Cautions, quoted"}</p>{result.card![sec].map((s, i) => <S key={i} s={s} />)}</div>
+                    <div key={sec} className="space-y-2"><p className="eyebrow">{sec === "identity" ? "What it is" : sec === "expect" ? "What to expect" : sec === "manage" ? "Management, quoted" : "Cautions, quoted"}</p>{result.card![sec].length ? result.card![sec].map((s, i) => <S key={i} s={s} />) : <p className="text-sm text-fg-muted">The indexed guidelines have no sentence on this for this chemical group.</p>}</div>
                   ))}
                   <div className="flex flex-wrap gap-3 text-xs text-fg-muted"><span>Quotes verified {result.citations.verified}/{result.citations.total}</span>{result.audit && <span>Auditor: {result.audit.overall}</span>}<span>{result.latency_ms} ms</span></div>
                 </>
