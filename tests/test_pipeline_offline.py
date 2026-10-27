@@ -106,3 +106,17 @@ def test_cholinergic_signs_without_a_class_word_never_route():
 
     lab = LabelRead(product_name="Gramoxone", active_ingredients=[{"name": "paraquat dichloride"}], visible_text=["GRAMOXONE"])
     assert class_level_match(lab, {"signs": "pinpoint pupils, salivation"}) is None
+
+
+def test_auditor_reasons_never_reach_the_card():
+    """Regression: held-out case set 2 found an auditor reason mentioning oximes printed on a pyrethroid card."""
+    from antidote_core.pipeline import AntidotePipeline
+    from antidote_core.schemas import AuditReport, AuditVerdict, CardSentence, Cite, ManagementCard
+
+    card = ManagementCard(identity=[], expect=[], cautions=[], no_antidote=True,
+                          manage=[CardSentence(kind="quote", text="Supportive care is the mainstay", cite=Cite(doc="d", page=3, quote="x"))])
+    report = AuditReport(verdicts=[AuditVerdict(index=0, section="manage", verdict="reject", reason="mentions oximes for organophosphate poisoning, not pyrethroids")], overall="reject")
+    out = AntidotePipeline._apply_audit(card, report)
+    text = " ".join(s.text for s in out.manage)
+    assert "oxime" not in text.lower() and "atropin" not in text.lower()
+    assert "page 3" in text

@@ -270,6 +270,8 @@ class AntidotePipeline:
                 sec = getattr(card, v.section, None)
                 if sec and 0 <= v.index < len(sec):
                     s = sec[v.index]
-                    s.text = f"See {s.cite.doc} page {s.cite.page}. (Auditor rejected: {v.reason})" if s.cite else f"(Auditor rejected: {v.reason})"
+                    # The auditor's reason is model-written free text; it stays in the audit report and the trace and is
+                    # never printed on the card, where it would bypass the no-drug-names gate on explanations.
+                    s.text = f"Removed by the independent auditor. See {s.cite.doc} page {s.cite.page}." if s.cite else "Removed by the independent auditor."
                     s.kind = "explanation"
         return card

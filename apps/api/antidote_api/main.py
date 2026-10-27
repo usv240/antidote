@@ -99,7 +99,7 @@ LABEL_PROMPT = (
     "You are reading a photo of a pesticide container label for a doctor. Return ONLY a JSON object with keys: product_name, "
     "active_ingredients (list of {name, percent} exactly as printed), formulation_code, registration_number (e.g. CIR-...), batch, expiry, "
     "manufacturer, triangle_colour (red, yellow, blue or green if a coloured triangle or band is visible), signal_word, antidote_statement_text "
-    "(the antidote sentence exactly as printed, or null), visible_text (list of strings as printed), languages_seen (list), confidence (0 to 1). "
+    "(the antidote sentence exactly as printed, or null), visible_text (at most 15 short strings as printed), languages_seen (list), confidence (0 to 1). "
     "Do not infer anything not visible; use null."
 )
 
@@ -157,7 +157,10 @@ async def read_label(image: UploadFile = File(...)) -> dict[str, Any]:
 
     av.PROMPT = LABEL_PROMPT
     vr = describe(await image.read())
-    raw = vr.raw
+    return {"mode": vr.mode, "fields": parse_label_fields(vr.raw), "notes": vr.notes}
+
+
+def parse_label_fields(raw: str) -> dict[str, Any]:
     start, end = raw.find("{"), raw.rfind("}")
     fields: dict[str, Any] = {}
     if start >= 0 and end > start:
@@ -165,7 +168,7 @@ async def read_label(image: UploadFile = File(...)) -> dict[str, Any]:
             fields = json.loads(raw[start : end + 1])
         except Exception:  # noqa: BLE001
             fields = {}
-    return {"mode": vr.mode, "fields": fields, "notes": vr.notes}
+    return fields
 
 
 @app.post("/v1/analyze")
