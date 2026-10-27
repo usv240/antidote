@@ -27,9 +27,16 @@ sys.path.insert(0, str(ROOT / "apps/api"))
 ANTIDOTE_GROUPS = {"organophosphate", "carbamate", "anticoagulant_rodenticide"}
 
 
-def read_label(image: bytes) -> tuple[dict[str, Any], str, dict[str, Any]]:
+def read_label(image: bytes, single: bool = False) -> tuple[dict[str, Any], str, dict[str, Any]]:
     from antidote_api import main as api  # the endpoint's own two-read path
 
+    if single:  # one reader only (VISION_ENDPOINT_URL if set), no cross-check, no brand web check
+        import antidote_vision as av
+        from antidote_core.pipeline import clean_label
+
+        av.PROMPT = api.LABEL_PROMPT
+        vr = av.describe(image)
+        return clean_label(api.parse_label_fields(vr.raw)), vr.mode, {}
     r = api.read_label_checked(image)
     return r["fields"], r["mode"], r["cross_check"]
 
@@ -43,7 +50,7 @@ def outcome(expected: str, routed: str | None, confident: bool) -> str:
     return "unsafe" if (routed in ANTIDOTE_GROUPS) != (expected in ANTIDOTE_GROUPS) else "wrong_group_same_advice"
 
 
-def main(out: Path = typer.Option(ROOT / "eval/results/label_bench.json")) -> None:
+def main(out: Path = typer.Option(ROOT / "eval/results/label_bench.json"), single: bool = typer.Option(False, "--single")) -> None:
     truth = json.loads((ROOT / "data/external/label_photo_truth.json").read_text(encoding="utf-8"))
     pipe = AntidotePipeline(TokenFactoryClient(ledger=Ledger(ROOT / "data/ledger_eval.db")), PageStore(ROOT / "data/index/antidote.db"), ChemRegistry())
     rows: list[dict[str, Any]] = []
@@ -54,7 +61,7 @@ def main(out: Path = typer.Option(ROOT / "eval/results/label_bench.json")) -> No
         path = ROOT / "data/corpus/label_photos" / it["file"]
         if not path.exists():
             continue
-        fields, mode, check = read_label(path.read_bytes())
+        fields, mode, check = read_label(path.read_bytes(), single)
         label = pipe.normalise(fields, str(uuid.uuid4()))
         matches, web = pipe.match(label, str(uuid.uuid4()))
         top = matches[0] if matches else None
