@@ -120,3 +120,36 @@ def test_auditor_reasons_never_reach_the_card():
     text = " ".join(s.text for s in out.manage)
     assert "oxime" not in text.lower() and "atropin" not in text.lower()
     assert "page 3" in text
+
+
+def test_telegram_text_message_gets_a_card_with_stop_first():
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "apps/api"))
+    from antidote_api.telegram import handle_update
+    from antidote_core import ChemRegistry
+    from antidote_core.pipeline import AntidotePipeline
+    from antidote_retrieval import PageStore
+
+    pipe = AntidotePipeline(None, PageStore(Path(__file__).resolve().parents[1] / "data/index/antidote.db"), ChemRegistry())
+    sent: list[str] = []
+    did = handle_update({"message": {"chat": {"id": 1}, "text": "Gramoxone paraquat dichloride"}},
+                        analyze=lambda f: pipe.analyze(raw_label=f, audit=False), read_photo=lambda _id: {},
+                        send=lambda _c, t: sent.append(t), npic="1800-116-117")
+    assert did == "text card"
+    assert "STOP" in sent[-1] and "atropine" in sent[-1].lower()  # the stop card says do not give atropine
+    assert sent[-1].index("STOP") < sent[-1].index("Poison centre")
+
+
+def test_telegram_unreadable_photo_asks_for_a_better_one():
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "apps/api"))
+    from antidote_api.telegram import handle_update
+
+    sent: list[str] = []
+    did = handle_update({"message": {"chat": {"id": 1}, "photo": [{"file_id": "a"}, {"file_id": "b"}]}},
+                        analyze=lambda f: None, read_photo=lambda _id: {}, send=lambda _c, t: sent.append(t), npic="x")
+    assert did == "photo unreadable" and "could not read" in sent[-1]

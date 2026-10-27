@@ -244,3 +244,40 @@ async def upload_protocol(file: UploadFile = File(...), kind: str = "protocol", 
     doc_id = f"local-{workspace}-" + _re.sub(r"[^a-z0-9]+", "-", safe.lower().rsplit(".", 1)[0])[:60]
     STORE.add_doc(doc_id=doc_id, title=f"{safe} (local protocol, workspace {workspace})", path=str(dest / safe), device_class="guideline", device_ids=[], licence="Uploaded by the workspace owner; indexed locally only", source_url="", sha256=_h.sha256(raw).hexdigest(), pages=pages, ingested_at=time.time())
     return {"kind": "protocol", "doc_id": doc_id, "pages": len(pages), "workspace": workspace, "note": "Cited beside the national module as a local source from the next card onward."}
+
+
+# --- Telegram front door (set TELEGRAM_BOT_TOKEN and TELEGRAM_WEBHOOK_SECRET to enable) ---
+@app.post("/v1/telegram/webhook", include_in_schema=False)
+async def telegram_webhook(request: Request) -> dict[str, Any]:
+    import httpx
+
+    from antidote_api.telegram import handle_update
+
+    token = os.environ.get("TELEGRAM_BOT_TOKEN")
+    secret = os.environ.get("TELEGRAM_WEBHOOK_SECRET")
+    if not token or not secret:
+        raise HTTPException(404, "telegram not configured")
+    if request.headers.get("x-telegram-bot-api-secret-token") != secret:
+        raise HTTPException(403, "bad secret")
+    update = await request.json()
+    api = f"https://api.telegram.org/bot{token}"
+
+    def send(chat: int, text: str) -> None:
+        httpx.post(f"{api}/sendMessage", json={"chat_id": chat, "text": text[:4000]}, timeout=20)
+
+    def read_photo(file_id: str) -> dict[str, Any]:
+        import antidote_vision as av
+
+        info = httpx.get(f"{api}/getFile", params={"file_id": file_id}, timeout=20).json()
+        path = (info.get("result") or {}).get("file_path")
+        if not path:
+            return {}
+        img = httpx.get(f"https://api.telegram.org/file/bot{token}/{path}", timeout=30).content
+        av.PROMPT = LABEL_PROMPT
+        return parse_label_fields(describe(img).raw)
+
+    def analyze_label(fields: dict[str, Any]):
+        return PIPE.analyze(raw_label=fields, context={}, audit=False)
+
+    did = handle_update(update, analyze=analyze_label, read_photo=read_photo, send=send, npic=NPIC)
+    return {"ok": True, "did": did}
