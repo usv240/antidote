@@ -207,3 +207,13 @@ def test_nulls_from_the_vision_model_do_not_crash_normalisation():
     lab = pipe.normalise({"product_name": "Gramoxone", "active_ingredients": [{"name": "Paraquat dichloride", "percent": None}, None, "Water"],
                           "batch": None, "confidence": None, "visible_text": ["GRAMOXONE", None]}, "t")
     assert lab.product_name == "Gramoxone" and lab.active_ingredients[0] == {"name": "Paraquat dichloride"}
+
+
+def test_label_check_survives_null_ingredient_list():
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "apps/api"))
+    from antidote_core.pipeline import clean_label
+
+    assert clean_label({"product_name": "Confidor", "active_ingredients": None, "visible_text": None}) == {"product_name": "Confidor"}

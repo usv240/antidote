@@ -3,6 +3,7 @@ import { Info } from "@/components/info";
 import { Explain } from "@/components/explain-mode";
 import { EvalTiles } from "@/components/eval-tiles";
 import { SampleGallery } from "@/components/sample-gallery";
+import { StackStrip } from "@/components/stack-strip";
 import { ShieldAlert, Camera, Search, ClipboardCheck, FileText, Phone, WifiOff } from "lucide-react";
 
 export default function Landing() {
@@ -124,6 +125,8 @@ export default function Landing() {
         <Card title="Works offline" icon={<WifiOff className="h-5 w-5" />}>The registry, the WHO table and the guideline pages are small enough to ship in full; an open Nemotron model on a laptop composes the card without internet.</Card>
         <Card title="Call the poison centre" icon={<Phone className="h-5 w-5" />}>Every card shows 1800-116-117 and prepares the proforma so the call takes thirty seconds.</Card>
       </section>
+
+      <StackStrip />
 
       <section aria-labelledby="limits" className="space-y-3">
         <h2 id="limits" className="text-2xl font-semibold">Limits, honestly</h2>

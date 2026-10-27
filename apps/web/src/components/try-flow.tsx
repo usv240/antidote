@@ -94,6 +94,10 @@ export function TryFlow() {
           <h1 className="text-2xl font-semibold">1. Read the label <Info k="registration" /></h1>
           <p className="text-sm text-fg-muted">Photograph the bottle, use a sample, or type what is printed. The vision model only reads; the registry decides.</p>
           <label className="btn-ghost cursor-pointer">Upload a label photo<input type="file" accept="image/*" className="sr-only" onChange={(e) => e.target.files?.[0] && readPhoto(e.target.files[0])} /></label>
+          <p className="text-xs text-fg-muted">No bottle nearby? Download a sample label and upload it:{" "}
+            <a className="text-accent underline underline-offset-2" href="/samples/sample-label-organophosphate.png" download>organophosphate</a>,{" "}
+            <a className="text-accent underline underline-offset-2" href="/samples/sample-label-paraquat.png" download>paraquat</a>,{" "}
+            <a className="text-accent underline underline-offset-2" href="/samples/sample-label-phosphide.png" download>phosphide</a>. These labels were made for testing and are not real products.</p>
           {readMode && (readMode.startsWith("Two independent") ? <p role="alert" className="rounded-xl border border-caution p-2 text-sm">{readMode}</p> : <p className="text-xs text-fg-muted">Read with: {readMode}</p>)}
           <div className="grid gap-3 sm:grid-cols-2">
             <L label="Product name"><input className="inp" value={String(label.product_name ?? "")} onChange={(e) => setLabel({ ...label, product_name: e.target.value })} /></L>
@@ -139,7 +143,7 @@ export function TryFlow() {
                   {(["identity", "expect", "manage", "cautions"] as const).map((sec) => (
                     <div key={sec} className="space-y-2"><p className="eyebrow">{sec === "identity" ? "What it is" : sec === "expect" ? "What to expect" : sec === "manage" ? "Management, quoted" : "Cautions, quoted"}</p>{result.card![sec].length ? result.card![sec].map((s, i) => <S key={i} s={s} />) : <p className="text-sm text-fg-muted">The indexed guidelines have no sentence on this for this chemical group.</p>}</div>
                   ))}
-                  <div className="flex flex-wrap gap-3 text-xs text-fg-muted"><span>Quotes verified {result.citations.verified}/{result.citations.total}</span>{result.audit && <span>Auditor: {result.audit.overall}</span>}<span>{result.latency_ms} ms</span></div>
+                  <div className="flex flex-wrap gap-3 text-xs text-fg-muted"><span>Quotes verified {result.citations.verified}/{result.citations.total}</span>{result.audit && <span>Auditor: {result.audit.overall}</span>}<span>{result.latency_ms} ms</span><a className="ml-auto text-accent underline underline-offset-2" download={`antidote-result.json`} href={`data:application/json;charset=utf-8,${encodeURIComponent(JSON.stringify(result, null, 2))}`}>Download result as JSON</a></div>
                 </>
               ) : <p className="text-sm text-fg-muted">{result.notes.join(" ") || "No card (replay mode or no guideline pages)."}</p>}
             </div>
