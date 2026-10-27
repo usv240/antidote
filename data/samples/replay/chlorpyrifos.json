@@ -1,0 +1,282 @@
+{
+ "sample_id": "chlorpyrifos",
+ "recorded_at": "2026-10-27T19:58:48.300Z",
+ "request": {
+  "label": {
+   "product_name": "Dursban",
+   "active_ingredients": [
+    {
+     "name": "Chlorpyriphos",
+     "percent": "20"
+    }
+   ],
+   "formulation_code": "EC",
+   "registration_number": "CIR-12,345/2008",
+   "triangle_colour": "yellow",
+   "signal_word": "POISON",
+   "antidote_statement_text": "Atropine is the antidote. Consult a doctor.",
+   "visible_text": [
+    "DURSBAN",
+    "Chlorpyriphos 20% EC",
+    "POISON"
+   ]
+  },
+  "context": {
+   "route": "ingested",
+   "time_since_exposure": "1-2 h",
+   "signs": "pinpoint pupils, excess secretions"
+  },
+  "audit": true
+ },
+ "response": {
+  "trace_id": "a8680d16-0544-43de-98e0-07fe5e24f1a0",
+  "banner": "Decision support for trained clinicians. Airway, breathing, circulation first. National Poisons Information Centre, AIIMS New Delhi: 1800-116-117 (24x7).",
+  "label": {
+   "product_name": "Dursban",
+   "active_ingredients": [
+    {
+     "name": "chlorpyrifos",
+     "percent": "20"
+    }
+   ],
+   "formulation_code": "EC",
+   "registration_number": "CIR-12,345/2008",
+   "batch": null,
+   "expiry": null,
+   "manufacturer": null,
+   "triangle_colour": "yellow",
+   "signal_word": "POISON",
+   "antidote_statement_text": "Atropine is the antidote. Consult a doctor.",
+   "visible_text": [
+    "DURSBAN",
+    "Chlorpyriphos 20% EC",
+    "POISON"
+   ],
+   "languages_seen": [
+    "en"
+   ],
+   "confidence": 0.99
+  },
+  "matches": [
+   {
+    "active_ingredient": "chlorpyrifos",
+    "group": "organophosphate",
+    "who_class": "II",
+    "india_status": "restricted",
+    "verify": false,
+    "confidence": 0.97,
+    "reason": "exact active ingredient"
+   }
+  ],
+  "chosen": {
+   "active_ingredient": "chlorpyrifos",
+   "group": "organophosphate",
+   "who_class": "II",
+   "india_status": "restricted",
+   "verify": false,
+   "confidence": 0.97,
+   "reason": "exact active ingredient"
+  },
+  "group": {
+   "id": "organophosphate",
+   "name": "Organophosphate insecticide",
+   "antidote_exists": true,
+   "gate": "none",
+   "retrieval_terms": [
+    "organophosphorus",
+    "organophosphate",
+    "atropine",
+    "pralidoxime",
+    "cholinergic",
+    "muscarinic",
+    "oximes"
+   ]
+  },
+  "triangle": {
+   "label": "Highly toxic",
+   "signal": "POISON"
+  },
+  "guarded": false,
+  "stops": [],
+  "card": {
+   "identity": [
+    {
+     "kind": "explanation",
+     "text": "Chlorpyrifos is an organophosphate insecticide.",
+     "cite": null
+    }
+   ],
+   "expect": [
+    {
+     "kind": "quote",
+     "text": "tachycardia, hypertension, tachypnea Nystagmus t > phencyclidine, MDMA, MDEA Sedative-hypnotic CNS depression, confusion, Stupor, coma Variable Often normal; hypothermia, bradycardia, hypotension, bradypnea, apnea Hyporeflexia Benzodiazepines, barbiturates, alcohol, zolpidem Cholinergic Confusion, coma Miosis Bradycardia, hypertension, tachypnea,",
+     "cite": {
+      "sid": "S27",
+      "doc": "isccm-2024-acute-poisoning-position-statement",
+      "page": 11,
+      "quote": "tachycardia, hypertension, tachypnea Nystagmus t > phencyclidine, MDMA, MDEA Sedative-hypnotic CNS depression, confusion, Stupor, coma Variable Often normal; hypothermia, bradycardia, hypotension, bradypnea, apnea Hyporeflexia Benzodiazepines, barbiturates, alcohol, zolpidem Cholinergic Confusion, coma Miosis Bradycardia, hypertension, tachypnea,"
+     }
+    }
+   ],
+   "manage": [
+    {
+     "kind": "quote",
+     "text": "• Atropine, Pralidoxime – Organophosphates",
+     "cite": {
+      "sid": "S6",
+      "doc": "nhsrc-emergency-care-mo-poison-management",
+      "page": 31,
+      "quote": "• Atropine, Pralidoxime – Organophosphates"
+     }
+    }
+   ],
+   "cautions": [
+    {
+     "kind": "quote",
+     "text": "PAM (Pralidoxime) Evidence about the use of oximes to treat OP poisoning is inconsistent and difficult to interpret.",
+     "cite": {
+      "sid": "S19",
+      "doc": "isccm-2024-acute-poisoning-position-statement",
+      "page": 11,
+      "quote": "PAM (Pralidoxime) Evidence about the use of oximes to treat OP poisoning is inconsistent and difficult to interpret."
+     }
+    },
+    {
+     "kind": "quote",
+     "text": "Supportive care is the mainstay of treatment.",
+     "cite": {
+      "sid": "S13",
+      "doc": "isccm-2024-acute-poisoning-position-statement",
+      "page": 11,
+      "quote": "Supportive care is the mainstay of treatment."
+     }
+    }
+   ],
+   "no_antidote": false
+  },
+  "audit": {
+   "verdicts": [
+    {
+     "index": 0,
+     "section": "identity",
+     "verdict": "approve",
+     "reason": "Chlorpyrifos is correctly identified as an organophosphate insecticide; this is factual and not contradicted by either document."
+    },
+    {
+     "index": 1,
+     "section": "expect",
+     "verdict": "approve",
+     "reason": "The quoted toxidrome table from the ISCCM position statement (Annexure 5, page S227) includes the cholinergic toxidrome row that explicitly lists organophosphate and carbamate insecticides with the expected clinical features (miosis, bradycardia, salivation, etc.). The quote is a verbatim extract of the entire table; the relevant portion for organophosphates is accurate and not contradicted."
+    },
+    {
+     "index": 2,
+     "section": "manage",
+     "verdict": "approve",
+     "reason": "The national poison-management module (page 31) lists atropine and pralidoxime as the specific antidotes for organophosphates. This is correct and not contradicted."
+    },
+    {
+     "index": 3,
+     "section": "cautions",
+     "verdict": "approve",
+     "reason": "The ISCCM position statement (Annexure 5, page S227) states: 'PAM (Pralidoxime) Evidence about the use of oximes to treat OP poisoning is inconsistent and difficult to interpret.' This is a direct quote and reflects the consensus statement’s caution; it is not contradicted by the national module."
+    },
+    {
+     "index": 4,
+     "section": "cautions",
+     "verdict": "approve",
+     "reason": "The ISCCM position statement (Annexure 5, page S227) includes 'Supportive care is the mainstay of treatment' as a general principle. This is consistent with both documents and not contradicted."
+    }
+   ],
+   "overall": "approve",
+   "notes": "All quotes are accurate for the organophosphate chemical group and are supported by the provided documents. No contradictions regarding atropine, pralidoxime, oxygen, or decontamination were found."
+  },
+  "citations": {
+   "total": 4,
+   "verified": 4,
+   "integrity": 1,
+   "tiers": {
+    "id": 4
+   },
+   "failures": []
+  },
+  "retrieved": [
+   {
+    "doc": "nhsrc-emergency-care-mo-poison-management",
+    "title": "nhsrc_emergency_care_mo_poison_management",
+    "page": 31,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "isccm-2024-acute-poisoning-position-statement",
+    "title": "isccm_2024_acute_poisoning_position_statement",
+    "page": 11,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "nhsrc-emergency-care-mo-poison-management",
+    "title": "nhsrc_emergency_care_mo_poison_management",
+    "page": 12,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "nhsrc-emergency-care-mo-poison-management",
+    "title": "nhsrc_emergency_care_mo_poison_management",
+    "page": 14,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "nhsrc-emergency-care-mo-poison-management",
+    "title": "nhsrc_emergency_care_mo_poison_management",
+    "page": 7,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "isccm-2024-acute-poisoning-position-statement",
+    "title": "isccm_2024_acute_poisoning_position_statement",
+    "page": 4,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   }
+  ],
+  "web": {},
+  "notes": [
+   "chlorpyrifos is restricted in India (CIB&RC); note this in the medico-legal record"
+  ],
+  "npic": "National Poisons Information Centre, AIIMS New Delhi: 1800-116-117 (24x7)",
+  "trace": [
+   {
+    "ts": 1793131117.839927,
+    "tier": "fast",
+    "model": "Nemotron 3 Nano",
+    "model_id": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+    "purpose": "normalise.label",
+    "tokens_in": 1136,
+    "tokens_out": 175,
+    "usd": 0.00011016,
+    "latency_ms": 2434
+   },
+   {
+    "ts": 1793131123.0788248,
+    "tier": "mid",
+    "model": "Nemotron 3 Super",
+    "model_id": "nvidia/nemotron-3-super-120b-a12b",
+    "purpose": "compose.card",
+    "tokens_in": 4284,
+    "tokens_out": 757,
+    "usd": 0.0019665,
+    "latency_ms": 5229
+   },
+   {
+    "ts": 1793131128.5803676,
+    "tier": "deep",
+    "model": "Nemotron 3 Ultra",
+    "model_id": "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "purpose": "audit.card",
+    "tokens_in": 27337,
+    "tokens_out": 1786,
+    "usd": 0.032695,
+    "latency_ms": 5497
+   }
+  ],
+  "latency_ms": 13178
+ }
+}

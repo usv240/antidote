@@ -40,6 +40,14 @@ Complete end to end: pipeline, API, MCP server, web app, published evaluation.
 
 Every call is written to a ledger (tier, model, tokens, USD, latency) and shown in the app's Trace panel.
 
+## Where Token Factory accelerated our workflow
+
+- **Four NVIDIA models behind one key and one API shape.** Nemotron 3 Nano normalises labels, 3 Super assembles cards, 3 Ultra audits them and 3.5 Super VL reads photos, all through the same OpenAI-compatible call. Moving a stage between tiers is a one-line change.
+- **An auditor that reads both national guidelines at once.** Nemotron 3 Ultra checks every card against the complete NHSRC module and ISCCM 2024 statement in one long-context call. Hosting a 550B model ourselves was out of reach.
+- **Evaluation we could repeat until it was right.** The case-report benchmark, the label-photo benchmark and the negative controls each cost cents to a few dollars per run, so we reran them after every safety fix and kept every run, including the ones that found unsafe cards.
+- **A vision model appeared mid-hackathon and we switched in a day.** Nemotron 3.5 Super VL arrived in the catalog; adopting it took a model id and one request flag, and it fixed label misreads the previous reader made.
+- **One ledger.** Every call records tier, model, tokens, dollars and latency, shown to the doctor in the Trace panel. That transparency came almost free because every model sits behind one endpoint.
+
 ## Screenshots
 
 `docs/screenshots/landing-dark.jpg`, `docs/screenshots/landing-light.jpg`, and the paraquat stop cards in `docs/screenshots/try-paraquat-dark.jpg`.

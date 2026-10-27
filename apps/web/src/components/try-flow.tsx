@@ -124,6 +124,7 @@ export function TryFlow() {
               <div key={s.rule} role="alert" className="rounded-[16px] border-2 border-stop bg-bg-elev p-4"><p className="flex items-center gap-2 font-semibold text-stop"><ShieldAlert className="h-5 w-5" /> Stop</p><p className="mt-1">{s.message}</p><p className="mt-1 text-xs text-fg-muted">Source: {s.citation}</p></div>
             ))}
             <div className="card space-y-3">
+              {result && (result as { mode?: string }).mode === "replay" && <p role="status" className="rounded-xl border border-caution p-3 text-sm">The live model service did not answer, so this is the result this sample produced when it was recorded from the live pipeline on {String(((result as { replay?: { recorded_at?: string } }).replay?.recorded_at ?? "").slice(0, 10))}. Everything else on the page works as normal.</p>}
               <h2 className="text-xl font-semibold">3. Card: {result.chosen ? result.chosen.active_ingredient : "product not identified"}</h2>
               {result.matches.length > 1 && (
                 <div className="flex flex-wrap gap-2 text-sm">

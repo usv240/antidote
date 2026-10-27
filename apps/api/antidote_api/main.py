@@ -20,6 +20,8 @@ from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+from antidote_api.replay import ReplayBook, antidote_signature
+
 ROOT = Path(__file__).resolve().parents[3]
 DATA = data_dir()
 for _env in (ROOT / ".env", ROOT.parent / ".env"):
@@ -129,6 +131,7 @@ try:
 except RuntimeError:
     CLIENT = None
 PIPE = AntidotePipeline(CLIENT, STORE, REGISTRY)
+REPLAYS = ReplayBook(DATA / "samples/replay", antidote_signature)
 RECORDS = DATA / "mlc_register.jsonl"
 
 LABEL_PROMPT = (
@@ -268,7 +271,13 @@ def parse_label_fields(raw: str) -> dict[str, Any]:
 @app.post("/v1/analyze")
 def analyze(body: AnalyzeBody) -> dict[str, Any]:
     t0 = time.perf_counter()
-    res = PIPE.analyze(raw_label=body.label, context=body.context, audit=body.audit, chosen_ai=body.chosen_ai)
+    try:
+        res = PIPE.analyze(raw_label=body.label, context=body.context, audit=body.audit, chosen_ai=body.chosen_ai)
+    except Exception as e:
+        served = REPLAYS.serve(body.model_dump(), f"{type(e).__name__}")
+        if served:
+            return served
+        raise HTTPException(503, f"The model service is unavailable right now ({type(e).__name__}). The sample presets still work from recorded results; please try one of them.") from e
     out = _result_json(res)
     out["latency_ms"] = int((time.perf_counter() - t0) * 1000)
     return out

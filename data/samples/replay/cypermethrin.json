@@ -1,0 +1,289 @@
+{
+ "sample_id": "cypermethrin",
+ "recorded_at": "2026-10-27T19:59:24.830Z",
+ "request": {
+  "label": {
+   "product_name": "Cyperkill",
+   "active_ingredients": [
+    {
+     "name": "Cypermethrin",
+     "percent": "10"
+    }
+   ],
+   "formulation_code": "EC",
+   "triangle_colour": "yellow",
+   "visible_text": [
+    "CYPERKILL",
+    "Cypermethrin 10% EC"
+   ]
+  },
+  "context": {
+   "route": "skin and inhaled",
+   "time_since_exposure": "2-6 h",
+   "signs": "paraesthesia, nausea"
+  },
+  "audit": true
+ },
+ "response": {
+  "trace_id": "146e8c6b-ecd1-40ff-a7b1-3aa319aa7628",
+  "banner": "Decision support for trained clinicians. Airway, breathing, circulation first. National Poisons Information Centre, AIIMS New Delhi: 1800-116-117 (24x7).",
+  "label": {
+   "product_name": "Cyperkill",
+   "active_ingredients": [
+    {
+     "name": "cypermethrin",
+     "percent": "10"
+    }
+   ],
+   "formulation_code": "EC",
+   "registration_number": null,
+   "batch": null,
+   "expiry": null,
+   "manufacturer": null,
+   "triangle_colour": "yellow",
+   "signal_word": null,
+   "antidote_statement_text": null,
+   "visible_text": [
+    "CYPERKILL",
+    "Cypermethrin 10% EC"
+   ],
+   "languages_seen": [
+    "en"
+   ],
+   "confidence": 0.95
+  },
+  "matches": [
+   {
+    "active_ingredient": "cypermethrin",
+    "group": "pyrethroid",
+    "who_class": "II",
+    "india_status": "registered",
+    "verify": false,
+    "confidence": 0.97,
+    "reason": "exact active ingredient"
+   }
+  ],
+  "chosen": {
+   "active_ingredient": "cypermethrin",
+   "group": "pyrethroid",
+   "who_class": "II",
+   "india_status": "registered",
+   "verify": false,
+   "confidence": 0.97,
+   "reason": "exact active ingredient"
+  },
+  "group": {
+   "id": "pyrethroid",
+   "name": "Synthetic pyrethroid insecticide",
+   "antidote_exists": false,
+   "gate": "atropine-for-pyrethroid",
+   "retrieval_terms": [
+    "pyrethroid",
+    "supportive",
+    "paraesthesia",
+    "no specific antidote"
+   ]
+  },
+  "triangle": {
+   "label": "Highly toxic",
+   "signal": "POISON"
+  },
+  "guarded": false,
+  "stops": [
+   {
+    "rule": "no-specific-antidote",
+    "message": "No specific antidote for Synthetic pyrethroid insecticide. Do not give atropine for this exposure. Management is supportive per the cited guidance.",
+    "citation": "Registry (chemical_groups.yaml) + cited guideline pages below"
+   }
+  ],
+  "card": {
+   "identity": [
+    {
+     "kind": "explanation",
+     "text": "Cypermethrin is a synthetic pyrethroid insecticide.",
+     "cite": null
+    },
+    {
+     "kind": "explanation",
+     "text": "It belongs to the synthetic pyrethroid group, WHO class II.",
+     "cite": null
+    }
+   ],
+   "expect": [
+    {
+     "kind": "quote",
+     "text": "• Toxidrome recognition • Decontamination",
+     "cite": {
+      "sid": "S2",
+      "doc": "nhsrc-emergency-care-mo-poison-management",
+      "page": 7,
+      "quote": "• Toxidrome recognition • Decontamination"
+     }
+    }
+   ],
+   "manage": [
+    {
+     "kind": "quote",
+     "text": "• Specific Antidotes • Symptomatic and Supportive Care",
+     "cite": {
+      "sid": "S3",
+      "doc": "nhsrc-emergency-care-mo-poison-management",
+      "page": 7,
+      "quote": "• Specific Antidotes • Symptomatic and Supportive Care"
+     }
+    },
+    {
+     "kind": "quote",
+     "text": "• Support of vital signs • Prevention of further absorption",
+     "cite": {
+      "sid": "S65",
+      "doc": "nhsrc-emergency-care-mo-poison-management",
+      "page": 18,
+      "quote": "• Support of vital signs • Prevention of further absorption"
+     }
+    }
+   ],
+   "cautions": [
+    {
+     "kind": "quote",
+     "text": "We recommend against use of carriers like saline, water, oils, potassium permanganate in GI decontamination.",
+     "cite": {
+      "sid": "S113",
+      "doc": "isccm-2024-acute-poisoning-position-statement",
+      "page": 4,
+      "quote": "We recommend against use of carriers like saline, water, oils, potassium permanganate in GI decontamination."
+     }
+    }
+   ],
+   "no_antidote": false
+  },
+  "audit": {
+   "verdicts": [
+    {
+     "index": 0,
+     "section": "identity",
+     "verdict": "approve",
+     "reason": "Cypermethrin is correctly identified as a synthetic pyrethroid insecticide, WHO class II; not contradicted by documents."
+    },
+    {
+     "index": 1,
+     "section": "identity",
+     "verdict": "approve",
+     "reason": "Correct classification; not contradicted."
+    },
+    {
+     "index": 2,
+     "section": "expect",
+     "verdict": "approve",
+     "reason": "Toxidrome recognition and decontamination are part of general approach to poisoning (page 7 national module); applies to pyrethroids."
+    },
+    {
+     "index": 3,
+     "section": "manage",
+     "verdict": "approve",
+     "reason": "Specific antidotes and symptomatic care are general approach steps (page 7); no specific antidote for pyrethroids but quote is generic."
+    },
+    {
+     "index": 4,
+     "section": "manage",
+     "verdict": "approve",
+     "reason": "Support of vital signs and prevention of further absorption are goals of therapy (page 18); applies to pyrethroids."
+    },
+    {
+     "index": 5,
+     "section": "cautions",
+     "verdict": "approve",
+     "reason": "ISCCM recommends against carriers in GI decontamination (Q14); consistent with general guidance."
+    }
+   ],
+   "overall": "approve",
+   "notes": "All quotes are from general poisoning management guidelines applicable to pyrethroids; no contradictions found."
+  },
+  "citations": {
+   "total": 4,
+   "verified": 4,
+   "integrity": 1,
+   "tiers": {
+    "id": 4
+   },
+   "failures": []
+  },
+  "retrieved": [
+   {
+    "doc": "nhsrc-emergency-care-mo-poison-management",
+    "title": "nhsrc_emergency_care_mo_poison_management",
+    "page": 7,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "isccm-2024-acute-poisoning-position-statement",
+    "title": "isccm_2024_acute_poisoning_position_statement",
+    "page": 11,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "isccm-2024-acute-poisoning-position-statement",
+    "title": "isccm_2024_acute_poisoning_position_statement",
+    "page": 5,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "nhsrc-emergency-care-mo-poison-management",
+    "title": "nhsrc_emergency_care_mo_poison_management",
+    "page": 18,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "isccm-2024-acute-poisoning-position-statement",
+    "title": "isccm_2024_acute_poisoning_position_statement",
+    "page": 15,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "isccm-2024-acute-poisoning-position-statement",
+    "title": "isccm_2024_acute_poisoning_position_statement",
+    "page": 4,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   }
+  ],
+  "web": {},
+  "notes": [],
+  "npic": "National Poisons Information Centre, AIIMS New Delhi: 1800-116-117 (24x7)",
+  "trace": [
+   {
+    "ts": 1793131150.3540246,
+    "tier": "fast",
+    "model": "Nemotron 3 Nano",
+    "model_id": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+    "purpose": "normalise.label",
+    "tokens_in": 1077,
+    "tokens_out": 114,
+    "usd": 0.00009198000000000001,
+    "latency_ms": 1913
+   },
+   {
+    "ts": 1793131155.8932068,
+    "tier": "mid",
+    "model": "Nemotron 3 Super",
+    "model_id": "nvidia/nemotron-3-super-120b-a12b",
+    "purpose": "compose.card",
+    "tokens_in": 5567,
+    "tokens_out": 775,
+    "usd": 0.0023676,
+    "latency_ms": 5528
+   },
+   {
+    "ts": 1793131165.127363,
+    "tier": "deep",
+    "model": "Nemotron 3 Ultra",
+    "model_id": "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "purpose": "audit.card",
+    "tokens_in": 27159,
+    "tokens_out": 2984,
+    "usd": 0.036111,
+    "latency_ms": 9231
+   }
+  ],
+  "latency_ms": 16689
+ }
+}

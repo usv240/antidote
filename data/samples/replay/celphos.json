@@ -1,0 +1,328 @@
+{
+ "sample_id": "celphos",
+ "recorded_at": "2026-10-27T19:59:42.663Z",
+ "request": {
+  "label": {
+   "product_name": "Celphos",
+   "active_ingredients": [
+    {
+     "name": "Aluminium phosphide",
+     "percent": "56"
+    }
+   ],
+   "formulation_code": "tablet",
+   "triangle_colour": "red",
+   "signal_word": "POISON",
+   "visible_text": [
+    "CELPHOS",
+    "Aluminium Phosphide 56%",
+    "FUMIGANT"
+   ]
+  },
+  "context": {
+   "route": "ingested",
+   "time_since_exposure": "under 1 h",
+   "signs": "hypotension, garlic odour"
+  },
+  "audit": true
+ },
+ "response": {
+  "trace_id": "12af16a6-a13b-4efe-afcc-6dba05b78f22",
+  "banner": "Decision support for trained clinicians. Airway, breathing, circulation first. National Poisons Information Centre, AIIMS New Delhi: 1800-116-117 (24x7).",
+  "label": {
+   "product_name": "Celphos",
+   "active_ingredients": [
+    {
+     "name": "Aluminium phosphide",
+     "percent": "56"
+    }
+   ],
+   "formulation_code": "tablet",
+   "registration_number": null,
+   "batch": null,
+   "expiry": null,
+   "manufacturer": null,
+   "triangle_colour": "red",
+   "signal_word": "POISON",
+   "antidote_statement_text": null,
+   "visible_text": [
+    "CELPHOS",
+    "Aluminium Phosphide 56%",
+    "FUMIGANT"
+   ],
+   "languages_seen": [
+    "en"
+   ],
+   "confidence": 0.99
+  },
+  "matches": [
+   {
+    "active_ingredient": "aluminium phosphide",
+    "group": "metal_phosphide",
+    "who_class": "FM",
+    "india_status": "restricted",
+    "verify": true,
+    "confidence": 0.97,
+    "reason": "exact active ingredient"
+   }
+  ],
+  "chosen": {
+   "active_ingredient": "aluminium phosphide",
+   "group": "metal_phosphide",
+   "who_class": "FM",
+   "india_status": "restricted",
+   "verify": true,
+   "confidence": 0.97,
+   "reason": "exact active ingredient"
+  },
+  "group": {
+   "id": "metal_phosphide",
+   "name": "Metal phosphides (aluminium phosphide, zinc phosphide)",
+   "antidote_exists": false,
+   "gate": "atropine-for-phosphide",
+   "retrieval_terms": [
+    "aluminium phosphide",
+    "zinc phosphide",
+    "phosphine",
+    "celphos",
+    "supportive",
+    "no specific antidote"
+   ]
+  },
+  "triangle": {
+   "label": "Extremely toxic",
+   "signal": "POISON"
+  },
+  "guarded": false,
+  "stops": [
+   {
+    "rule": "no-specific-antidote",
+    "message": "No specific antidote for Metal phosphides (aluminium phosphide, zinc phosphide). Do not give atropine for this exposure. Management is supportive per the cited guidance.",
+    "citation": "Registry (chemical_groups.yaml) + cited guideline pages below"
+   }
+  ],
+  "card": {
+   "identity": [
+    {
+     "kind": "explanation",
+     "text": "Aluminium phosphide is a metal phosphide used as a fumigant.",
+     "cite": null
+    },
+    {
+     "kind": "explanation",
+     "text": "It belongs to the metal phosphides group which includes zinc phosphide.",
+     "cite": null
+    }
+   ],
+   "expect": [
+    {
+     "kind": "quote",
+     "text": "• Support of vital signs • Prevention of further absorption",
+     "cite": {
+      "sid": "S65",
+      "doc": "nhsrc-emergency-care-mo-poison-management",
+      "page": 18,
+      "quote": "• Support of vital signs • Prevention of further absorption"
+     }
+    },
+    {
+     "kind": "quote",
+     "text": "• Enhancement of elimination • Administration of specific antidotes",
+     "cite": {
+      "sid": "S66",
+      "doc": "nhsrc-emergency-care-mo-poison-management",
+      "page": 18,
+      "quote": "• Enhancement of elimination • Administration of specific antidotes"
+     }
+    }
+   ],
+   "manage": [
+    {
+     "kind": "quote",
+     "text": "• Prevention of re-exposure GOALS OF THERAPY",
+     "cite": {
+      "sid": "S67",
+      "doc": "nhsrc-emergency-care-mo-poison-management",
+      "page": 18,
+      "quote": "• Prevention of re-exposure GOALS OF THERAPY"
+     }
+    },
+    {
+     "kind": "quote",
+     "text": "• Specific Antidotes • Symptomatic and Supportive Care",
+     "cite": {
+      "sid": "S3",
+      "doc": "nhsrc-emergency-care-mo-poison-management",
+      "page": 7,
+      "quote": "• Specific Antidotes • Symptomatic and Supportive Care"
+     }
+    }
+   ],
+   "cautions": [
+    {
+     "kind": "quote",
+     "text": "Indian Society of Critical Care Medicine Position Statement Indian Journal of Critical Care Medicine, Volume 28 Issue Suppl 2 (August 2024) S223 Level of Evidence: C Recommendation: Moderate Rationale: Emesis yields unpredictable and inconsistent results and has an increased risk of aspiration.",
+     "cite": {
+      "sid": "S68",
+      "doc": "isccm-2024-acute-poisoning-position-statement",
+      "page": 7,
+      "quote": "Indian Society of Critical Care Medicine Position Statement Indian Journal of Critical Care Medicine, Volume 28 Issue Suppl 2 (August 2024) S223 Level of Evidence: C Recommendation: Moderate Rationale: Emesis yields unpredictable and inconsistent results and has an increased risk of aspiration."
+     }
+    },
+    {
+     "kind": "quote",
+     "text": "Cathartics are intended to decrease poison absorption by enhancing rectal evacuation of toxins.",
+     "cite": {
+      "sid": "S69",
+      "doc": "isccm-2024-acute-poisoning-position-statement",
+      "page": 7,
+      "quote": "Cathartics are intended to decrease poison absorption by enhancing rectal evacuation of toxins."
+     }
+    }
+   ],
+   "no_antidote": true
+  },
+  "audit": {
+   "verdicts": [
+    {
+     "index": 0,
+     "section": "identity",
+     "verdict": "approve",
+     "reason": "Factual background statement about aluminium phosphide; not contradicted by any document."
+    },
+    {
+     "index": 1,
+     "section": "identity",
+     "verdict": "approve",
+     "reason": "Factual classification statement; not contradicted."
+    },
+    {
+     "index": 2,
+     "section": "expect",
+     "verdict": "approve",
+     "reason": "Direct quote from national module page 18 (GOALS OF THERAPY); general poisoning management principle applicable to metal phosphide."
+    },
+    {
+     "index": 3,
+     "section": "expect",
+     "verdict": "approve",
+     "reason": "Direct quote from national module page 18; general principle applicable to metal phosphide."
+    },
+    {
+     "index": 4,
+     "section": "manage",
+     "verdict": "approve",
+     "reason": "Direct quote from national module page 18 (GOALS OF THERAPY); general principle applicable."
+    },
+    {
+     "index": 5,
+     "section": "manage",
+     "verdict": "approve",
+     "reason": "Direct quote from national module page 7 (GENERAL APPROACH); general principle applicable."
+    },
+    {
+     "index": 6,
+     "section": "cautions",
+     "verdict": "approve",
+     "reason": "Direct quote from ISCCM position statement (Annexure 14/17) recommending against emesis; general caution applicable to all poisoning including metal phosphide."
+    },
+    {
+     "index": 7,
+     "section": "cautions",
+     "verdict": "approve",
+     "reason": "Direct quote from ISCCM position statement (Annexure 14) describing cathartics; factual statement from the document."
+    }
+   ],
+   "overall": "approve",
+   "notes": "All quotes are sourced from the provided documents and are not contradicted. The general poisoning management principles apply to metal phosphide (aluminium phosphide). The no_antidote flag is consistent with the documents: no specific antidote is listed for aluminium phosphide (atropine/pralidoxime are for organophosphates)."
+  },
+  "citations": {
+   "total": 6,
+   "verified": 6,
+   "integrity": 1,
+   "tiers": {
+    "id": 6
+   },
+   "failures": []
+  },
+  "retrieved": [
+   {
+    "doc": "nhsrc-emergency-care-mo-poison-management",
+    "title": "nhsrc_emergency_care_mo_poison_management",
+    "page": 7,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "isccm-2024-acute-poisoning-position-statement",
+    "title": "isccm_2024_acute_poisoning_position_statement",
+    "page": 11,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "isccm-2024-acute-poisoning-position-statement",
+    "title": "isccm_2024_acute_poisoning_position_statement",
+    "page": 5,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "nhsrc-emergency-care-mo-poison-management",
+    "title": "nhsrc_emergency_care_mo_poison_management",
+    "page": 18,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "isccm-2024-acute-poisoning-position-statement",
+    "title": "isccm_2024_acute_poisoning_position_statement",
+    "page": 7,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "isccm-2024-acute-poisoning-position-statement",
+    "title": "isccm_2024_acute_poisoning_position_statement",
+    "page": 15,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   }
+  ],
+  "web": {},
+  "notes": [
+   "aluminium phosphide is restricted in India (CIB&RC); note this in the medico-legal record"
+  ],
+  "npic": "National Poisons Information Centre, AIIMS New Delhi: 1800-116-117 (24x7)",
+  "trace": [
+   {
+    "ts": 1793131168.217606,
+    "tier": "fast",
+    "model": "Nemotron 3 Nano",
+    "model_id": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+    "purpose": "normalise.label",
+    "tokens_in": 1093,
+    "tokens_out": 143,
+    "usd": 0.0000999,
+    "latency_ms": 3016
+   },
+   {
+    "ts": 1793131174.8154814,
+    "tier": "mid",
+    "model": "Nemotron 3 Super",
+    "model_id": "nvidia/nemotron-3-super-120b-a12b",
+    "purpose": "compose.card",
+    "tokens_in": 5315,
+    "tokens_out": 853,
+    "usd": 0.0023621999999999996,
+    "latency_ms": 6586
+   },
+   {
+    "ts": 1793131182.9624612,
+    "tier": "deep",
+    "model": "Nemotron 3 Ultra",
+    "model_id": "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "purpose": "audit.card",
+    "tokens_in": 27447,
+    "tokens_out": 2551,
+    "usd": 0.0351,
+    "latency_ms": 8143
+   }
+  ],
+  "latency_ms": 17764
+ }
+}

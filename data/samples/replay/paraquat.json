@@ -1,0 +1,322 @@
+{
+ "sample_id": "paraquat",
+ "recorded_at": "2026-10-27T19:59:08.061Z",
+ "request": {
+  "label": {
+   "product_name": "Gramoxone",
+   "active_ingredients": [
+    {
+     "name": "Paraquat dichloride",
+     "percent": "24"
+    }
+   ],
+   "formulation_code": "SL",
+   "triangle_colour": "yellow",
+   "antidote_statement_text": "No specific antidote. Rush to hospital.",
+   "visible_text": [
+    "GRAMOXONE",
+    "PARAQUAT DICHLORIDE 24% SL",
+    "Syngenta"
+   ]
+  },
+  "context": {
+   "route": "ingested",
+   "time_since_exposure": "under 1 h",
+   "signs": "vomiting, oral burns"
+  },
+  "audit": true
+ },
+ "response": {
+  "trace_id": "ceb947f9-479b-404c-8181-b578d49a9b9c",
+  "banner": "Decision support for trained clinicians. Airway, breathing, circulation first. National Poisons Information Centre, AIIMS New Delhi: 1800-116-117 (24x7).",
+  "label": {
+   "product_name": "Gramoxone",
+   "active_ingredients": [
+    {
+     "name": "paraquat dichloride",
+     "percent": "24"
+    }
+   ],
+   "formulation_code": "SL",
+   "registration_number": null,
+   "batch": null,
+   "expiry": null,
+   "manufacturer": "Syngenta",
+   "triangle_colour": "yellow",
+   "signal_word": "Restricted Use",
+   "antidote_statement_text": "No specific antidote. Rush to hospital.",
+   "visible_text": [
+    "GRAMOXONE",
+    "PARAQUAT DICHLORIDE 24% SL",
+    "Syngenta"
+   ],
+   "languages_seen": [
+    "English"
+   ],
+   "confidence": 0.99
+  },
+  "matches": [
+   {
+    "active_ingredient": "paraquat dichloride",
+    "group": "paraquat",
+    "who_class": "II",
+    "india_status": "restricted",
+    "verify": false,
+    "confidence": 0.97,
+    "reason": "exact active ingredient"
+   }
+  ],
+  "chosen": {
+   "active_ingredient": "paraquat dichloride",
+   "group": "paraquat",
+   "who_class": "II",
+   "india_status": "restricted",
+   "verify": false,
+   "confidence": 0.97,
+   "reason": "exact active ingredient"
+  },
+  "group": {
+   "id": "paraquat",
+   "name": "Paraquat (bipyridyl herbicide)",
+   "antidote_exists": false,
+   "gate": "atropine-for-paraquat",
+   "retrieval_terms": [
+    "paraquat",
+    "fuller's earth",
+    "activated charcoal",
+    "oxygen",
+    "pulmonary fibrosis",
+    "no specific antidote"
+   ]
+  },
+  "triangle": {
+   "label": "Highly toxic",
+   "signal": "POISON"
+  },
+  "guarded": false,
+  "stops": [
+   {
+    "rule": "no-specific-antidote",
+    "message": "No specific antidote for Paraquat (bipyridyl herbicide). Do not give atropine for this exposure. Management is supportive per the cited guidance.",
+    "citation": "Registry (chemical_groups.yaml) + cited guideline pages below"
+   },
+   {
+    "rule": "paraquat-oxygen",
+    "message": "Paraquat: avoid supplemental oxygen unless the patient is hypoxic; oxygen accelerates lung injury. See the cited guidance.",
+    "citation": "ISCCM 2024 position statement"
+   }
+  ],
+  "card": {
+   "identity": [
+    {
+     "kind": "quote",
+     "text": "Paraquat (N, N’-dimethyl-4, 4’-bipyridinium dichloride, PQ) intoxication is a common cause of lethal poisoning.",
+     "cite": {
+      "sid": "S20",
+      "doc": "isccm-2024-acute-poisoning-position-statement",
+      "page": 10,
+      "quote": "Paraquat (N, N’-dimethyl-4, 4’-bipyridinium dichloride, PQ) intoxication is a common cause of lethal poisoning."
+     }
+    },
+    {
+     "kind": "explanation",
+     "text": "Paraquat belongs to the bipyridyl herbicide group.",
+     "cite": null
+    }
+   ],
+   "expect": [
+    {
+     "kind": "quote",
+     "text": "• Being sick. • Dizziness. • Sudden, noticeable heartbeats (palpitations).",
+     "cite": {
+      "sid": "S2",
+      "doc": "isccm-2024-acute-poisoning-position-statement",
+      "page": 10,
+      "quote": "• Being sick. • Dizziness. • Sudden, noticeable heartbeats (palpitations)."
+     }
+    }
+   ],
+   "manage": [
+    {
+     "kind": "quote",
+     "text": "So therefore, oxygen therapy should be avoided in Paraquat poisoning until there is evidence of hypoxia (SpO2 is dropped to < 90%).4 Paraquat is oxidized to the paraquat radical upon entry into the cell and is subsequently reduced by enzyme systems such as (Nicotinamide adenine dinucleotide phosphate) NADPH- cytochrome P450 reductase and nitric oxide",
+     "cite": {
+      "sid": "S28",
+      "doc": "isccm-2024-acute-poisoning-position-statement",
+      "page": 10,
+      "quote": "So therefore, oxygen therapy should be avoided in Paraquat poisoning until there is evidence of hypoxia (SpO2 is dropped to < 90%).4 Paraquat is oxidized to the paraquat radical upon entry into the cell and is subsequently reduced by enzyme systems such as (Nicotinamide adenine dinucleotide phosphate) NADPH- cytochrome P450 reductase and nitric oxide"
+     }
+    },
+    {
+     "kind": "quote",
+     "text": "gastric lavage may be considered in few selected patients who present within one hour of ingestion of potentially lethal dose of poison after carefully weighing the risk–benefit ratio.",
+     "cite": {
+      "sid": "S69",
+      "doc": "isccm-2024-acute-poisoning-position-statement",
+      "page": 4,
+      "quote": "gastric lavage may be considered in few selected patients who present within one hour of ingestion of potentially lethal dose of poison after carefully weighing the risk–benefit ratio."
+     }
+    },
+    {
+     "kind": "quote",
+     "text": "Strong Moderate Q12. What is the role of activated charcoal (AC) in removal of poison from GI tract within one hour and beyond? a) We recommend the use of AC within one hour of poison ingestion. b) We suggest use of AC in poisoning beyond one hour in selected patients and also if there is suspected ingestion of sustained-release formulations like pellets",
+     "cite": {
+      "sid": "S70",
+      "doc": "isccm-2024-acute-poisoning-position-statement",
+      "page": 4,
+      "quote": "Strong Moderate Q12. What is the role of activated charcoal (AC) in removal of poison from GI tract within one hour and beyond? a) We recommend the use of AC within one hour of poison ingestion. b) We suggest use of AC in poisoning beyond one hour in selected patients and also if there is suspected ingestion of sustained-release formulations like pellets"
+     }
+    }
+   ],
+   "cautions": [
+    {
+     "kind": "quote",
+     "text": "Administration of excessive oxygen should be avoided in paraquat poisoning because it may worsen its toxicity.",
+     "cite": {
+      "sid": "S19",
+      "doc": "isccm-2024-acute-poisoning-position-statement",
+      "page": 10,
+      "quote": "Administration of excessive oxygen should be avoided in paraquat poisoning because it may worsen its toxicity."
+     }
+    }
+   ],
+   "no_antidote": true
+  },
+  "audit": {
+   "verdicts": [
+    {
+     "index": 0,
+     "section": "identity",
+     "verdict": "approve",
+     "reason": "Quote is directly from ISCCM position statement (page 10) and specifically names paraquat as a common cause of lethal poisoning; no contradiction in documents."
+    },
+    {
+     "index": 1,
+     "section": "identity",
+     "verdict": "approve",
+     "reason": "Explanation that paraquat belongs to the bipyridyl herbicide group is not contradicted by any document; it is consistent with known classification and the ISCCM text refers to paraquat as a pesticide/herbicide."
+    },
+    {
+     "index": 0,
+     "section": "expect",
+     "verdict": "approve",
+     "reason": "Quote lists general symptoms associated with serious poisoning (from ISCCM Annexure 1); while not paraquat-specific, it is not contradicted and can reasonably be expected in paraquat poisoning."
+    },
+    {
+     "index": 0,
+     "section": "manage",
+     "verdict": "approve",
+     "reason": "Quote is the ISCCM position statement's specific recommendation on oxygen therapy in paraquat poisoning (page 10); directly applicable and not contradicted."
+    },
+    {
+     "index": 1,
+     "section": "manage",
+     "verdict": "approve",
+     "reason": "Quote reflects the ISCCM consensus on gastric lavage (Q11) – a general decontamination statement that is not contradicted for paraquat; the documents do not prohibit its consideration in selected early-presenting paraquat cases."
+    },
+    {
+     "index": 2,
+     "section": "manage",
+     "verdict": "approve",
+     "reason": "Quote reflects the ISCCM consensus on activated charcoal (Q12) – a general decontamination statement; paraquat is not listed among toxins poorly adsorbed by charcoal (Annexure 10), and no document contradicts its use in paraquat."
+    },
+    {
+     "index": 0,
+     "section": "cautions",
+     "verdict": "approve",
+     "reason": "Quote is the ISCCM position statement's explicit caution against excessive oxygen in paraquat poisoning (page 10); directly applicable and not contradicted."
+    }
+   ],
+   "overall": "approve",
+   "notes": "All quotes are sourced from the provided documents and are either specific to paraquat or general statements not contradicted for paraquat. The card correctly reflects the ISCCM position statement and national module without conflict."
+  },
+  "citations": {
+   "total": 7,
+   "verified": 7,
+   "integrity": 1,
+   "tiers": {
+    "id": 7
+   },
+   "failures": []
+  },
+  "retrieved": [
+   {
+    "doc": "isccm-2024-acute-poisoning-position-statement",
+    "title": "isccm_2024_acute_poisoning_position_statement",
+    "page": 10,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "isccm-2024-acute-poisoning-position-statement",
+    "title": "isccm_2024_acute_poisoning_position_statement",
+    "page": 4,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "isccm-2024-acute-poisoning-position-statement",
+    "title": "isccm_2024_acute_poisoning_position_statement",
+    "page": 11,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "nhsrc-emergency-care-mo-poison-management",
+    "title": "nhsrc_emergency_care_mo_poison_management",
+    "page": 7,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "isccm-2024-acute-poisoning-position-statement",
+    "title": "isccm_2024_acute_poisoning_position_statement",
+    "page": 3,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "isccm-2024-acute-poisoning-position-statement",
+    "title": "isccm_2024_acute_poisoning_position_statement",
+    "page": 5,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   }
+  ],
+  "web": {},
+  "notes": [
+   "paraquat dichloride is restricted in India (CIB&RC); note this in the medico-legal record"
+  ],
+  "npic": "National Poisons Information Centre, AIIMS New Delhi: 1800-116-117 (24x7)",
+  "trace": [
+   {
+    "ts": 1793131131.2086666,
+    "tier": "fast",
+    "model": "Nemotron 3 Nano",
+    "model_id": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+    "purpose": "normalise.label",
+    "tokens_in": 1106,
+    "tokens_out": 185,
+    "usd": 0.00011075999999999999,
+    "latency_ms": 2516
+   },
+   {
+    "ts": 1793131139.594542,
+    "tier": "mid",
+    "model": "Nemotron 3 Super",
+    "model_id": "nvidia/nemotron-3-super-120b-a12b",
+    "purpose": "compose.card",
+    "tokens_in": 5121,
+    "tokens_out": 1164,
+    "usd": 0.0025839,
+    "latency_ms": 8373
+   },
+   {
+    "ts": 1793131148.3586717,
+    "tier": "deep",
+    "model": "Nemotron 3 Ultra",
+    "model_id": "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "purpose": "audit.card",
+    "tokens_in": 27701,
+    "tokens_out": 2776,
+    "usd": 0.036029,
+    "latency_ms": 8760
+   }
+  ],
+  "latency_ms": 19671
+ }
+}

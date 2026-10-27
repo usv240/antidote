@@ -1,0 +1,228 @@
+{
+ "sample_id": "urea",
+ "recorded_at": "2026-10-27T20:00:23.073Z",
+ "request": {
+  "label": {
+   "product_name": "IFFCO Urea",
+   "active_ingredients": [],
+   "visible_text": [
+    "Urea 46% N",
+    "Neem coated",
+    "45 kg"
+   ]
+  },
+  "context": {
+   "route": "ingested",
+   "time_since_exposure": "unknown"
+  },
+  "audit": true
+ },
+ "response": {
+  "trace_id": "74edc894-90e5-4475-9add-1f085dcd5ad4",
+  "banner": "Decision support for trained clinicians. Airway, breathing, circulation first. National Poisons Information Centre, AIIMS New Delhi: 1800-116-117 (24x7).",
+  "label": {
+   "product_name": "IFFCO Urea",
+   "active_ingredients": [
+    {
+     "name": "Urea",
+     "percent": "46"
+    }
+   ],
+   "formulation_code": null,
+   "registration_number": null,
+   "batch": null,
+   "expiry": null,
+   "manufacturer": null,
+   "triangle_colour": null,
+   "signal_word": null,
+   "antidote_statement_text": null,
+   "visible_text": [
+    "Urea 46% N",
+    "Neem coated",
+    "45 kg"
+   ],
+   "languages_seen": [
+    "en"
+   ],
+   "confidence": 0.95
+  },
+  "matches": [
+   {
+    "active_ingredient": "urea",
+    "group": "not_pesticide",
+    "who_class": null,
+    "india_status": "fertiliser",
+    "verify": false,
+    "confidence": 0.97,
+    "reason": "exact active ingredient"
+   }
+  ],
+  "chosen": {
+   "active_ingredient": "urea",
+   "group": "not_pesticide",
+   "who_class": null,
+   "india_status": "fertiliser",
+   "verify": false,
+   "confidence": 0.97,
+   "reason": "exact active ingredient"
+  },
+  "group": {
+   "id": "not_pesticide",
+   "name": "Not a pesticide",
+   "antidote_exists": false,
+   "gate": "identify-before-antidote",
+   "retrieval_terms": [
+    "general approach",
+    "unknown poison",
+    "supportive"
+   ]
+  },
+  "triangle": null,
+  "guarded": false,
+  "stops": [],
+  "card": {
+   "identity": [
+    {
+     "kind": "explanation",
+     "text": "Urea is a naturally occurring compound found in the body and in fertilizers.",
+     "cite": null
+    },
+    {
+     "kind": "explanation",
+     "text": "It is not classified as a pesticide and has no WHO toxicity class.",
+     "cite": null
+    }
+   ],
+   "expect": [
+    {
+     "kind": "quote",
+     "text": "We recommend airway, breathing, circulation (ABC) approach in all poisoning patients.",
+     "cite": {
+      "sid": "S13",
+      "doc": "isccm-2024-acute-poisoning-position-statement",
+      "page": 4,
+      "quote": "We recommend airway, breathing, circulation (ABC) approach in all poisoning patients."
+     }
+    }
+   ],
+   "manage": [
+    {
+     "kind": "quote",
+     "text": "Supportive care is the mainstay of treatment.",
+     "cite": {
+      "sid": "S134",
+      "doc": "isccm-2024-acute-poisoning-position-statement",
+      "page": 11,
+      "quote": "Supportive care is the mainstay of treatment."
+     }
+    }
+   ],
+   "cautions": [],
+   "no_antidote": true
+  },
+  "audit": {
+   "verdicts": [
+    {
+     "index": 0,
+     "section": "expect",
+     "verdict": "approve",
+     "reason": "The quote 'We recommend airway, breathing, circulation (ABC) approach in all poisoning patients' is a general ISCCM position statement recommendation applicable to all poisoning patients, including non-pesticide poisonings. It is not contradicted by any document and is appropriate clinical guidance for the chemical group 'not_pesticide'."
+    },
+    {
+     "index": 1,
+     "section": "manage",
+     "verdict": "approve",
+     "reason": "The quote 'Supportive care is the mainstay of treatment' is a general principle of poisoning management found in both the national module (General Supportive Care) and ISCCM position statement. It applies to non-pesticide poisonings and is not contradicted."
+    }
+   ],
+   "overall": "approve",
+   "notes": "Both quotes are general ISCCM recommendations that are appropriate for the management of non-pesticide poisonings. The identity section describes urea as a non-pesticide compound, which is consistent with the chemical group."
+  },
+  "citations": {
+   "total": 2,
+   "verified": 2,
+   "integrity": 1,
+   "tiers": {
+    "id": 2
+   },
+   "failures": []
+  },
+  "retrieved": [
+   {
+    "doc": "nhsrc-emergency-care-mo-poison-management",
+    "title": "nhsrc_emergency_care_mo_poison_management",
+    "page": 7,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "isccm-2024-acute-poisoning-position-statement",
+    "title": "isccm_2024_acute_poisoning_position_statement",
+    "page": 4,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "isccm-2024-acute-poisoning-position-statement",
+    "title": "isccm_2024_acute_poisoning_position_statement",
+    "page": 16,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "isccm-2024-acute-poisoning-position-statement",
+    "title": "isccm_2024_acute_poisoning_position_statement",
+    "page": 11,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "isccm-2024-acute-poisoning-position-statement",
+    "title": "isccm_2024_acute_poisoning_position_statement",
+    "page": 5,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "isccm-2024-acute-poisoning-position-statement",
+    "title": "isccm_2024_acute_poisoning_position_statement",
+    "page": 3,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   }
+  ],
+  "web": {},
+  "notes": [],
+  "npic": "National Poisons Information Centre, AIIMS New Delhi: 1800-116-117 (24x7)",
+  "trace": [
+   {
+    "ts": 1793131206.4713655,
+    "tier": "fast",
+    "model": "Nemotron 3 Nano",
+    "model_id": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+    "purpose": "normalise.label",
+    "tokens_in": 1042,
+    "tokens_out": 160,
+    "usd": 0.00010091999999999999,
+    "latency_ms": 2423
+   },
+   {
+    "ts": 1793131214.932284,
+    "tier": "mid",
+    "model": "Nemotron 3 Super",
+    "model_id": "nvidia/nemotron-3-super-120b-a12b",
+    "purpose": "compose.card",
+    "tokens_in": 6383,
+    "tokens_out": 713,
+    "usd": 0.0025566,
+    "latency_ms": 8449
+   },
+   {
+    "ts": 1793131223.3725474,
+    "tier": "deep",
+    "model": "Nemotron 3 Ultra",
+    "model_id": "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "purpose": "audit.card",
+    "tokens_in": 26985,
+    "tokens_out": 2407,
+    "usd": 0.034206,
+    "latency_ms": 8437
+   }
+  ],
+  "latency_ms": 19327
+ }
+}

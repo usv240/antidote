@@ -1,0 +1,273 @@
+{
+ "sample_id": "carbofuran",
+ "recorded_at": "2026-10-27T20:00:03.673Z",
+ "request": {
+  "label": {
+   "product_name": "Furadan",
+   "active_ingredients": [
+    {
+     "name": "Carbofuran",
+     "percent": "3"
+    }
+   ],
+   "formulation_code": "CG",
+   "triangle_colour": "red",
+   "visible_text": [
+    "FURADAN 3G",
+    "Carbofuran 3% CG"
+   ]
+  },
+  "context": {
+   "route": "ingested",
+   "time_since_exposure": "1-2 h",
+   "signs": "sweating, vomiting, miosis"
+  },
+  "audit": true
+ },
+ "response": {
+  "trace_id": "c4a11c74-2224-4349-b234-68fb42ad7fed",
+  "banner": "Decision support for trained clinicians. Airway, breathing, circulation first. National Poisons Information Centre, AIIMS New Delhi: 1800-116-117 (24x7).",
+  "label": {
+   "product_name": "Furadan",
+   "active_ingredients": [
+    {
+     "name": "carbofuran",
+     "percent": "3"
+    }
+   ],
+   "formulation_code": "CG",
+   "registration_number": null,
+   "batch": null,
+   "expiry": null,
+   "manufacturer": null,
+   "triangle_colour": "red",
+   "signal_word": null,
+   "antidote_statement_text": null,
+   "visible_text": [
+    "FURADAN 3G",
+    "Carbofuran 3% CG"
+   ],
+   "languages_seen": [],
+   "confidence": 0
+  },
+  "matches": [
+   {
+    "active_ingredient": "carbofuran",
+    "group": "carbamate",
+    "who_class": "Ib",
+    "india_status": "restricted",
+    "verify": false,
+    "confidence": 0.97,
+    "reason": "exact active ingredient"
+   }
+  ],
+  "chosen": {
+   "active_ingredient": "carbofuran",
+   "group": "carbamate",
+   "who_class": "Ib",
+   "india_status": "restricted",
+   "verify": false,
+   "confidence": 0.97,
+   "reason": "exact active ingredient"
+  },
+  "group": {
+   "id": "carbamate",
+   "name": "Carbamate insecticide",
+   "antidote_exists": true,
+   "gate": "none",
+   "retrieval_terms": [
+    "carbamate",
+    "atropine",
+    "cholinergic",
+    "carbofuran",
+    "pralidoxime controversial"
+   ]
+  },
+  "triangle": {
+   "label": "Extremely toxic",
+   "signal": "POISON"
+  },
+  "guarded": false,
+  "stops": [],
+  "card": {
+   "identity": [
+    {
+     "kind": "explanation",
+     "text": "Carbofuran is a carbamate insecticide.",
+     "cite": null
+    }
+   ],
+   "expect": [
+    {
+     "kind": "quote",
+     "text": "hypotension, bradypnea Salivation, urinary and fecal incontinence, diarrhea, emesis, diaphoresis, lacrimation, GI cramps, bronchoconstriction, muscle fasciculations, weakness, and seizures Organophosphate and carbamate insecticide, nerve agents, nicotine, physostigmine, edrophonium Serotonin syndrome Confusion, agitation, coma Mydriasis Hyperthermia,",
+     "cite": {
+      "sid": "S28",
+      "doc": "isccm-2024-acute-poisoning-position-statement",
+      "page": 11,
+      "quote": "hypotension, bradypnea Salivation, urinary and fecal incontinence, diarrhea, emesis, diaphoresis, lacrimation, GI cramps, bronchoconstriction, muscle fasciculations, weakness, and seizures Organophosphate and carbamate insecticide, nerve agents, nicotine, physostigmine, edrophonium Serotonin syndrome Confusion, agitation, coma Mydriasis Hyperthermia,"
+     }
+    }
+   ],
+   "manage": [
+    {
+     "kind": "quote",
+     "text": "• Atropine, Pralidoxime – Organophosphates",
+     "cite": {
+      "sid": "S6",
+      "doc": "nhsrc-emergency-care-mo-poison-management",
+      "page": 31,
+      "quote": "• Atropine, Pralidoxime – Organophosphates"
+     }
+    },
+    {
+     "kind": "quote",
+     "text": "Supportive care is the mainstay of treatment.",
+     "cite": {
+      "sid": "S13",
+      "doc": "isccm-2024-acute-poisoning-position-statement",
+      "page": 11,
+      "quote": "Supportive care is the mainstay of treatment."
+     }
+    }
+   ],
+   "cautions": [
+    {
+     "kind": "quote",
+     "text": "Indian Journal of Critical Care Medicine, Volume 28 Issue Suppl 2 (August 2024) S227 Annexure Annexure 5 Antidotal Therapy A response to empirically administered antidotes can be used to suggest a suspected diagnosis, their indiscriminate use can potentially increase patient morbidity.",
+     "cite": {
+      "sid": "S11",
+      "doc": "isccm-2024-acute-poisoning-position-statement",
+      "page": 11,
+      "quote": "Indian Journal of Critical Care Medicine, Volume 28 Issue Suppl 2 (August 2024) S227 Annexure Annexure 5 Antidotal Therapy A response to empirically administered antidotes can be used to suggest a suspected diagnosis, their indiscriminate use can potentially increase patient morbidity."
+     }
+    }
+   ],
+   "no_antidote": false
+  },
+  "audit": {
+   "verdicts": [
+    {
+     "index": 0,
+     "section": "identity",
+     "verdict": "approve",
+     "reason": "The statement 'Carbofuran is a carbamate insecticide' correctly identifies a representative agent of the carbamate chemical group and is not contradicted by the provided documents."
+    },
+    {
+     "index": 1,
+     "section": "expect",
+     "verdict": "reject",
+     "reason": "The quoted text concatenates the cholinergic toxidrome (which includes carbamates) with the serotonin syndrome toxidrome from the ISCCM table. It includes symptoms (e.g., mydriasis, hyperthermia) and agents (MAOIs, SSRIs) that are not relevant to carbamate poisoning, making it inaccurate for this chemical group."
+    },
+    {
+     "index": 2,
+     "section": "manage",
+     "verdict": "reject",
+     "reason": "The quote 'Atropine, Pralidoxime – Organophosphates' is explicitly for organophosphate poisoning. The nhsrc document (page 35) states pralidoxime (PAM) should be started only if the poison is an organophosphate (OPC), implying it is not indicated for carbamates. Using this quote for carbamate management is wrong group."
+    },
+    {
+     "index": 3,
+     "section": "manage",
+     "verdict": "reject",
+     "reason": "The quote 'Supportive care is the mainstay of treatment' is a general principle from the ISCCM position statement and does not constitute specific clinical guidance for carbamate poisoning. It lacks any reference to carbamate-specific management (e.g., atropine dosing, decontamination, monitoring)."
+    },
+    {
+     "index": 4,
+     "section": "cautions",
+     "verdict": "reject",
+     "reason": "The quoted caution about antidotal therapy is a general consensus statement from ISCCM Annexure 5 and is not specific to carbamate poisoning. It does not provide carbamate-relevant cautions (e.g., avoiding pralidoxime, watching for intermediate syndrome)."
+    }
+   ],
+   "overall": "approve_with_rejections",
+   "notes": "Only the identity statement is accurate for the carbamate group. The expect quote mixes two toxidromes, the manage quotes are either for organophosphates or too generic, and the cautions quote is not carbamate-specific. The card needs carbamate-specific expect (cholinergic toxidrome only), manage (atropine as primary antidote, no routine pralidoxime), and cautions (e.g., intermediate syndrome, no oximes)."
+  },
+  "citations": {
+   "total": 4,
+   "verified": 4,
+   "integrity": 1,
+   "tiers": {
+    "id": 4
+   },
+   "failures": []
+  },
+  "retrieved": [
+   {
+    "doc": "nhsrc-emergency-care-mo-poison-management",
+    "title": "nhsrc_emergency_care_mo_poison_management",
+    "page": 31,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "isccm-2024-acute-poisoning-position-statement",
+    "title": "isccm_2024_acute_poisoning_position_statement",
+    "page": 11,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "nhsrc-emergency-care-mo-poison-management",
+    "title": "nhsrc_emergency_care_mo_poison_management",
+    "page": 12,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "nhsrc-emergency-care-mo-poison-management",
+    "title": "nhsrc_emergency_care_mo_poison_management",
+    "page": 14,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "nhsrc-emergency-care-mo-poison-management",
+    "title": "nhsrc_emergency_care_mo_poison_management",
+    "page": 13,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   },
+   {
+    "doc": "isccm-2024-acute-poisoning-position-statement",
+    "title": "isccm_2024_acute_poisoning_position_statement",
+    "page": 16,
+    "source_url": "https://iris.who.int/bitstream/handle/10665/332193/9789240005662-eng.pdf"
+   }
+  ],
+  "web": {},
+  "notes": [
+   "carbofuran is restricted in India (CIB&RC); note this in the medico-legal record"
+  ],
+  "npic": "National Poisons Information Centre, AIIMS New Delhi: 1800-116-117 (24x7)",
+  "trace": [
+   {
+    "ts": 1793131185.4516134,
+    "tier": "fast",
+    "model": "Nemotron 3 Nano",
+    "model_id": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+    "purpose": "normalise.label",
+    "tokens_in": 1078,
+    "tokens_out": 90,
+    "usd": 0.00008627999999999998,
+    "latency_ms": 2407
+   },
+   {
+    "ts": 1793131191.9646423,
+    "tier": "mid",
+    "model": "Nemotron 3 Super",
+    "model_id": "nvidia/nemotron-3-super-120b-a12b",
+    "purpose": "compose.card",
+    "tokens_in": 5760,
+    "tokens_out": 858,
+    "usd": 0.0025001999999999997,
+    "latency_ms": 6504
+   },
+   {
+    "ts": 1793131203.9628835,
+    "tier": "deep",
+    "model": "Nemotron 3 Ultra",
+    "model_id": "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "purpose": "audit.card",
+    "tokens_in": 27380,
+    "tokens_out": 3805,
+    "usd": 0.038795,
+    "latency_ms": 11995
+   }
+  ],
+  "latency_ms": 20921
+ }
+}
