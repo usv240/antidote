@@ -49,6 +49,11 @@ In Yavatmal in 2017 about 800 farm workers were poisoned while spraying cotton, 
 
 Every call is written to a ledger (tier, model, tokens, USD, latency) and shown in the app's Trace panel.
 
+## Nebius Serverless, run and stopped
+
+- **Job: verify both entries from a clean machine.** A Serverless Job cloned both public repositories, ran every test and the published safety checks, and called both live APIs. Result PASS in about 3 minutes (`sieve/infra/job-verify/RUN.md`).
+- **Endpoint: an open NVIDIA vision model on our own GPU.** A Serverless Endpoint served NVIDIA Nemotron Nano 12B v2 VL with vLLM on one L40S, and both photo benchmarks were rerun with it as the only reader. On its own it made one unsafe Antidote card out of 68 labels, which the production two-read and brand checks catch (`sieve/infra/endpoint-vl/RUN.md`). Stopped after the run; about $1 in total.
+
 ## Where Token Factory accelerated our workflow
 
 - **Four NVIDIA models behind one key and one API shape.** Nemotron 3 Nano normalises labels, 3 Super assembles cards, 3 Ultra audits them and 3.5 Super VL reads photos, all through the same OpenAI-compatible call. Moving a stage between tiers is a one-line change.

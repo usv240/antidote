@@ -15,4 +15,5 @@ export const EVAL_HELP: Record<string, string> = {
   case_class_level: "Bottles where only the class, such as organophosphate, could be read. With the patient's signs recorded, Antidote now gives the right guidance for them.",
   label_photo_unsafe: "Real photos of Indian pesticide bottles. Cards that would have pointed a doctor to the wrong kind of treatment.",
   label_photo_correct: "On the same photos, when the chemical name is readable, how often Antidote identified it correctly.",
+  label_photo_nano_vl: "The same 68 labels read by NVIDIA's open Nemotron Nano 12B VL alone on our own Nebius Serverless Endpoint, with no second read. It made one unsafe card, which the two-read check and brand check would have caught.",
 };

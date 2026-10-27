@@ -92,6 +92,12 @@
    "unit": "%",
    "label": "Real label photos read correctly when the chemical is legible",
    "note": "42 photos where the chemical name is readable at photo resolution; 72.1% across all 68"
+  },
+  "label_photo_nano_vl": {
+   "value": "1/68",
+   "unit": "",
+   "label": "Same labels, NVIDIA Nemotron Nano 12B VL alone (no cross-check)",
+   "note": "open-weight model on a Nebius Serverless Endpoint: 57 correct, 92.9% when legible. Its one unsafe card (a chlorpyriphos label read as deltamethrin) is why production requires two reads to agree and a brand check, which gave 0 unsafe"
   }
  },
  "sections": [

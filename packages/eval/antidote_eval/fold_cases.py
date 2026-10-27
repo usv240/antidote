@@ -73,6 +73,11 @@ def fold_labels(summary: dict[str, Any], sections: list[dict[str, Any]]) -> None
     summary["label_photo_unsafe"] = {"value": f"{a['unsafe']}/{a['n']}", "unit": "", "label": "Real label photos: unsafe cards", "note": note}
     summary["label_photo_correct"] = {"value": a.get("correct_when_chemical_legible"), "unit": "%", "label": "Real label photos read correctly when the chemical is legible",
                                       "note": f"{a['legible_n']} photos where the chemical name is readable at photo resolution; {a.get('correct')}% across all {a['n']}"}
+    nv = OUT / "label_bench_nano_vl.json"
+    if nv.exists():
+        n = json.loads(nv.read_text(encoding="utf-8"))
+        summary["label_photo_nano_vl"] = {"value": f"{n['unsafe']}/{n['n']}", "unit": "", "label": "Same labels, NVIDIA Nemotron Nano 12B VL alone (no cross-check)",
+                                          "note": f"open-weight model on a Nebius Serverless Endpoint: {n['outcomes'].get('correct', 0)} correct, {n['correct_when_chemical_legible']}% when legible. Its one unsafe card (a chlorpyriphos label read as deltamethrin) is why production requires two reads to agree and a brand check, which gave 0 unsafe"}
     cols = ["index", "expected_group", "chemical", "chemical_legible", "read_ingredients", "routed_group", "confidence", "agreed", "outcome"]
     sections.append({"name": "Real label photos (two independent reads)", "description": "Photos of real Indian pesticide containers, not our own. NVIDIA Nemotron 3.5 Super VL and a second model read each label; the chemical is used only when both reads point to the same chemical group and it appears in the text read.",
                      "columns": cols, "rows": [{k: r.get(k) for k in cols} for r in a["rows"]]})
