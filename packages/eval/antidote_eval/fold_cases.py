@@ -64,8 +64,12 @@ def fold_labels(summary: dict[str, Any], sections: list[dict[str, Any]]) -> None
     b = json.loads(before.read_text(encoding="utf-8")) if before.exists() else None
     oc = a["outcomes"]
     note = f"{a['n']} photos of real Indian pesticide labels from product pages and listings, annotated by eye before any run: {oc.get('correct', 0)} correct, {oc.get('safe_withheld', 0)} withheld for the clinician to confirm, {oc.get('wrong_group_same_advice', 0)} wrong group with the same advice."
+    mid = OUT / "label_bench_tworead.json"
+    m = json.loads(mid.read_text(encoding="utf-8")) if mid.exists() else None
     if b:
-        note += f" The first run found {b['unsafe']} unsafe cards: an empty read was normalised to a chemical the model invented. Fixed with a grounding gate and two independent reads."
+        note += f" History: the first run found {b['unsafe']} unsafe cards, because an empty read was normalised to a chemical the model invented."
+    if m:
+        note += f" With two independent reads, {m['unsafe']} remained, where both vision models invented names from small print. A Tavily check of the brand and a mixture rule brought it to {a['unsafe']}."
     summary["label_photo_unsafe"] = {"value": f"{a['unsafe']}/{a['n']}", "unit": "", "label": "Real label photos: unsafe cards", "note": note}
     summary["label_photo_correct"] = {"value": a.get("correct_when_chemical_legible"), "unit": "%", "label": "Real label photos read correctly when the chemical is legible",
                                       "note": f"{a['legible_n']} photos where the chemical name is readable at photo resolution; {a.get('correct')}% across all {a['n']}"}
