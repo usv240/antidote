@@ -382,3 +382,36 @@ async def telegram_webhook(request: Request) -> dict[str, Any]:
 
     did = handle_update(update, analyze=analyze_label, read_photo=read_photo, send=send, npic=NPIC)
     return {"ok": True, "did": did}
+
+
+# --- Surveillance: the register as an early-warning signal (deterministic alerts; Nemotron 3.5 Lightning brief) ---
+def _register_rows() -> list[dict[str, Any]]:
+    from antidote_core.surveillance import load_rows
+
+    return load_rows(RECORDS, DATA / "samples/register_demo.jsonl")
+
+
+@app.get("/v1/surveillance/alerts")
+def surveillance_alerts() -> dict[str, Any]:
+    """Clusters and banned chemicals in the register, by fixed rules only. Instant, no model call."""
+    from antidote_core.surveillance import detect_alerts, status_map
+
+    rows = _register_rows()
+    return {"register_rows": len(rows), "demo_rows": sum(1 for r in rows if r.get("demo")), "alerts": detect_alerts(rows, status_map(REGISTRY))}
+
+
+@app.post("/v1/surveillance/brief")
+def surveillance_brief() -> dict[str, Any]:
+    """Nemotron 3.5 Lightning reads the whole register and every published case report for the chemicals in it, in one
+    long-context call, and writes the district brief. Item-level safety rules apply before it is returned."""
+    from antidote_core.surveillance import build_brief
+
+    if not CLIENT:
+        raise HTTPException(503, "model key not configured")
+    t0 = time.perf_counter()
+    trace_id = str(uuid.uuid4())
+    out = build_brief(CLIENT, _register_rows(), REGISTRY, PIPE.rules, trace_id=trace_id)
+    out["latency_ms"] = int((time.perf_counter() - t0) * 1000)
+    out["trace"] = LEDGER.trace(trace_id)
+    return out
+

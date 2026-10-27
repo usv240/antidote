@@ -3,7 +3,8 @@ apps/mcp
 node_modules
 .venv
 .next
-data/corpus
+data/corpus/*
+!data/corpus/case_reports
 data/ledger*.db
 data/api_keys.json
 docs

@@ -1,0 +1,164 @@
+{
+ "alerts": [
+  {
+   "type": "spraying cluster",
+   "chemical_group": "organophosphate",
+   "cases": 5,
+   "from": "2026-09-28 10:15",
+   "to": "2026-10-03 14:10",
+   "chemicals": [
+    "profenofos"
+   ],
+   "localities": [
+    "Block A",
+    "Block B",
+    "Block C"
+   ],
+   "row_ids": [
+    "demo-01",
+    "demo-02",
+    "demo-03",
+    "demo-04",
+    "demo-05"
+   ],
+   "why": "5 cases of organophosphate within 7 days, 5 from skin or inhaled exposure while spraying"
+  },
+  {
+   "type": "banned chemical in circulation",
+   "chemical_group": "organophosphate",
+   "cases": 1,
+   "from": "2026-10-15 16:45",
+   "to": "2026-10-15 16:45",
+   "chemicals": [
+    "phorate"
+   ],
+   "localities": [
+    "Block C"
+   ],
+   "row_ids": [
+    "demo-09"
+   ],
+   "why": "phorate is banned in India (CIB&RC) and still reached a patient: the product is still being sold or stored"
+  },
+  {
+   "type": "restricted-use chemicals",
+   "chemical_group": null,
+   "cases": 4,
+   "from": "2026-10-04 08:50",
+   "to": "2026-10-21 19:30",
+   "chemicals": [
+    "aluminium phosphide",
+    "monocrotophos",
+    "paraquat dichloride"
+   ],
+   "localities": [
+    "Block B",
+    "Block D",
+    "Block E"
+   ],
+   "row_ids": [
+    "demo-06",
+    "demo-07",
+    "demo-08",
+    "demo-11"
+   ],
+   "why": "4 poisonings from chemicals whose sale is restricted in India: aluminium phosphide, monocrotophos, paraquat dichloride"
+  }
+ ],
+ "brief": {
+  "headline": "Organophosphate spraying cluster and banned chemicals in circulation drive acute poisonings across Blocks A–E",
+  "clusters": [
+   {
+    "title": "Organophosphate spraying cluster",
+    "detail": "5 cases of organophosphate poisoning within 7 days (28 Sep–3 Oct) after field spraying without masks; all involved profenofos. Row IDs: demo-01, demo-02, demo-03, demo-04, demo-05.",
+    "evidence": [
+     "demo-01",
+     "demo-02",
+     "demo-03",
+     "demo-04",
+     "demo-05"
+    ]
+   },
+   {
+    "title": "Banned chemical phorate still in circulation",
+    "detail": "Phorate is banned in India (CIB&RC) but reached a patient in Block C; product still being sold or stored. Row ID: demo-09.",
+    "evidence": [
+     "demo-09"
+    ]
+   }
+  ],
+  "regulatory": [
+   {
+    "title": "Banned/restricted chemicals reaching patients",
+    "detail": "Monocrotophos (Ib), phorate (Ia), paraquat dichloride (restricted), aluminium phosphide (restricted) – all registered or restricted in India but still causing poisoning. Row IDs: demo-06, demo-07, demo-08, demo-09, demo-11.",
+    "evidence": [
+     "demo-06",
+     "demo-07",
+     "demo-08",
+     "demo-09",
+     "demo-11"
+    ]
+   }
+  ],
+  "what_published_cases_teach": [
+   {
+    "title": "Aluminium phosphide ingestion can cause delayed cardiac complications",
+    "detail": "Case reports document delayed myocardial infarction and arrhythmias after aluminium phosphide ingestion; early suspicion of cardiotoxicity improves outcomes. URL: https://pmc.ncbi.nlm.nih.gov/articles/PMC10041262",
+    "evidence": [
+     "https://pmc.ncbi.nlm.nih.gov/articles/PMC10041262"
+    ]
+   },
+   {
+    "title": "Paraquat ingestion causes progressive acute kidney injury",
+    "detail": "Published cases show paraquat ingestion leads to AKI requiring hemodialysis; early fluid resuscitation and antioxidants improve renal recovery. URL: https://pmc.ncbi.nlm.nih.gov/articles/PMC12768155",
+    "evidence": [
+     "https://pmc.ncbi.nlm.nih.gov/articles/PMC12768155"
+    ]
+   }
+  ],
+  "actions": [
+   {
+    "title": "Field visit to Blocks A, B, C",
+    "detail": "Verify pesticide storage, label integrity, and farmer protective practices during spraying.",
+    "evidence": [
+     "register rows demo-01 to demo-05"
+    ]
+   },
+   {
+    "title": "Farmer outreach on PPE",
+    "detail": "Emphasise mask, glove, and long-sleeve use during organophosphate spraying; advise re-entry intervals.",
+    "evidence": [
+     "cluster alert: organophosphate spraying cluster"
+    ]
+   },
+   {
+    "title": "Retailer inspection for banned products",
+    "detail": "Check shops for phorate, monocrotophos, and paraquat formulations not permitted for sale; seize if found.",
+    "evidence": [
+     "regulatory alert: banned chemical in circulation"
+    ]
+   },
+   {
+    "title": "Report to Poison Centre",
+    "detail": "Share register data and cluster findings with the district poison centre for early warning and antidote stock verification.",
+    "evidence": [
+     "all alerts"
+    ]
+   }
+  ],
+  "confidence_note": "All 12 register rows are marked as demo data; figures and clusters reflect demo data only. Date range: 28 Sep 2026 – 24 Oct 2026."
+ },
+ "removed_by_rules": [
+  {
+   "section": "what_published_cases_teach",
+   "title": "Cypermethrin can mimic organophosphate poisoning",
+   "rules": [
+    "antidote-for-non-cholinergic",
+    "atropine-for-pyrethroid"
+   ]
+  }
+ ],
+ "input_tokens_approx": 229294,
+ "case_reports_read": 32,
+ "register_rows": 12
+}

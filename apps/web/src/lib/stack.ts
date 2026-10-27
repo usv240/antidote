@@ -7,6 +7,7 @@ export const STACK: StackItem[] = [
   { name: "NVIDIA Nemotron 3 Nano", role: "Normalises what was read, for example Chlorpyriphos to chlorpyrifos. It can never add a chemical that was not on the label.", status: "live", href: "/how-it-works" },
   { name: "NVIDIA Nemotron 3 Super", role: "Assembles the bedside card by choosing numbered guideline sentences. It never writes clinical text itself.", status: "live", href: "/how-it-works" },
   { name: "NVIDIA Nemotron 3 Ultra", role: "Audits every card against the complete national module and the ISCCM statement in one long context.", status: "live", href: "/how-it-works" },
+  { name: "NVIDIA Nemotron 3.5 Lightning", role: "Reads the whole poisoning register and the full text of every published case report for the chemicals in it, about 200,000 tokens in one call, to write the district surveillance brief.", status: "live", href: "/register" },
   { name: "NVIDIA Nemotron Nano 12B v2 VL", role: "Offline label reading on a laptop GPU through llama.cpp, with no internet.", status: "laptop", href: "/limits" },
   { name: "Tavily", role: "Checks a brand's registered composition on Indian agrochemical sources before a card is trusted, and fetched the WHO and CIB&RC documents that block automated download.", status: "live", href: "/how-it-works" },
   { name: "Hermes Agent", role: "Runs Antidote as tools for an agent alongside Sieve.", status: "laptop", href: "https://github.com/usv240/antidote" },

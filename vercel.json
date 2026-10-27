@@ -8,7 +8,7 @@
       "functions": {
         "index.py": {
           "maxDuration": 300,
-          "includeFiles": "{data/index,data/samples,eval/results}/**"
+          "includeFiles": "{data/index,data/samples,data/external,data/corpus/case_reports,eval/results}/**"
         }
       }
     }

@@ -84,3 +84,4 @@ class MLCRecord(BaseModel):
     poison_centre_called: bool = False
     ai_trace_id: str
     label_photo_attached: bool = False
+    locality: str | None = Field(default=None, description="Block or village, never a home address; used for cluster detection")
