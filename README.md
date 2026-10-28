@@ -73,7 +73,7 @@ Every call is written to a ledger (tier, model, tokens, USD, latency) and shown 
 git clone https://github.com/usv240/antidote && cd antidote
 cp .env.example .env            # add NEBIUS_API_KEY and TAVILY_API_KEY
 make setup
-make test                       # 10 tests
+make test                       # 40 tests
 make eval                       # writes eval/results/latest.json and REPORT.md
 make dev                        # API on :8010, OpenAPI at /docs
 cd apps/web && npm install && npm run dev   # web on :3010
