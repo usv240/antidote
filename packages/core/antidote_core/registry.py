@@ -43,6 +43,12 @@ TRIANGLE = {
 }
 
 
+# WHO 2019 chemical-type codes whose registry group decides the antidote question.
+WHO_TYPE_GROUP = {"OP": "organophosphate", "C": "carbamate", "PY": "pyrethroid", "CO": "anticoagulant_rodenticide"}
+# Coded OP by WHO but not cholinesterase inhibitors: an atropine card would be wrong.
+WHO_TYPE_EXCLUDE = {"fosamine"}
+
+
 class ChemRegistry:
     def __init__(self, path: Path = DATA / "chemical_groups.yaml", who_csv: Path = DATA / "who_hazard_2019.csv"):
         doc = yaml.safe_load(path.read_text(encoding="utf-8"))
@@ -72,12 +78,27 @@ class ChemRegistry:
                     return v
             return None
 
+        used: set[int] = set()
         for a in self.ais:
             w = _lookup(a["name"])
             if w:
                 a["who_class"] = w["who_class"]
                 a["verify"] = False
                 a["who_source"] = {"doc": "who-hazard-2019", "line": int(w["source_line"])}
+                used.add(int(w["source_line"]))
+        # Chemicals the seed list lacks, routed by WHO's own chemical-type code. Only codes whose group decides the
+        # antidote are taken. WHO's C also covers carbamate herbicides and growth regulators (chlorpropham, carbetamide,
+        # fenoxycarb, all class U) that do not inhibit cholinesterase, so class U carbamates are left out. OC and BP are
+        # left out: OC mixes herbicides and fungicides with insecticides, and BP would give diquat a paraquat card.
+        for w in self.who.values():
+            group = WHO_TYPE_GROUP.get(w.get("chemical_type_code") or "")
+            line = int(w["source_line"]) if (w.get("source_line") or "").isdigit() else None
+            name = w["active_ingredient"].strip()
+            # Parse artefacts (a bare number) and three-letter codes would match label text by accident.
+            if not group or line is None or line in used or (group == "carbamate" and w["who_class"] == "U") or len(name) < 5 or not re.search(r"[a-z]{4}", name.lower()) or name.lower() in WHO_TYPE_EXCLUDE:
+                continue
+            self.ais.append({"name": name, "group": group, "who_class": w["who_class"], "verify": False,
+                             "india_status": "unknown", "who_source": {"doc": "who-hazard-2019", "line": line}, "added_from": "who-2019-chemical-type"})
         self.names = [a["name"].lower() for a in self.ais]
 
     def group(self, group_id: str) -> dict | None:

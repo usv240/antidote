@@ -70,6 +70,10 @@ def label_source_text(raw: dict[str, Any]) -> str:
     return " ".join(p for p in parts if p and p.lower() != "none")
 
 
+def _plain(s: str) -> str:
+    return re.sub(r"[^a-z0-9]+", " ", s.lower()).strip()
+
+
 def grounded(name: str, source: str, threshold: float = 80.0) -> bool:
     """True if `name` (or a spelling variant of it) appears in what was read. Catches 'Chlorpyriphos' to
     'chlorpyrifos'; rejects a chemical the model brought from nowhere."""
@@ -165,6 +169,15 @@ class AntidotePipeline:
         except Exception as e:  # noqa: BLE001
             base.visible_text.append(f"normalise_error:{type(e).__name__}")
             return base
+        # Every other field must trace back to the read too. Given only "Ekalux" and "Syngenta", the normaliser has
+        # written "Active Ingredient: Chlorpyrifos 250 g/L" and "Antidote: Atropine" into visible_text, and the registry's
+        # text scan would then route on a chemical nobody read. A field the read does not contain falls back to the read.
+        src = _plain(source)
+        out.visible_text = list(dict.fromkeys([*base.visible_text, *(t for t in out.visible_text if _plain(t) and _plain(t) in src)]))
+        for f in ("formulation_code", "registration_number", "batch", "expiry", "manufacturer", "triangle_colour", "signal_word", "antidote_statement_text"):
+            v = getattr(out, f)
+            if v and _plain(str(v)) not in src:
+                setattr(out, f, getattr(base, f))
         # Grounding gate: a normalised chemical survives only if something like it was actually read from the label.
         kept = [a for a in out.active_ingredients if grounded(a.get("name", ""), source)]
         if len(kept) < len(out.active_ingredients):
