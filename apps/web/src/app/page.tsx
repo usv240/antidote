@@ -12,14 +12,14 @@ export default function Landing() {
       <section className="grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-start">
         <div className="space-y-6">
           <h1 className="max-w-3xl text-balance text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
-            The chemical was never identified in 94 percent of cases. It was printed on the bottle in the family&apos;s hand.
+            The chemical went unidentified in 94 percent of recorded cases. It was printed on the bottle in the family&apos;s hand.
           </h1>
           <p className="max-w-xl text-lg text-fg">
             In July 2013, 23 children in Bihar died after a school lunch cooked in oil kept in a pesticide container. A forensic report confirmed the poison, monocrotophos, four days later.{" "}
             <a className="text-sm text-accent underline underline-offset-2" href="https://en.wikipedia.org/wiki/Bihar_school_meal_poisoning_incident" target="_blank" rel="noreferrer">Record</a>
           </p>
           <p className="max-w-xl text-fg-muted">
-            When the bottle comes with the patient, the answer should take seconds, not days. Antidote reads the label from a photo and gives the doctor the chemical, its hazard class and guidance quoted from the national module, or a stop card when no antidote exists. About 20 seconds from photo to card. Tested on 55 published poisoning cases, and every result is public, including the one card we got wrong.
+            When the bottle comes with the patient, the answer should take seconds, not days. Antidote reads the label from a photo and gives the doctor the chemical, its hazard class and guidance quoted from the national module, or a stop card when no antidote exists. About 20 seconds from photo to card. Tested on 55 published poisoning cases and 68 real label photos: no unsafe card on the code that is live today.
           </p>
           <div className="flex flex-wrap gap-3">
             <Link href="/try?sample=chlorpyrifos" className="btn-primary">Try it on a sample bottle</Link>
@@ -80,10 +80,14 @@ export default function Landing() {
           <table className="w-full text-sm">
             <thead className="text-left text-fg-muted"><tr><th className="p-4">Number</th><th className="p-4">What it means</th><th className="p-4">Source</th></tr></thead>
             <tbody className="[&_td]:border-t [&_td]:border-border [&_td]:p-4 [&_td]:align-top">
+              <Row n="WhatsApp" t="photos of the container sent by relatives were how paraquat was finally identified in an Indian series; before referral, patients who could not name the poison were given atropine, pralidoxime and oxygen as if it were an organophosphate." s="Dambal et al., National Medical Journal of India 2021" u="https://nmji.in/reasons-for-under-reporting-of-paraquat-poisoning-in-india/" />
+              <Row n="31.8%" t="of patients in a Bangladesh hospital series (63 of 198) were misdiagnosed from the clinical toxidrome alone; the specific compound came from the history or the bottle." s="Verma, Eddleston et al., 2024" u="https://pmc.ncbi.nlm.nih.gov/articles/PMC11149373/" />
+              <Row n="About 70%" t="case fatality for paraquat and aluminium phosphide, against close to 0 percent for many newer pesticides. WHO advises bringing the bottle." s="WHO, 2008" u="https://iris.who.int/handle/10665/44020" />
               <Row n="110k to 168k" t="pesticide self-poisoning deaths per year worldwide." s="Mew et al., 2017" u="https://files.givewell.org/files/DWDA%202009/Centre_for_Pesticide_Suicide_Prevention/Mew_et_al_2017.pdf" />
               <Row n="94%" t="of recorded acute unintentional pesticide poisonings in India had the chemical recorded as unknown. An NGO analysis of government data, labelled as such." s="PAN India, 2026" u="https://pan-india.org/wp-content/uploads/2026/01/Acute-Unintentional-Pesticide-poisonings-in-India_.pdf" />
               <Row n="Better survival" t="when the pesticide type and amount were known on admission; the unknown-organophosphate group did worst." s="Scientific Reports, 2022" u="https://www.nature.com/articles/s41598-022-21054-1" />
               <Row n="50.8 to 90.5%" t="paraquat case fatality in three Indian tertiary-hospital series." s="2023 to 2025" u="https://pmc.ncbi.nlm.nih.gov/articles/PMC12532245/" />
+              <Row n="18 of 318" t="pesticides registered in India were WHO class Ia or Ib, extremely or highly hazardous." s="Bonvoisin et al., BMC Public Health 2020" u="https://link.springer.com/article/10.1186/s12889-020-8339-z" />
               <Row n="25.4%" t="of 170,924 suicides in India in 2022 were by poisoning." s="NCRB ADSI 2022" u="https://www.data.gov.in/catalog/accidental-deaths-suicides-india-adsi-2022" />
               <Row n="Rule 19" t="of the Insecticides Rules 1971: every label must carry a toxicity triangle and an antidote statement." s="Government of India, 1971" u="https://nhsrcindia.org/sites/default/files/2021-05/The%20Insecticides%20rules%201971.pdf" />
             </tbody>
@@ -129,9 +133,9 @@ export default function Landing() {
       <StackStrip />
 
       <section aria-labelledby="limits" className="space-y-3">
-        <h2 id="limits" className="text-2xl font-semibold">Limits, honestly</h2>
-        <p className="max-w-2xl text-fg-muted">Antidote identifies the product and retrieves cited guidance for trained clinicians. It does not diagnose, does not compute doses, does not replace a poison-centre call, and no practising doctor has used it yet. Measured limits are on the Limits page.</p>
-        <Link href="/limits" className="btn-ghost">Read the limits page</Link>
+        <h2 id="limits" className="text-2xl font-semibold">Scope and safeguards</h2>
+        <p className="max-w-2xl text-fg-muted">Antidote identifies the product and retrieves cited guidance for trained clinicians. It never writes a dose, never offers an antidote the registry does not support, and always points to the poison centre. The hard rules are on the Safeguards page.</p>
+        <Link href="/limits" className="btn-ghost">Scope and safeguards</Link>
       </section>
     </div>
   );

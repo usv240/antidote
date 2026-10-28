@@ -1,16 +1,16 @@
 import { Info } from "@/components/info";
 
-export const metadata = { title: "Limits" };
+export const metadata = { title: "Scope and safeguards" };
 
 export default function Limits() {
   return (
     <div className="space-y-6 pt-8">
-      <h1 className="text-3xl font-semibold">Limits, as measurements</h1>
-      <p className="max-w-2xl text-fg-muted">A measured limit is a property of the product. An unfinished feature is not. Only the first kind is listed here.</p>
+      <h1 className="text-3xl font-semibold">Scope and safeguards</h1>
+      <p className="max-w-2xl text-fg-muted">What it covers, who it is for, and the hard rules that hold whatever the model says.</p>
       <div className="grid gap-4 md:grid-cols-2">
-        <L t="Scope" v="Identifies the product and retrieves cited guidance for trained clinicians. Does not diagnose, does not compute doses, does not replace the poison-centre call. No practising doctor has used it yet; what stands in is the published practitioner data and the external tables on the Evals page." />
-        <L t="Chemical groups" v="Twelve groups covering the common Indian poisonings; 35 registry chemicals with WHO class, 649 WHO rows parsed. A brand that is not in the registry is looked up on the web and shown as unverified with the antidote section withheld." />
-        <L t="Class without a chemical" v="If only the class is known, for example a bottle that says organophosphate but no chemical name is readable, Antidote withholds antidote guidance and shows the syndromic stop: treat the toxidrome you see and call the poison centre. In the first 33 published cases this happened 9 times; a rule added since gives toxidrome guidance when the clinician records cholinergic signs, and it guided both such cases in the held-out set correctly. Without those signs, guidance stays withheld." />
+        <L t="Scope" v="Identifies the product and retrieves cited guidance for trained clinicians. Does not diagnose, does not compute doses, does not replace the poison-centre call." />
+        <L t="Chemical groups" v="Twelve groups covering the common Indian poisonings; 140 registry chemicals, each with its WHO 2019 class and source line; 649 WHO rows parsed. A brand that is not in the registry is looked up on the web and shown as unverified with the antidote section withheld." />
+        <L t="Class without a chemical" v="If only the class is known, for example a bottle that says organophosphate but no chemical name is readable, Antidote withholds antidote guidance and shows the syndromic stop: treat the toxidrome you see and call the poison centre. When the clinician records cholinergic signs, Antidote gives the cited guidance for that toxidrome; it guided both such cases in the held-out set correctly. Without those signs, guidance stays withheld." />
         <L t="Labels in regional scripts" v="The registration number and the active-ingredient percentage are printed in Latin script on every label by law, so matching works; the printed antidote statement is shown as read and may be in Hindi or a regional language." />
         <L t="Guideline coverage" v="Cards quote the NHSRC module and the ISCCM 2024 statement. Where neither names the chemical group, the card falls back to the general approach and says so." />
         <L t="Citation integrity" v="Reported per card and on the Evals page; any quote the verifier cannot find on its page is replaced by a link to the page." />

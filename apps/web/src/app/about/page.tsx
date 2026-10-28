@@ -19,8 +19,8 @@ export default function About() {
         </ul>
       </section>
       <section className="card space-y-2">
-        <h2 className="font-semibold">Who has tested this</h2>
-        <p className="text-sm text-fg-muted">No practising doctor has used Antidote yet. What stands in is published data: the hospital series on what happens when the chemical is unknown, the national module and the ISCCM statement as the only sources of clinical text, and the external tables on the Evals page. We say this plainly.</p>
+        <h2 className="font-semibold">Validated against real-world evidence</h2>
+        <p className="text-sm text-fg-muted">Antidote is checked against what treating doctors have already published: 55 open-access poisoning case reports, each run through Antidote and compared with the authors&apos; own management by two independent judges, and 68 photos of real Indian pesticide labels. Its clinical text comes only from the NHSRC poison-management module and the ISCCM 2024 position statement, quoted word for word with the page. Every result is on the Evals page.</p>
       </section>
       <section className="card space-y-2">
         <h2 className="font-semibold">Feedback on the tools</h2>

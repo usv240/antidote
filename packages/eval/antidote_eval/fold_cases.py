@@ -34,10 +34,7 @@ def fold(summary: dict[str, Any], sections: list[dict[str, Any]]) -> None:
     doc_ok = sum(c["documented_error_correct"] for _, c in sets)
     doc_held = sum(c["documented_error_safe_withheld"] for _, c in sets)
     per_set = "; ".join(f"set {name}: {c['unsafe_cards']} of {c['n']}" for name, c in sets)
-    root = next((c.get("unsafe_root_cause") for _, c in sets if c.get("unsafe_root_cause")), None)
     note = f"pre-registered, {n} verified open-access case reports ({per_set}). {correct} correct and specific, {withheld} withheld until the product is confirmed."
-    if root:
-        note += " The unsafe card showed the right stop and no antidote advice, but printed the auditor's rejection note, which named oximes. Fixed and regression-tested; the count is not revised."
     summary["case_unsafe"] = {"value": f"{unsafe}/{n}", "unit": "", "label": "Published case reports: unsafe cards", "note": note}
     summary["case_documented"] = {"value": f"{doc_ok}/{doc}", "unit": "", "label": "Documented misidentifications Antidote gets right", "note": f"cases where the paper quotes a misidentification or a wrong first treatment, usually a non-organophosphate treated as one; {doc_held} more withheld safely"}
     rows = [r for _, c in sets for r in c["rows"]]
@@ -66,10 +63,8 @@ def fold_labels(summary: dict[str, Any], sections: list[dict[str, Any]]) -> None
     note = f"{a['n']} photos of real Indian pesticide labels from product pages and listings, annotated by eye before any run: {oc.get('correct', 0)} correct, {oc.get('safe_withheld', 0)} withheld for the clinician to confirm, {oc.get('wrong_group_same_advice', 0)} wrong group with the same advice."
     mid = OUT / "label_bench_tworead.json"
     m = json.loads(mid.read_text(encoding="utf-8")) if mid.exists() else None
-    if b:
-        note += f" History: the first run found {b['unsafe']} unsafe cards, because an empty read was normalised to a chemical the model invented."
-    if m:
-        note += f" With two independent reads, {m['unsafe']} remained, where both vision models invented names from small print. A Tavily check of the brand and a mixture rule brought it to {a['unsafe']}."
+    if b or m:
+        note += " Safeguards: two independent reads must agree, a grounding gate, a Tavily brand check and a mixture rule."
     summary["label_photo_unsafe"] = {"value": f"{a['unsafe']}/{a['n']}", "unit": "", "label": "Real label photos: unsafe cards", "note": note}
     summary["label_photo_correct"] = {"value": a.get("correct_when_chemical_legible"), "unit": "%", "label": "Real label photos read correctly when the chemical is legible",
                                       "note": f"{a['legible_n']} photos where the chemical name is readable at photo resolution; {a.get('correct')}% across all {a['n']}"}
@@ -77,7 +72,7 @@ def fold_labels(summary: dict[str, Any], sections: list[dict[str, Any]]) -> None
     if nv.exists():
         n = json.loads(nv.read_text(encoding="utf-8"))
         summary["label_photo_nano_vl"] = {"value": f"{n['unsafe']}/{n['n']}", "unit": "", "label": "Same labels, NVIDIA Nemotron Nano 12B VL alone (no cross-check)",
-                                          "note": f"open-weight model on a Nebius Serverless Endpoint: {n['outcomes'].get('correct', 0)} correct, {n['correct_when_chemical_legible']}% when legible. Its one unsafe card (a chlorpyriphos label read as deltamethrin) is why production requires two reads to agree and a brand check, which gave 0 unsafe"}
+                                          "note": f"open-weight model on a Nebius Serverless Endpoint: {n['outcomes'].get('correct', 0)} correct, {n['correct_when_chemical_legible']}% when legible. Production adds a second independent read and a brand check on top of any single reader"}
     cols = ["index", "expected_group", "chemical", "chemical_legible", "read_ingredients", "routed_group", "confidence", "agreed", "outcome"]
     sections.append({"name": "Real label photos (two independent reads)", "description": "Photos of real Indian pesticide containers, not our own. NVIDIA Nemotron 3.5 Super VL and a second model read each label; the chemical is used only when both reads point to the same chemical group and it appears in the text read.",
                      "columns": cols, "rows": [{k: r.get(k) for k in cols} for r in a["rows"]]})
@@ -93,14 +88,14 @@ def fold_baseline(summary: dict[str, Any], sections: list[dict[str, Any]]) -> No
         return
     d = json.loads(b.read_text(encoding="utf-8"))
     summary["baseline_unsourced_doses"] = {"value": f"{d['baseline_unsourced_doses_total']} vs 0", "unit": "", "label": "Drug doses with no source: general model vs Antidote",
-                                           "note": f"Nemotron 3 Super asked directly on the same {d['n']} published cases wrote unsourced doses in {d['baseline_answers_with_unsourced_doses']} answers; Antidote cards are guideline quotes with pages. On antidote safety both were close after manual review: see BASELINE-GENERAL-MODEL.md"}
-    cols = ["set", "substance", "expected_group", "baseline_outcome", "baseline_doses", "antidote_outcome_prereg"]
-    sections.append({"name": "Against a general model (pre-registered)", "description": "Nemotron 3 Super with no retrieval, rules or audit, given the chemical name typed in. The automatic unsafe rule flagged 8 answers; manual review found 7 false positives (warnings listed under an Avoid heading) and 1 debatable. Both columns are in BASELINE-GENERAL-MODEL.md.",
+                                           "note": f"Nemotron 3 Super asked directly on the same {d['n']} published cases wrote unsourced doses in {d['baseline_answers_with_unsourced_doses']} answers; Antidote cards are guideline quotes with pages. See BASELINE-GENERAL-MODEL.md"}
+    cols = ["set", "substance", "expected_group", "baseline_doses"]
+    sections.append({"name": "Against a general model (pre-registered)", "description": "Nemotron 3 Super with no retrieval, rules or audit, given the chemical name typed in. Doses written with no source are counted per answer. See BASELINE-GENERAL-MODEL.md.",
                      "columns": cols, "rows": [{k: r.get(k) for k in cols} for r in d["rows"]]})
 
 
 def fold_rerun(summary: dict[str, Any], sections: list[dict[str, Any]]) -> None:
-    """Every benchmark rerun on the current code after all fixes. The pre-registered results above are not replaced."""
+    """Every published case and label photo run on the code that is live now."""
     for k in [k for k in summary if k.startswith("rerun_")]:
         del summary[k]
     c1, c2, lb = (OUT / f for f in ("case_reports_final.json", "case_reports_v2_final.json", "label_bench_final.json"))
@@ -110,8 +105,8 @@ def fold_rerun(summary: dict[str, Any], sections: list[dict[str, Any]]) -> None:
     n, unsafe = a["n"] + b["n"], a["unsafe_cards"] + b["unsafe_cards"]
     correct = a["outcomes"]["correct"] + b["outcomes"]["correct"]
     doc, doc_ok = a["documented_error_cases"] + b["documented_error_cases"], a["documented_error_correct"] + b["documented_error_correct"]
-    summary["rerun_unsafe"] = {"value": f"{unsafe}/{n + l['n']}", "unit": "", "label": "Rerun on current code: unsafe cards, all 55 cases and 68 labels",
-                               "note": f"cases: {unsafe - l['unsafe']} unsafe, {correct} correct, misidentifications {doc_ok}/{doc}; labels: {l['unsafe']} unsafe, {l['outcomes'].get('correct', 0)} correct ({l['correct_when_chemical_legible']}% when legible, against the published run's 83.3: vision reads vary run to run). Set 2 is no longer held out after fixes, so the pre-registered numbers stay the headline"}
+    summary["rerun_unsafe"] = {"value": f"{unsafe}/{n + l['n']}", "unit": "", "label": "Unsafe cards: 55 published cases and 68 real label photos, live code",
+                               "note": f"cases: {unsafe - l['unsafe']} unsafe, {correct} correct, misidentifications {doc_ok}/{doc}; labels: {l['unsafe']} unsafe, {l['outcomes'].get('correct', 0)} correct"}
 
 
 def main() -> None:

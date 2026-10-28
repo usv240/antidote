@@ -14,6 +14,13 @@ const refs = [
   ["NHSRC. Medico-legal guideline.", "https://qi.nhsrcindia.org/sites/default/files/medico_legal.pdf"],
   ["Prior art: webPOISONCONTROL (US consumer barcode triage).", "https://www.webpoisoncontrol.org/"],
   ["Prior art: SprayWise (student hackathon label reader for farmers).", "https://github.com/bhaveshgandhi03/spraywise"],
+  ["Dambal A et al. Reasons for under-reporting of paraquat poisoning in India. National Medical Journal of India 2021.", "https://nmji.in/reasons-for-under-reporting-of-paraquat-poisoning-in-india/"],
+  ["Verma VR, Lamb T, Sattar MA, Ghose A, Eddleston M. Lessons from the field: compound-specific management in acute pesticide poisoning. Trans R Soc Trop Med Hyg 2024.", "https://pmc.ncbi.nlm.nih.gov/articles/PMC11149373/"],
+  ["WHO. Clinical management of acute pesticide intoxication: prevention of suicidal behaviours, 2008.", "https://iris.who.int/handle/10665/44020"],
+  ["Karunarathne A et al. Importance of pesticides for lethal poisoning in India during 1999 to 2018: a systematic review. BMC Public Health 2021.", "https://link.springer.com/article/10.1186/s12889-021-11156-2"],
+  ["Bonvoisin T et al. Suicide by pesticide poisoning in India: a review of pesticide regulations and their impact on suicide trends. BMC Public Health 2020.", "https://link.springer.com/article/10.1186/s12889-020-8339-z"],
+  ["Blanchard J et al. Experience of Indian emergency physicians in management of acute poisonings. Toxicology Communications 2019.", "https://doi.org/10.1080/24734306.2019.1635725"],
+  ["Galvão TF et al. Impact of a poison control center on the length of hospital stay of poisoned patients. Sao Paulo Medical Journal 2011.", "https://pmc.ncbi.nlm.nih.gov/articles/PMC10865900/"],
 ];
 
 export default function References() {

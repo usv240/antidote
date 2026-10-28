@@ -11,7 +11,7 @@ const nav = [
   { href: "/register", label: "Register" },
   { href: "/evals", label: "Evals" },
   { href: "/api", label: "API" },
-  { href: "/limits", label: "Limits" },
+  { href: "/limits", label: "Safeguards" },
 ];
 
 export function SiteHeader() {
