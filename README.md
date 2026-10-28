@@ -73,7 +73,7 @@ Every call is written to a ledger (tier, model, tokens, USD, latency) and shown 
 git clone https://github.com/usv240/antidote && cd antidote
 cp .env.example .env            # add NEBIUS_API_KEY and TAVILY_API_KEY
 make setup
-make test                       # 40 tests
+make test                       # 49 tests
 make eval                       # writes eval/results/latest.json and REPORT.md
 make dev                        # API on :8010, OpenAPI at /docs
 cd apps/web && npm install && npm run dev   # web on :3010
@@ -90,6 +90,8 @@ webPOISONCONTROL triages consumers in the United States from barcodes. SprayWise
 No practising doctor has used Antidote yet. What stands in is the work of the clinicians who already wrote up real cases: 55 published case reports in two pre-registered sets, each run through Antidote and compared with the authors' own management by two independent judges, under a scoring rule committed before any card was generated. Behind that sit the hospital series on outcomes when the chemical is unknown, and the national module and ISCCM statement as the only sources of clinical text.
 
 ## Documents
+
+- [EVIDENCE.md](EVIDENCE.md): every published number, its raw output file, and the command that reruns it.
 
 `docs/IDEA.md`, `docs/PLAN.md`, `docs/TECHNICAL-DESIGN.md`, `docs/UX-DESIGN.md`, `FEEDBACK.md`, `DEPLOY.md`. Shared platform with Sieve, our other entry: different domain, practitioner, corpus and record.
 
