@@ -13,7 +13,7 @@ export function UploadProtocol() {
     if (file.size > UPLOAD_LIMIT_BYTES) { setResult({ error: UPLOAD_LIMIT_NOTE }); return; }
     setBusy(true); setResult(null);
     const fd = new FormData(); fd.append("file", file);
-    try { const r = await fetch(apiUrl(`/v1/upload-protocol?kind=${kind}&workspace=${encodeURIComponent(workspace)}`), { method: "POST", body: fd }); setResult(await r.json()); }
+    try { const r = await fetch(apiUrl(`/v1/upload-protocol?kind=${kind}&workspace=${encodeURIComponent(workspace)}`), { method: "POST", body: fd }); const j = await r.json(); setResult(r.ok ? j : { error: j.detail ?? `upload failed (${r.status})` }); }
     catch { setResult({ error: "upload failed" }); } finally { setBusy(false); }
   }
   return (
@@ -24,6 +24,9 @@ export function UploadProtocol() {
       </div>
       <label className="btn-primary cursor-pointer">{busy ? "Indexing…" : kind === "stock" ? "Upload stock CSV" : "Upload protocol PDF"}<input type="file" accept={kind === "stock" ? ".csv,text/csv" : "application/pdf"} className="sr-only" onChange={(e) => e.target.files?.[0] && upload(e.target.files[0])} disabled={busy} /></label>
       {result && (result.error || result.detail ? <p className="text-sm text-stop">{result.error || result.detail}</p> : <p className="text-sm text-ok">{result.doc_id ? `Indexed ${result.pages} pages as ${result.doc_id}. ${result.note ?? ""}` : `Stored ${result.items} stock items for this workspace.`}</p>)}
+      {result && !(result.error || result.detail) && (
+        <p className="text-sm"><a className="btn-ghost" href={`/try?sample=chlorpyrifos&workspace=${encodeURIComponent(workspace)}`}>See it on a card: an organophosphate in workspace {workspace}</a></p>
+      )}
     </div>
   );
 }

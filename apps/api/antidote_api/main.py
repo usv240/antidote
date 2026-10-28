@@ -148,6 +148,38 @@ class AnalyzeBody(BaseModel):
     context: dict[str, str] = {}
     chosen_ai: str | None = None
     audit: bool = True
+    workspace: str | None = None  # uploads from /v1/upload-protocol for this workspace: its protocol pages and its stock list
+
+
+def _workspace_dir(workspace: str) -> Path:
+    import re as _re
+
+    return DATA / "uploads" / _re.sub(r"[^A-Za-z0-9_-]+", "-", workspace)[:40]
+
+
+def stock_check(group: dict[str, Any] | None, workspace: str | None) -> dict[str, Any] | None:
+    """Is the antidote on this hospital's shelf? A lookup in the uploaded stock CSV, no model involved."""
+    names = (group or {}).get("stock_names") or []
+    if not workspace or not names:
+        return None
+    path = _workspace_dir(workspace) / "stock.json"
+    if not path.exists():
+        return None
+    rows = json.loads(path.read_text(encoding="utf-8"))
+
+    def qty(r: dict[str, Any]) -> str:
+        return str(next((v for k, v in r.items() if k and k.strip().lower() in ("quantity", "qty", "stock", "count")), "")).strip()
+
+    def name(r: dict[str, Any]) -> str:
+        return str(next((v for k, v in r.items() if k and k.strip().lower() in ("name", "drug", "item", "antidote")), "")).strip()
+
+    out = []
+    for n in names:
+        row = next((r for r in rows if n in name(r).lower()), None)
+        q = qty(row) if row else ""
+        in_stock = bool(row) and q not in ("", "0", "0.0") and not q.lower().startswith(("nil", "none", "out"))
+        out.append({"antidote": n, "listed_as": name(row) if row else None, "quantity": q or None, "in_stock": in_stock})
+    return {"workspace": workspace, "items": out, "source": "your uploaded stock list"}
 
 
 def _result_json(res) -> dict[str, Any]:
@@ -272,13 +304,15 @@ def parse_label_fields(raw: str) -> dict[str, Any]:
 def analyze(body: AnalyzeBody) -> dict[str, Any]:
     t0 = time.perf_counter()
     try:
-        res = PIPE.analyze(raw_label=body.label, context=body.context, audit=body.audit, chosen_ai=body.chosen_ai)
+        res = PIPE.analyze(raw_label=body.label, context=body.context, audit=body.audit, chosen_ai=body.chosen_ai, workspace=body.workspace)
     except Exception as e:
         served = REPLAYS.serve(body.model_dump(), f"{type(e).__name__}")
         if served:
             return served
         raise HTTPException(503, f"The model service is unavailable right now ({type(e).__name__}). The sample presets still work from recorded results; please try one of them.") from e
     out = _result_json(res)
+    # Only when the card actually gives antidote guidance: a withheld or stopped card gets no stock line.
+    out["stock"] = None if res.guarded else stock_check(res.group, body.workspace)
     out["latency_ms"] = int((time.perf_counter() - t0) * 1000)
     return out
 
@@ -328,12 +362,19 @@ async def upload_protocol(file: UploadFile = File(...), kind: str = "protocol", 
     import re as _re
 
     raw = await file.read()
-    dest = DATA / "uploads" / workspace
+    dest = _workspace_dir(workspace)
+    workspace = dest.name
     dest.mkdir(parents=True, exist_ok=True)
     safe = _re.sub(r"[^A-Za-z0-9._-]+", "-", file.filename or "upload")[:120]
     (dest / safe).write_bytes(raw)
     if kind == "stock":
-        rows = list(_csv.DictReader(_io.StringIO(raw.decode("utf-8", errors="replace"))))
+        try:
+            rows = list(_csv.DictReader(_io.StringIO(raw.decode("utf-8-sig", errors="replace"), newline="")))
+        except _csv.Error:
+            rows = []
+        names = {k.strip().lower() for k in (rows[0].keys() if rows else []) if k}
+        if not rows or not names & {"name", "drug", "item", "antidote"}:
+            raise HTTPException(400, "The stock CSV needs a header row with a name column and a quantity column, e.g. name,quantity")
         (dest / "stock.json").write_text(json.dumps(rows, indent=1), encoding="utf-8")
         return {"kind": "stock", "items": len(rows), "workspace": workspace}
     if not safe.lower().endswith(".pdf"):

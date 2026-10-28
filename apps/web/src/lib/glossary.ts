@@ -75,8 +75,8 @@ export const GLOSSARY = {
   },
   byo: {
     term: "Bring your own data",
-    plain: "Upload your hospital's antidote stock list or your state's protocol. Antidote shows what is in stock here and cites your protocol next to the national one. Your files stay in your workspace.",
-    technical: "Workspace-scoped ingestion through the same chunker used for the Tavily-extracted texts; never merged into the shared index; export and delete from settings.",
+    plain: "Upload your hospital's antidote stock list or your state's protocol. The card then says whether the antidote is on your shelf, and draws on your protocol beside the national one. Only cards in your workspace use them.",
+    technical: "Protocol PDFs are indexed with a workspace-prefixed id; retrieval searches the national guidelines plus that workspace's documents only. The stock check is a deterministic lookup of the group's antidote names in the uploaded CSV. Hosted uploads are not persistent; a self-hosted install keeps them on disk.",
   },
   mcp: {
     term: "MCP",

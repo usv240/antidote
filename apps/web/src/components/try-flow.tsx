@@ -18,7 +18,8 @@ type Result = {
   guarded: boolean; stops: { rule: string; message: string; citation: string }[];
   card: { identity: Sentence[]; expect: Sentence[]; manage: Sentence[]; cautions: Sentence[]; no_antidote: boolean } | null;
   audit: { overall: string } | null; citations: { total?: number; verified?: number; tiers?: Record<string, number> };
-  retrieved: { doc: string; title: string; page: number }[]; web: { results?: { title: string; url: string }[] }; notes: string[]; npic: string;
+  retrieved: { doc: string; title: string; page: number; local?: boolean }[];
+  stock?: { workspace: string; items: { antidote: string; listed_as: string | null; quantity: string | null; in_stock: boolean }[] } | null; web: { results?: { title: string; url: string }[] }; notes: string[]; npic: string;
   trace: { model: string; purpose: string; tokens_in: number; tokens_out: number; usd: number }[]; latency_ms: number;
 };
 
@@ -31,6 +32,8 @@ const CONTEXT_FIELDS: { k: string; q: string; opts: string[] }[] = [
 export function TryFlow() {
   const params = useSearchParams();
   const sample = useMemo(() => SAMPLES.find((s) => s.id === params.get("sample")), [params]);
+  // Bring your own data: a workspace's uploaded stock list and protocol apply to its cards only.
+  const workspace = params.get("workspace") ?? "";
   const [label, setLabel] = useState<Record<string, unknown>>({ product_name: "", active_ingredients: [], registration_number: "", triangle_colour: "", antidote_statement_text: "", visible_text: [] });
   const [aiText, setAiText] = useState("");
   const [ctx, setCtx] = useState<Record<string, string>>({});
@@ -69,7 +72,7 @@ export function TryFlow() {
   async function analyze(chosen?: string) {
     setBusy("Matching the registry and assembling the cited card…");
     const ais = aiText.split(",").map((s) => s.trim()).filter(Boolean).map((s) => { const m = s.match(/^(.*?)\s*(\d+(?:\.\d+)?)\s*%?$/); return m ? { name: m[1].trim(), percent: m[2] } : { name: s }; });
-    const body = { label: { ...label, active_ingredients: ais }, context: { ...ctx, signs }, chosen_ai: chosen ?? null, audit: true };
+    const body = { label: { ...label, active_ingredients: ais }, context: { ...ctx, signs }, chosen_ai: chosen ?? null, audit: true, workspace: workspace || null };
     const r = await fetch(apiUrl("/v1/analyze"), { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
     setResult(await r.json()); setBusy(null); setSaved(null);
   }
@@ -82,7 +85,7 @@ export function TryFlow() {
   }
 
   const S = ({ s }: { s: Sentence }) => s.kind === "quote" && s.cite ? (
-    <blockquote className="quote text-sm">“{s.text}”<footer className="mt-1 text-xs text-fg-muted">{s.cite.doc}, page {s.cite.page} · <a className="text-accent underline underline-offset-2" href={apiUrl(`/v1/page/${s.cite.doc}/${s.cite.page}`)} target="_blank" rel="noreferrer">Show page</a></footer></blockquote>
+    <blockquote className="quote text-sm">“{s.text}”<footer className="mt-1 text-xs text-fg-muted">{s.cite.doc.startsWith("local-") ? <span className="mr-1 rounded bg-accent/15 px-1.5 py-0.5 font-medium text-fg">Your protocol</span> : null}{s.cite.doc.startsWith("local-") ? "uploaded by your hospital" : s.cite.doc}, page {s.cite.page} ·<a className="text-accent underline underline-offset-2" href={apiUrl(`/v1/page/${s.cite.doc}/${s.cite.page}`)} target="_blank" rel="noreferrer">Show page</a></footer></blockquote>
   ) : <p className="text-sm text-fg-muted">{s.text}</p>;
 
   return (
@@ -138,6 +141,15 @@ export function TryFlow() {
                 <Tile l={<>Label triangle <Info k="triangle" /></>} v={result.triangle ? `${result.triangle.label} (${result.triangle.signal})` : "not read"} />
                 <Tile l="India status (CIB&RC)" v={result.chosen?.india_status ?? "unknown"} />
               </div>
+              {result.stock && (
+                <div className="rounded-xl border border-border p-3 text-sm">
+                  <p className="font-medium">On your shelf ({result.stock.workspace}) <Info term="Stock check" text="Looked up in the stock list this hospital uploaded. A table lookup, no AI involved. Check the shelf before relying on it." /></p>
+                  <ul className="mt-1 space-y-0.5">
+                    {result.stock.items.map((i) => <li key={i.antidote} className={i.in_stock ? "text-ok" : "text-stop"}>{i.in_stock ? "In stock" : "Not in stock"}: {i.listed_as ?? i.antidote}{i.quantity ? `, ${i.quantity}` : ""}{!i.in_stock && !i.listed_as ? " (not on your list)" : ""}</li>)}
+                  </ul>
+                </div>
+              )}
+              {workspace && <p className="text-xs text-fg-muted">Workspace {workspace}: your uploaded protocol and stock list apply to this card.</p>}
               {result.guarded && <p className="text-sm text-caution">Match confidence below 75 percent: the antidote section is withheld until the product is confirmed.</p>}
               {result.card ? (
                 <>
@@ -160,7 +172,7 @@ export function TryFlow() {
       <aside className="space-y-4">
         {result ? (<>
           <div className="card text-sm"><p className="font-semibold">Trace <Info k="trace" /></p><ul className="mt-1 space-y-1">{result.trace.map((t, i) => <li key={i} className="flex justify-between gap-2 text-fg-muted"><span>{t.model} · {t.purpose}</span><span>{t.tokens_in + t.tokens_out} tok · ${t.usd.toFixed(4)}</span></li>)}</ul></div>
-          <div className="card text-sm"><p className="flex items-center gap-2 font-semibold"><FileText className="h-4 w-4" /> Guideline pages used</p><ul className="mt-1 space-y-1 text-fg-muted">{result.retrieved.map((r) => <li key={`${r.doc}-${r.page}`}>{r.title}, p{r.page}</li>)}</ul></div>
+          <div className="card text-sm"><p className="flex items-center gap-2 font-semibold"><FileText className="h-4 w-4" /> Guideline pages used</p><ul className="mt-1 space-y-1 text-fg-muted">{result.retrieved.map((r) => <li key={`${r.doc}-${r.page}`}>{r.local && <span className="mr-1 rounded bg-accent/15 px-1.5 py-0.5 text-xs font-medium text-fg">your protocol</span>}{r.title}, p{r.page}</li>)}</ul></div>
           {result.web?.results?.length ? <div className="card text-sm"><p className="font-semibold">Brand lookup via Tavily (unverified)</p><ul className="mt-1 space-y-1">{result.web.results.slice(0, 3).map((r) => <li key={r.url}><a className="text-accent underline underline-offset-2" href={r.url} target="_blank" rel="noreferrer">{r.title}</a></li>)}</ul></div> : null}
         </>) : <div className="card text-sm text-fg-muted">The card, the Trace and the guideline pages appear here.</div>}
       </aside>

@@ -120,7 +120,7 @@ export default function Landing() {
       </section>
 
       <section className="grid gap-4 md:grid-cols-2">
-        <Card title={<>Bring your own data <Info k="byo" /></>} icon={<FileText className="h-5 w-5" />}>Upload your antidote stock list and your state protocol. Antidote shows what is in stock here and cites your protocol beside the national one.<div className="mt-3"><Link href="/data" className="btn-ghost">Data and uploads</Link></div></Card>
+        <Card title={<>Bring your own data <Info k="byo" /></>} icon={<FileText className="h-5 w-5" />}>Upload your antidote stock list and your state protocol. The card then says whether the antidote is on your shelf, and draws on your protocol beside the national one.<div className="mt-3"><Link href="/data" className="btn-ghost">Data and uploads</Link></div></Card>
         <Card title={<>Use Antidote as a service <Info k="mcp" /></>} icon={<ClipboardCheck className="h-5 w-5" />}>Call it from your own software, or let your agent use it as a tool through MCP.<div className="mt-3"><Link href="/api" className="btn-ghost">API and code samples</Link></div></Card>
         <Card title="Works offline" icon={<WifiOff className="h-5 w-5" />}>The registry, the WHO table and the guideline pages are small enough to ship in full; an open Nemotron model on a laptop composes the card without internet.</Card>
         <Card title="Call the poison centre" icon={<Phone className="h-5 w-5" />}>Every card shows 1800-116-117 and prepares the proforma so the call takes thirty seconds.</Card>

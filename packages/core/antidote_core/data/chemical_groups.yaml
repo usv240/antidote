@@ -12,6 +12,7 @@ groups:
     retrieval_terms: ["organophosphorus", "organophosphate", "atropine", "pralidoxime", "cholinergic", "muscarinic", "oximes"]
     # Pinned guideline sentence: restored to the card if composing or auditing ever drops the antidote. Verified against the page at run time.
     antidote_quote: {doc: nhsrc-emergency-care-mo-poison-management, page: 35, text: "Inj. Atropine IV 3 – 5 mg to repeat based on the lung signs"}
+    stock_names: ["atropine", "pralidoxime"]  # what the hospital stock list is checked for
   - id: carbamate
     name: Carbamate insecticide
     antidote_exists: true
@@ -19,6 +20,7 @@ groups:
     retrieval_terms: ["carbamate", "atropine", "cholinergic", "carbofuran", "pralidoxime controversial"]
     # Pinned guideline sentence: restored to the card if composing or auditing ever drops the antidote. Verified against the page at run time.
     antidote_quote: {doc: nhsrc-emergency-care-mo-poison-management, page: 35, text: "Inj. Atropine IV 3 – 5 mg to repeat based on the lung signs"}
+    stock_names: ["atropine"]  # what the hospital stock list is checked for
   - id: pyrethroid
     name: Synthetic pyrethroid insecticide
     antidote_exists: false
@@ -46,6 +48,7 @@ groups:
     retrieval_terms: ["rodenticide", "anticoagulant", "vitamin K", "prothrombin", "INR", "brodifacoum", "bromadiolone"]
     # Pinned guideline sentence: restored to the card if composing or auditing ever drops the antidote. Verified against the page at run time.
     antidote_quote: {doc: nhsrc-emergency-care-mo-poison-management, page: 31, text: "Vitamin K – Coumadin anticoag. rodenticides"}
+    stock_names: ["vitamin k"]  # what the hospital stock list is checked for
   - id: neonicotinoid
     name: Neonicotinoid insecticide
     antidote_exists: false

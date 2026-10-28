@@ -26,8 +26,9 @@ class Searcher:
     def __init__(self, store: PageStore):
         self.store = store
 
-    def search(self, query: str, *, device_id: str | None = None, device_class: str | None = None, k: int = 8) -> list[Hit]:
-        doc_ids = self.store.doc_ids_for(device_id, device_class) if (device_id or device_class) else None
+    def search(self, query: str, *, device_id: str | None = None, device_class: str | None = None, k: int = 8, doc_ids: list[str] | None = None) -> list[Hit]:
+        if doc_ids is None:
+            doc_ids = self.store.doc_ids_for(device_id, device_class) if (device_id or device_class) else None
         if device_id and not doc_ids:
             # Known device but no manual indexed: fall back to the class, then to everything.
             doc_ids = self.store.doc_ids_for(None, device_class) or None

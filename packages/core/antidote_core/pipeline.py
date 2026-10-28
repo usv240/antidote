@@ -202,7 +202,7 @@ class AntidotePipeline:
         return matches, web
 
     # ---------- full analysis ----------
-    def analyze(self, *, raw_label: dict[str, Any], context: dict[str, str] | None = None, trace_id: str | None = None, audit: bool = True, chosen_ai: str | None = None) -> AnalyzeResult:
+    def analyze(self, *, raw_label: dict[str, Any], context: dict[str, str] | None = None, trace_id: str | None = None, audit: bool = True, chosen_ai: str | None = None, workspace: str | None = None) -> AnalyzeResult:
         trace_id = trace_id or str(uuid.uuid4())
         notes: list[str] = []
         label = self.normalise(raw_label, trace_id)
@@ -236,8 +236,17 @@ class AntidotePipeline:
         # Retrieve guideline pages for the group.
         terms = " ".join(group.get("retrieval_terms", [])) if group else "general approach poisoning"
         q = f"{chosen.active_ingredient if chosen else ''} {terms} toxidrome management antidote"
-        hits = self.search.search(q, device_class="guideline", k=6)
-        retrieved = [{"doc": h.doc_id, "title": h.title, "page": h.page, "source_url": h.source_url} for h in hits]
+        # National guidance for everyone; a workspace's own uploaded protocol only for that workspace, never another's.
+        guideline_docs = self.store.doc_ids_for(None, "guideline")
+        national = [d for d in guideline_docs if not d.startswith("local-")]
+        hits = self.search.search(q, k=6, doc_ids=national)
+        local = [d for d in guideline_docs if workspace and d.startswith(f"local-{workspace}-")]
+        if local:
+            local_hits = self.search.search(q, k=2, doc_ids=local)
+            if local_hits:
+                hits = local_hits + [h for h in hits if (h.doc_id, h.page) not in {(x.doc_id, x.page) for x in local_hits}][:6]
+                notes.append(f"{len(local_hits)} page(s) from this workspace's own protocol included and labelled local")
+        retrieved = [{"doc": h.doc_id, "title": h.title, "page": h.page, "source_url": h.source_url, "local": h.doc_id.startswith("local-")} for h in hits]
 
         card: ManagementCard | None = None
         audit_report: AuditReport | None = None
