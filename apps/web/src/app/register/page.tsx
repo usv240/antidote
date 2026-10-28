@@ -12,7 +12,7 @@ export default function RegisterPage() {
   useEffect(() => { fetch(apiUrl("/v1/records")).then((r) => r.json()).then(setRecs).catch(() => {}); }, []);
   return (
     <div className="space-y-6 pt-8">
-      <h1 className="text-3xl font-semibold">Medico-legal register <Info k="mlc" /></h1>
+      <h1 className="text-[1.625rem] font-semibold sm:text-3xl">Medico-legal register <Info k="mlc" /></h1>
       <SurveillancePanel />
       <p className="max-w-2xl text-fg-muted">Demo workspace. Substance fields come from the label; patient identifiers and examination findings are entered by staff and are not stored here.</p>
       <div className="card overflow-x-auto p-0">

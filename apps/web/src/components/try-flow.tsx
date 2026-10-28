@@ -1,12 +1,28 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { ShieldAlert, Phone, FileText } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { downscaleImage } from "@/lib/image";
 import { SAMPLES } from "@/lib/samples";
 import { Info } from "@/components/info";
+import { Progress } from "@/components/progress";
+
+const CARD_STAGES = [
+  { at: 0, text: "Matching the chemical in the registry and its WHO class" },
+  { at: 2, text: "NVIDIA Nemotron 3 Super composes the card from numbered guideline sentences" },
+  { at: 10, text: "Checking every quote against its page" },
+  { at: 12, text: "NVIDIA Nemotron 3 Ultra audits the card against both guidelines in full" },
+  { at: 40, text: "The full audit can take up to a minute; almost there" },
+];
+
+const DOC_NAMES: Record<string, string> = {
+  "isccm-2024-acute-poisoning-position-statement": "ISCCM 2024 position statement",
+  "nhsrc-emergency-care-mo-poison-management": "NHSRC poison-management module",
+  "nhsrc-medico-legal-guideline": "NHSRC medico-legal guideline",
+};
+const docName = (id: string) => DOC_NAMES[id.replace(/_/g, "-")] ?? id.replace(/[-_]+/g, " ");
 
 type Sentence = { kind: "quote" | "explanation"; text: string; cite: { doc: string; page: number; quote: string } | null };
 type Result = {
@@ -69,6 +85,14 @@ export function TryFlow() {
     setBusy(null);
   }
 
+  // When the card arrives, take the doctor to it and move focus there for keyboard and screen-reader users.
+  const resultRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (!result || !resultRef.current) return;
+    resultRef.current.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+    resultRef.current.focus({ preventScroll: true });
+  }, [result]);
+
   async function analyze(chosen?: string) {
     setBusy("Matching the registry and assembling the cited card…");
     const ais = aiText.split(",").map((s) => s.trim()).filter(Boolean).map((s) => { const m = s.match(/^(.*?)\s*(\d+(?:\.\d+)?)\s*%?$/); return m ? { name: m[1].trim(), percent: m[2] } : { name: s }; });
@@ -85,8 +109,8 @@ export function TryFlow() {
   }
 
   const S = ({ s }: { s: Sentence }) => s.kind === "quote" && s.cite ? (
-    <blockquote className="quote text-sm">“{s.text}”<footer className="mt-1 text-xs text-fg-muted">{s.cite.doc.startsWith("local-") ? <span className="mr-1 rounded bg-accent/15 px-1.5 py-0.5 font-medium text-fg">Your protocol</span> : null}{s.cite.doc.startsWith("local-") ? "uploaded by your hospital" : s.cite.doc}, page {s.cite.page} ·<a className="text-accent underline underline-offset-2" href={apiUrl(`/v1/page/${s.cite.doc}/${s.cite.page}`)} target="_blank" rel="noreferrer">Show page</a></footer></blockquote>
-  ) : <p className="text-sm text-fg-muted">{s.text}</p>;
+    <blockquote className="quote text-sm">“{s.text}”<footer className="mt-1 text-xs text-fg-muted">{s.cite.doc.startsWith("local-") ? <span className="mr-1 rounded bg-accent/15 px-1.5 py-0.5 font-medium text-fg">Your protocol</span> : null}{s.cite.doc.startsWith("local-") ? "uploaded by your hospital" : docName(s.cite.doc)}, page {s.cite.page} · <a className="text-accent underline underline-offset-2" href={apiUrl(`/v1/page/${s.cite.doc}/${s.cite.page}`)} target="_blank" rel="noreferrer">Show page</a></footer></blockquote>
+  ) : <p className="text-sm text-fg-muted">{s.text.replace(/See ([a-z0-9_-]+) page (\d+)/g, (_m, id, pg) => `See ${docName(id)}, page ${pg}`)}</p>;
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
@@ -114,15 +138,15 @@ export function TryFlow() {
         <section className="card space-y-3">
           <h2 className="text-xl font-semibold">2. Patient context <Info k="toxidrome" /></h2>
           {CONTEXT_FIELDS.map((f) => (
-            <div key={f.k} className="flex flex-wrap items-center gap-2"><span className="text-sm">{f.q}</span>{f.opts.map((o) => <button key={o} onClick={() => setCtx({ ...ctx, [f.k]: o })} className={`btn-ghost min-h-0 px-3 py-1.5 text-sm ${ctx[f.k] === o ? "border-accent" : ""}`}>{o}</button>)}</div>
+            <div key={f.k} className="flex flex-wrap items-center gap-2"><span className="text-sm">{f.q}</span>{f.opts.map((o) => <button key={o} onClick={() => setCtx({ ...ctx, [f.k]: o })} aria-pressed={ctx[f.k] === o} className={`btn-ghost min-h-0 px-3 py-1.5 text-sm ${ctx[f.k] === o ? "bg-accent! text-accent-fg!" : ""}`}>{o}</button>)}</div>
           ))}
           <L label="Key signs (optional)"><input className="inp" placeholder="pinpoint pupils, excess secretions, seizures…" value={signs} onChange={(e) => setSigns(e.target.value)} /></L>
           <button className="btn-primary" onClick={() => analyze()} disabled={!!busy}>Build the card</button>
-          {busy && <p className="text-sm text-fg-muted" role="status">{busy}</p>}
+          {busy && (busy.startsWith("Matching") ? <Progress title="Building the card. Usually 20 to 60 seconds." stages={CARD_STAGES} /> : <p className="text-sm text-fg-muted" role="status">{busy}</p>)}
         </section>
 
         {result && (
-          <section className="space-y-4">
+          <section ref={resultRef} tabIndex={-1} aria-label="The card" className="scroll-mt-32 space-y-4 outline-none">
             {result.stops.map((s) => (
               <div key={s.rule} role="alert" className="rounded-[16px] border-2 border-stop bg-bg-elev p-4"><p className="flex items-center gap-2 font-semibold text-stop"><ShieldAlert className="h-5 w-5" /> Stop</p><p className="mt-1">{s.message}</p><p className="mt-1 text-xs text-fg-muted">Source: {s.citation}</p></div>
             ))}
@@ -156,7 +180,7 @@ export function TryFlow() {
                   {(["identity", "expect", "manage", "cautions"] as const).map((sec) => (
                     <div key={sec} className="space-y-2"><p className="eyebrow">{sec === "identity" ? "What it is" : sec === "expect" ? "What to expect" : sec === "manage" ? "Management, quoted" : "Cautions, quoted"}</p>{result.card![sec].length ? result.card![sec].map((s, i) => <S key={i} s={s} />) : <p className="text-sm text-fg-muted">The indexed guidelines have no sentence on this for this chemical group.</p>}</div>
                   ))}
-                  <div className="flex flex-wrap gap-3 text-xs text-fg-muted"><span>Quotes verified {result.citations.verified}/{result.citations.total}</span>{result.audit && <span>Auditor: {result.audit.overall}</span>}<span>{result.latency_ms} ms</span><a className="ml-auto text-accent underline underline-offset-2" download={`antidote-result.json`} href={`data:application/json;charset=utf-8,${encodeURIComponent(JSON.stringify(result, null, 2))}`}>Download result as JSON</a></div>
+                  <div className="flex flex-wrap gap-3 text-xs text-fg-muted"><span>Quotes verified {result.citations.verified}/{result.citations.total}</span>{result.audit && <span>Nemotron 3 Ultra audit: {result.audit.overall.replaceAll("_", " ")}</span>}<span>{Math.round(result.latency_ms / 1000)} s</span><a className="ml-auto text-accent underline underline-offset-2" download={`antidote-result.json`} href={`data:application/json;charset=utf-8,${encodeURIComponent(JSON.stringify(result, null, 2))}`}>Download result as JSON</a></div>
                 </>
               ) : <p className="text-sm text-fg-muted">{result.notes.join(" ") || "No card (replay mode or no guideline pages)."}</p>}
             </div>
@@ -172,7 +196,7 @@ export function TryFlow() {
       <aside className="space-y-4">
         {result ? (<>
           <div className="card text-sm"><p className="font-semibold">Trace <Info k="trace" /></p><ul className="mt-1 space-y-1">{result.trace.map((t, i) => <li key={i} className="flex justify-between gap-2 text-fg-muted"><span>{t.model} · {t.purpose}</span><span>{t.tokens_in + t.tokens_out} tok · ${t.usd.toFixed(4)}</span></li>)}</ul></div>
-          <div className="card text-sm"><p className="flex items-center gap-2 font-semibold"><FileText className="h-4 w-4" /> Guideline pages used</p><ul className="mt-1 space-y-1 text-fg-muted">{result.retrieved.map((r) => <li key={`${r.doc}-${r.page}`}>{r.local && <span className="mr-1 rounded bg-accent/15 px-1.5 py-0.5 text-xs font-medium text-fg">your protocol</span>}{r.title}, p{r.page}</li>)}</ul></div>
+          <div className="card text-sm"><p className="flex items-center gap-2 font-semibold"><FileText className="h-4 w-4" /> Guideline pages used</p><ul className="mt-1 space-y-1 text-fg-muted">{result.retrieved.map((r) => <li key={`${r.doc}-${r.page}`}>{r.local && <span className="mr-1 rounded bg-accent/15 px-1.5 py-0.5 text-xs font-medium text-fg">your protocol</span>}{r.local ? r.title : docName(r.doc)}, page {r.page}</li>)}</ul></div>
           {result.web?.results?.length ? <div className="card text-sm"><p className="font-semibold">Brand lookup via Tavily (unverified)</p><ul className="mt-1 space-y-1">{result.web.results.slice(0, 3).map((r) => <li key={r.url}><a className="text-accent underline underline-offset-2" href={r.url} target="_blank" rel="noreferrer">{r.title}</a></li>)}</ul></div> : null}
         </>) : <div className="card text-sm text-fg-muted">The card, the Trace and the guideline pages appear here.</div>}
       </aside>

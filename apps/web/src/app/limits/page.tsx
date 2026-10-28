@@ -5,7 +5,7 @@ export const metadata = { title: "Scope and safeguards" };
 export default function Limits() {
   return (
     <div className="space-y-6 pt-8">
-      <h1 className="text-3xl font-semibold">Scope and safeguards</h1>
+      <h1 className="text-[1.625rem] font-semibold sm:text-3xl">Scope and safeguards</h1>
       <p className="max-w-2xl text-fg-muted">What it covers, who it is for, and the hard rules that hold whatever the model says.</p>
       <div className="grid gap-4 md:grid-cols-2">
         <L t="Scope" v="Identifies the product and retrieves cited guidance for trained clinicians. Does not diagnose, does not compute doses, does not replace the poison-centre call." />

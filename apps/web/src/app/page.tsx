@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Info } from "@/components/info";
 import { Reveal } from "@/components/reveal";
 import { SampleGallery } from "@/components/sample-gallery";
+import { BottleDemo } from "@/components/bottle-demo";
 import { ShieldAlert } from "lucide-react";
 
 const d = (ms: number) => ({ "--d": `${ms}ms` }) as React.CSSProperties;
@@ -46,22 +47,7 @@ export default function Landing() {
           </p>
         </div>
 
-        <figure data-ui className="rise rounded-[24px] bg-surface p-6 sm:p-8" style={d(200)}>
-          <p className="text-[0.9375rem] text-fg-muted">Label read from a photo</p>
-          <p className="mt-2 text-2xl font-semibold leading-snug tracking-[-0.01em]">Gramoxone: paraquat dichloride 24%</p>
-          <div role="note" className="mt-5 rounded-[16px] border-2 border-stop bg-bg-elev p-4">
-            <p className="flex items-center gap-2 text-lg font-semibold text-stop"><ShieldAlert className="h-5 w-5 shrink-0" aria-hidden /> Stop: no specific antidote</p>
-            <p className="mt-1.5 text-base leading-relaxed">Do not give atropine for this exposure. Management is supportive per the cited guidance.</p>
-          </div>
-          <blockquote className="quote mt-5 text-base leading-relaxed">
-            &ldquo;Administration of excessive oxygen should be avoided in paraquat poisoning because it may worsen its toxicity.&rdquo;
-            <footer className="mt-2 text-[0.9375rem] text-fg-muted">ISCCM 2024 position statement, page 10</footer>
-          </blockquote>
-          <figcaption className="mt-6 text-[0.9375rem] leading-relaxed text-fg-muted">
-            From a live run. The stop comes from the registry, not the model; every clinical sentence is the guideline&apos;s own words.{" "}
-            <Link href="/try?sample=paraquat" className="text-accent underline underline-offset-2">Run it yourself</Link>
-          </figcaption>
-        </figure>
+        <BottleDemo />
       </section>
 
       <nav aria-label="On this page" className="rise mt-14 flex flex-wrap gap-2" style={d(340)}>
@@ -193,15 +179,17 @@ export default function Landing() {
 
       {/* Results */}
       <section id="results" aria-labelledby="results-h" className="scroll-mt-32 pt-36">
+        <div className="on-accent rounded-[28px] bg-accent px-6 py-12 text-accent-fg sm:px-12 sm:py-16">
         <h2 id="results-h" data-reveal className="text-3xl font-semibold tracking-[-0.02em] sm:text-4xl">Results<Info k="benchmark" /></h2>
-        <p data-reveal style={d(60)} className="mt-4 max-w-2xl text-lg leading-relaxed">Tested on what treating doctors have already published, on real label photos, and against a general model asked directly.</p>
+        <p data-reveal style={d(60)} className="mt-4 max-w-2xl text-lg leading-relaxed opacity-90">Tested on what treating doctors have already published, on real label photos, and against a general model asked directly.</p>
         <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <Result i={0} n="0 of 123" t="cards that would point a doctor the wrong way, across 55 published poisoning cases and 68 real label photos." info="Open-access case reports written by the treating doctors, ground truth taken from each paper, plus 68 photos of real Indian pesticide labels annotated before any run. Measured on the code that is live today." />
           <Result i={1} n="10 of 12" t="cases where the treating team first mistook the poison that Antidote would have set right." info="Cases where the published paper documents a misidentification or a wrong first treatment, usually a non-organophosphate treated as one." />
           <Result i={2} n="107 vs 0" t="drug doses with no source: a general model asked directly, against Antidote." info="Nemotron 3 Super asked the same 55 questions with the chemical name typed in for it. Every clinical sentence on an Antidote card is a guideline's own words with its page." />
           <Result i={3} n="10 of 10" t="lethal-error sentences, such as atropine for paraquat, blocked by the rules alone." info="Negative controls run on every evaluation, with no model involved, so they hold offline too." />
         </div>
-        <Link href="/evals" className="btn-ghost mt-10">All results and how to reproduce them</Link>
+        <Link href="/evals" className="btn mt-10 bg-accent-fg text-accent">All results and how to reproduce them</Link>
+        </div>
       </section>
 
       {/* Who */}
@@ -270,7 +258,7 @@ function Stop({ i, title, why }: { i: number; title: string; why: string }) {
 function Result({ i, n, t, info }: { i: number; n: string; t: string; info: string }) {
   return (
     <div data-reveal style={d(i * 80)}>
-      <p className="text-5xl font-semibold tracking-[-0.035em] text-accent">{n}</p>
+      <p className="text-5xl font-semibold tracking-[-0.035em]">{n}</p>
       <p className="mt-3 text-base leading-relaxed">{t}<Info term={n} text={info} /></p>
     </div>
   );

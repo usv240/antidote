@@ -18,7 +18,7 @@ const stages = [
 export default function HowItWorks() {
   return (
     <div className="space-y-8 pt-8">
-      <div><h1 className="text-3xl font-semibold">How Antidote works <Info k="tier_routing" /></h1><p className="mt-2 max-w-2xl text-fg-muted">Switch Explain mode in the header for plain or technical wording. Every number here is measured on the Evals page.</p></div>
+      <div><h1 className="text-[1.625rem] font-semibold sm:text-3xl">How Antidote works <Info k="tier_routing" /></h1><p className="mt-2 max-w-2xl text-fg-muted">Switch Explain mode in the header for plain or technical wording. Every number here is measured on the Evals page.</p></div>
       <ol className="space-y-3">{stages.map((s, i) => (<li key={s.t} className="card flex gap-4"><span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent text-sm font-semibold text-accent-fg">{i + 1}</span><div><h2 className="font-semibold">{s.t}</h2><p className="mt-1 text-fg-muted"><Explain plain={s.plain} technical={s.tech} /></p></div></li>))}</ol>
       <div className="card"><h2 className="font-semibold">Design rule</h2><p className="mt-1 text-fg-muted">Models read. Tables and rules decide. That is what lets us put a number on refusals instead of describing an architecture.</p></div>
     </div>

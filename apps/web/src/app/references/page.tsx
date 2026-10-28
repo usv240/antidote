@@ -26,7 +26,7 @@ const refs = [
 export default function References() {
   return (
     <div className="space-y-6 pt-8">
-      <h1 className="text-3xl font-semibold">References</h1>
+      <h1 className="text-[1.625rem] font-semibold sm:text-3xl">References</h1>
       <p className="max-w-2xl text-fg-muted">Every statistic on this site links here. The retracted 2020 estimate of 385 million poisonings is deliberately not used.</p>
       <ol className="list-decimal space-y-2 pl-6">{refs.map(([t, u]) => <li key={u}><a className="text-accent underline-offset-2 hover:underline" href={u} target="_blank" rel="noreferrer">{t}</a></li>)}</ol>
     </div>
