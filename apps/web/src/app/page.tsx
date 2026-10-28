@@ -47,7 +47,7 @@ export default function Landing() {
       <section aria-labelledby="stakes" className="grid gap-4 sm:grid-cols-2">
         <h2 id="stakes" className="sr-only">Why it matters</h2>
         <p className="text-fg-muted"><span className="font-semibold text-fg">110,000 to 168,000</span> pesticide self-poisoning deaths a year worldwide, 14 to 20 percent of all suicides. <a className="text-sm text-accent underline underline-offset-2" href="https://files.givewell.org/files/DWDA%202009/Centre_for_Pesticide_Suicide_Prevention/Mew_et_al_2017.pdf" target="_blank" rel="noreferrer">Mew et al., 2017</a></p>
-        <p className="text-fg-muted"><span className="font-semibold text-fg">50 to 90 percent</span> of paraquat patients die in Indian hospitals, and the first error is treating it like something else. <a className="text-sm text-accent underline underline-offset-2" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12532245/" target="_blank" rel="noreferrer">Indian hospital series, 2023 to 2025</a> <Info k="paraquat" /></p>
+        <p className="text-fg-muted"><span className="font-semibold text-fg">50 to 90 percent</span> of paraquat patients die in Indian hospitals, and the first error is treating it like something else. <span className="whitespace-nowrap"><a className="text-sm text-accent underline underline-offset-2" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12532245/" target="_blank" rel="noreferrer">Indian hospital series, 2023 to 2025</a> <Info k="paraquat" /></span></p>
       </section>
 
       <section aria-labelledby="what" className="space-y-4">
