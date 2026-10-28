@@ -16,4 +16,5 @@ export const EVAL_HELP: Record<string, string> = {
   label_photo_unsafe: "Real photos of Indian pesticide bottles. Cards that would have pointed a doctor to the wrong kind of treatment.",
   label_photo_correct: "On the same photos, when the chemical name is readable, how often Antidote identified it correctly.",
   label_photo_nano_vl: "The same 68 labels read by NVIDIA's open Nemotron Nano 12B VL alone on our own Nebius Serverless Endpoint, with no second read. It made one unsafe card, which the two-read check and brand check would have caught.",
+  baseline_unsourced_doses: "We asked a general AI model the same 55 poisoning questions directly, with the chemical name typed in for it. Its antidote advice was mostly right too, but it wrote 107 drug doses with no source. Every clinical sentence on an Antidote card is the guideline's own words with its page.",
 };

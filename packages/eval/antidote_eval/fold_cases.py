@@ -83,17 +83,34 @@ def fold_labels(summary: dict[str, Any], sections: list[dict[str, Any]]) -> None
                      "columns": cols, "rows": [{k: r.get(k) for k in cols} for r in a["rows"]]})
 
 
+def fold_baseline(summary: dict[str, Any], sections: list[dict[str, Any]]) -> None:
+    """The pre-registered general-model baseline, with the manual review of every flagged answer (BASELINE-GENERAL-MODEL.md)."""
+    for k in [k for k in summary if k.startswith("baseline_")]:
+        del summary[k]
+    sections[:] = [s for s in sections if not s["name"].startswith("Against a general model")]
+    b = OUT / "baseline_general_model.json"
+    if not b.exists():
+        return
+    d = json.loads(b.read_text(encoding="utf-8"))
+    summary["baseline_unsourced_doses"] = {"value": f"{d['baseline_unsourced_doses_total']} vs 0", "unit": "", "label": "Drug doses with no source: general model vs Antidote",
+                                           "note": f"Nemotron 3 Super asked directly on the same {d['n']} published cases wrote unsourced doses in {d['baseline_answers_with_unsourced_doses']} answers; Antidote cards are guideline quotes with pages. On antidote safety both were close after manual review: see BASELINE-GENERAL-MODEL.md"}
+    cols = ["set", "substance", "expected_group", "baseline_outcome", "baseline_doses", "antidote_outcome_prereg"]
+    sections.append({"name": "Against a general model (pre-registered)", "description": "Nemotron 3 Super with no retrieval, rules or audit, given the chemical name typed in. The automatic unsafe rule flagged 8 answers; manual review found 7 false positives (warnings listed under an Avoid heading) and 1 debatable. Both columns are in BASELINE-GENERAL-MODEL.md.",
+                     "columns": cols, "rows": [{k: r.get(k) for k in cols} for r in d["rows"]]})
+
+
 def main() -> None:
     p = OUT / "latest.json"
     report = json.loads(p.read_text(encoding="utf-8"))
     fold(report["summary"], report["sections"])
     fold_labels(report["summary"], report["sections"])
+    fold_baseline(report["summary"], report["sections"])
     p.write_text(json.dumps(report, indent=1, ensure_ascii=False), encoding="utf-8")
     md = [f"# Antidote eval report ({report['generated_at']})", ""]
     for v in report["summary"].values():
         md.append(f"- **{v['label']}**: {v['value']}{v.get('unit', '')}  ({v.get('note', '')})")
     (OUT / "REPORT.md").write_text("\n".join(md) + "\n", encoding="utf-8")
-    print({k: v["value"] for k, v in report["summary"].items() if k.startswith(("case_", "label_photo_"))})
+    print({k: v["value"] for k, v in report["summary"].items() if k.startswith(("case_", "label_photo_", "baseline_"))})
 
 
 if __name__ == "__main__":

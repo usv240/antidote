@@ -9,12 +9,21 @@ import json
 import os
 import re
 import time
-from pathlib import Path
 from typing import Any
 
 from antidote_llm import Ledger, Tier, TokenFactoryClient
 
-from .case_reports import ANTIDOTE_GROUPS, ATROPINE_RE, CASES, CASES_V2, CHOLINERGIC, CLASS_ONLY_RE, ROOT, judge1, judge2
+from .case_reports import (
+    ANTIDOTE_GROUPS,
+    ATROPINE_RE,
+    CASES,
+    CASES_V2,
+    CHOLINERGIC,
+    CLASS_ONLY_RE,
+    ROOT,
+    judge1,
+    judge2,
+)
 
 OUT = ROOT / "eval/results/baseline_general_model.json"
 PROMPT = ("You are assisting an emergency physician in India. A patient has ingested the product with this label. "

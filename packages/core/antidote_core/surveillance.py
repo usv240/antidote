@@ -100,7 +100,7 @@ class SurveillanceBrief(BaseModel):
 
 
 SYSTEM = """You are the analyst for a district surveillance officer in India. You receive a hospital's complete medico-legal poisoning register, alerts already computed by fixed rules, the registry status of each chemical, and the full text of published case reports about those chemicals.
-Write a brief the officer can act on in five minutes. The alerts are authoritative: explain them, never add or remove a cluster. Cite register row ids and case report URLs. Do not give drug names with doses or treatment instructions; this brief is for public-health action, not bedside care. If register rows are marked as demo data, say so in the confidence note. Return the SurveillanceBrief tool call."""
+Write a brief the officer can act on in five minutes. The alerts are authoritative: explain them, never add or remove a cluster, and copy every count from the alerts rather than recounting the register. Cite register row ids and case report URLs. Do not give drug names with doses or treatment instructions; this brief is for public-health action, not bedside care. If register rows are marked as demo data, say so in the confidence note. Return the SurveillanceBrief tool call."""
 
 
 def status_map(registry: Any) -> dict[str, str]:
@@ -142,6 +142,27 @@ def literature_for(rows: list[dict[str, Any]], max_chars: int = 2_600_000) -> li
     return out
 
 
+COUNT_RE = re.compile(r"\b(\d+)\s+(?:of the\s+|more\s+)?(?:cases?|patients?|poisonings?|rows?|deaths?)\b", re.IGNORECASE)
+
+
+def allowed_counts(alerts: list[dict[str, Any]], n_rows: int) -> set[int]:
+    """Every count the rules computed: case totals, the spraying sub-count, the register size."""
+    nums = {n_rows}
+    for a in alerts:
+        nums.add(int(a.get("cases") or 0))
+        nums.update(int(x) for x in re.findall(r"\d+", a.get("why", "")))
+    return nums
+
+
+def drop_unbacked_counts(text: str, allowed: set[int]) -> tuple[str, list[str]]:
+    """Remove each clause that states a case count the rules did not compute. Counts are facts; the model only explains them."""
+    kept, dropped = [], []
+    for clause in re.split(r"(?<=[.;])\s+", text.strip()):
+        bad = [int(m.group(1)) for m in COUNT_RE.finditer(clause) if int(m.group(1)) not in allowed]
+        (dropped if bad else kept).append(clause)
+    return " ".join(kept).rstrip(";") + ("" if not kept or kept[-1].endswith(".") else "."), dropped
+
+
 def build_brief(client: Any, rows: list[dict[str, Any]], registry: Any, rules: Any, trace_id: str | None = None) -> dict[str, Any]:
     from antidote_llm import Tier, call_structured
 
@@ -170,5 +191,13 @@ def build_brief(client: Any, rows: list[dict[str, Any]], registry: Any, rules: A
             else:
                 kept.append(item)
         setattr(brief, sec, kept)
+    # Counts must come from the rules. Lightning once wrote "3 skin or inhaled, 2 unknown route" for a cluster the
+    # rules had counted as 5 of 5; a clause with a count the rules did not compute is removed and the removal reported.
+    allowed = allowed_counts(alerts, len(rows))
+    for sec in ("clusters", "regulatory"):
+        for item in getattr(brief, sec):
+            item.detail, dropped = drop_unbacked_counts(item.detail, allowed)
+            if dropped:
+                removed.append({"section": sec, "title": f"{item.title}: {' '.join(dropped)}", "rules": ["count-not-computed-by-rules"]})
     return {"alerts": alerts, "brief": brief.model_dump(), "removed_by_rules": removed,
             "input_tokens_approx": approx, "case_reports_read": sum(1 for x in lit if x["full_text"]), "register_rows": len(rows)}

@@ -98,6 +98,12 @@
    "unit": "",
    "label": "Same labels, NVIDIA Nemotron Nano 12B VL alone (no cross-check)",
    "note": "open-weight model on a Nebius Serverless Endpoint: 57 correct, 92.9% when legible. Its one unsafe card (a chlorpyriphos label read as deltamethrin) is why production requires two reads to agree and a brand check, which gave 0 unsafe"
+  },
+  "baseline_unsourced_doses": {
+   "value": "107 vs 0",
+   "unit": "",
+   "label": "Drug doses with no source: general model vs Antidote",
+   "note": "Nemotron 3 Super asked directly on the same 55 published cases wrote unsourced doses in 47 answers; Antidote cards are guideline quotes with pages. On antidote safety both were close after manual review: see BASELINE-GENERAL-MODEL.md"
   }
  },
  "sections": [
@@ -2290,6 +2296,460 @@
      "confidence": 0.8,
      "agreed": true,
      "outcome": "correct"
+    }
+   ]
+  },
+  {
+   "name": "Against a general model (pre-registered)",
+   "description": "Nemotron 3 Super with no retrieval, rules or audit, given the chemical name typed in. The automatic unsafe rule flagged 8 answers; manual review found 7 false positives (warnings listed under an Avoid heading) and 1 debatable. Both columns are in BASELINE-GENERAL-MODEL.md.",
+   "columns": [
+    "set",
+    "substance",
+    "expected_group",
+    "baseline_outcome",
+    "baseline_doses",
+    "antidote_outcome_prereg"
+   ],
+   "rows": [
+    {
+     "set": 1,
+     "substance": "cypermethrin",
+     "expected_group": "pyrethroid",
+     "baseline_outcome": "unsafe",
+     "baseline_doses": 3,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 1,
+     "substance": "imidacloprid",
+     "expected_group": "neonicotinoid",
+     "baseline_outcome": "safe",
+     "baseline_doses": 2,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 1,
+     "substance": "aluminium phosphide",
+     "expected_group": "metal_phosphide",
+     "baseline_outcome": "safe",
+     "baseline_doses": 0,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 1,
+     "substance": "organophosphate",
+     "expected_group": "organophosphate",
+     "baseline_outcome": "safe",
+     "baseline_doses": 3,
+     "antidote_outcome_prereg": "safe_withheld"
+    },
+    {
+     "set": 1,
+     "substance": "organophosphate pesticide",
+     "expected_group": "organophosphate",
+     "baseline_outcome": "safe",
+     "baseline_doses": 2,
+     "antidote_outcome_prereg": "safe_withheld"
+    },
+    {
+     "set": 1,
+     "substance": "organophosphate",
+     "expected_group": "organophosphate",
+     "baseline_outcome": "safe",
+     "baseline_doses": 3,
+     "antidote_outcome_prereg": "safe_withheld"
+    },
+    {
+     "set": 1,
+     "substance": "Bromadiolone",
+     "expected_group": "anticoagulant_rodenticide",
+     "baseline_outcome": "safe",
+     "baseline_doses": 4,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 1,
+     "substance": "2,4-Dichlorophenoxyacetic acid",
+     "expected_group": "phenoxy_herbicide",
+     "baseline_outcome": "safe",
+     "baseline_doses": 1,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 1,
+     "substance": "acetamiprid and fipronil",
+     "expected_group": "neonicotinoid",
+     "baseline_outcome": "unsafe",
+     "baseline_doses": 2,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 1,
+     "substance": "emamectin benzoate and indoxacarb",
+     "expected_group": "other_pesticide",
+     "baseline_outcome": "safe",
+     "baseline_doses": 2,
+     "antidote_outcome_prereg": "safe_withheld"
+    },
+    {
+     "set": 1,
+     "substance": "paraquat",
+     "expected_group": "paraquat",
+     "baseline_outcome": "safe",
+     "baseline_doses": 0,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 1,
+     "substance": "methyl parathion",
+     "expected_group": "organophosphate",
+     "baseline_outcome": "safe",
+     "baseline_doses": 2,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 1,
+     "substance": "chlorfenapyr",
+     "expected_group": "other_pesticide",
+     "baseline_outcome": "safe",
+     "baseline_doses": 1,
+     "antidote_outcome_prereg": "safe_withheld"
+    },
+    {
+     "set": 1,
+     "substance": "endosulfan",
+     "expected_group": "organochlorine",
+     "baseline_outcome": "unsafe",
+     "baseline_doses": 1,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 1,
+     "substance": "glyphosate",
+     "expected_group": "glyphosate",
+     "baseline_outcome": "safe",
+     "baseline_doses": 2,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 1,
+     "substance": "Aluminium phosphide",
+     "expected_group": "metal_phosphide",
+     "baseline_outcome": "safe",
+     "baseline_doses": 0,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 1,
+     "substance": "imidacloprid",
+     "expected_group": "neonicotinoid",
+     "baseline_outcome": "unsafe",
+     "baseline_doses": 1,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 1,
+     "substance": "chlorpyrifos–cypermethrin",
+     "expected_group": "organophosphate",
+     "baseline_outcome": "safe",
+     "baseline_doses": 2,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 1,
+     "substance": "2,4-D ethyl ester",
+     "expected_group": "phenoxy_herbicide",
+     "baseline_outcome": "safe",
+     "baseline_doses": 1,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 1,
+     "substance": "Fipronil",
+     "expected_group": "other_pesticide",
+     "baseline_outcome": "safe",
+     "baseline_doses": 1,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 1,
+     "substance": "bromadiolone and fluoroacetamide",
+     "expected_group": "anticoagulant_rodenticide",
+     "baseline_outcome": "safe",
+     "baseline_doses": 1,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 1,
+     "substance": "Glyphosate",
+     "expected_group": "glyphosate",
+     "baseline_outcome": "safe",
+     "baseline_doses": 0,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 1,
+     "substance": "chlorpyrifos",
+     "expected_group": "organophosphate",
+     "baseline_outcome": "safe",
+     "baseline_doses": 3,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 1,
+     "substance": "organophosphorus insecticide",
+     "expected_group": "organophosphate",
+     "baseline_outcome": "safe",
+     "baseline_doses": 3,
+     "antidote_outcome_prereg": "safe_withheld"
+    },
+    {
+     "set": 1,
+     "substance": "Aluminum phosphide",
+     "expected_group": "metal_phosphide",
+     "baseline_outcome": "safe",
+     "baseline_doses": 0,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 1,
+     "substance": "Emamectin Benzoate",
+     "expected_group": "other_pesticide",
+     "baseline_outcome": "safe",
+     "baseline_doses": 3,
+     "antidote_outcome_prereg": "safe_withheld"
+    },
+    {
+     "set": 1,
+     "substance": "2,4-Dichlorophenoxyacetic acid",
+     "expected_group": "phenoxy_herbicide",
+     "baseline_outcome": "safe",
+     "baseline_doses": 1,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 1,
+     "substance": "chlorfenapyr",
+     "expected_group": "other_pesticide",
+     "baseline_outcome": "safe",
+     "baseline_doses": 1,
+     "antidote_outcome_prereg": "safe_withheld"
+    },
+    {
+     "set": 1,
+     "substance": "Chlorpyrifos",
+     "expected_group": "organophosphate",
+     "baseline_outcome": "safe",
+     "baseline_doses": 4,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 1,
+     "substance": "imidacloprid",
+     "expected_group": "neonicotinoid",
+     "baseline_outcome": "unsafe",
+     "baseline_doses": 1,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 1,
+     "substance": "deltamethrin",
+     "expected_group": "pyrethroid",
+     "baseline_outcome": "safe",
+     "baseline_doses": 2,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 1,
+     "substance": "diazinon",
+     "expected_group": "organophosphate",
+     "baseline_outcome": "safe",
+     "baseline_doses": 3,
+     "antidote_outcome_prereg": "safe_withheld"
+    },
+    {
+     "set": 1,
+     "substance": "aluminium phosphide",
+     "expected_group": "metal_phosphide",
+     "baseline_outcome": "safe",
+     "baseline_doses": 0,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 2,
+     "substance": "monocrotophos",
+     "expected_group": "organophosphate",
+     "baseline_outcome": "safe",
+     "baseline_doses": 4,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 2,
+     "substance": "paraquat",
+     "expected_group": "paraquat",
+     "baseline_outcome": "unsafe",
+     "baseline_doses": 1,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 2,
+     "substance": "acetamiprid and pyridaben",
+     "expected_group": "neonicotinoid",
+     "baseline_outcome": "safe",
+     "baseline_doses": 1,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 2,
+     "substance": "lambda-cyhalothrin",
+     "expected_group": "pyrethroid",
+     "baseline_outcome": "safe",
+     "baseline_doses": 2,
+     "antidote_outcome_prereg": "unsafe"
+    },
+    {
+     "set": 2,
+     "substance": "cypermethrin",
+     "expected_group": "pyrethroid",
+     "baseline_outcome": "unsafe",
+     "baseline_doses": 1,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 2,
+     "substance": "aluminum phosphide",
+     "expected_group": "metal_phosphide",
+     "baseline_outcome": "safe",
+     "baseline_doses": 0,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 2,
+     "substance": "paraquat",
+     "expected_group": "paraquat",
+     "baseline_outcome": "safe",
+     "baseline_doses": 0,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 2,
+     "substance": "diazinon",
+     "expected_group": "organophosphate",
+     "baseline_outcome": "safe",
+     "baseline_doses": 3,
+     "antidote_outcome_prereg": "safe_withheld"
+    },
+    {
+     "set": 2,
+     "substance": "Organophosphorus (OP)",
+     "expected_group": "organophosphate",
+     "baseline_outcome": "safe",
+     "baseline_doses": 3,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 2,
+     "substance": "dichlorvos",
+     "expected_group": "organophosphate",
+     "baseline_outcome": "safe",
+     "baseline_doses": 3,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 2,
+     "substance": "chlorophacinone",
+     "expected_group": "anticoagulant_rodenticide",
+     "baseline_outcome": "safe",
+     "baseline_doses": 4,
+     "antidote_outcome_prereg": "safe_withheld"
+    },
+    {
+     "set": 2,
+     "substance": "glufosinate ammonium",
+     "expected_group": "other_pesticide",
+     "baseline_outcome": "safe",
+     "baseline_doses": 1,
+     "antidote_outcome_prereg": "safe_withheld"
+    },
+    {
+     "set": 2,
+     "substance": "organophosphate insecticide",
+     "expected_group": "organophosphate",
+     "baseline_outcome": "safe",
+     "baseline_doses": 3,
+     "antidote_outcome_prereg": "safe_withheld"
+    },
+    {
+     "set": 2,
+     "substance": "methomyl",
+     "expected_group": "carbamate",
+     "baseline_outcome": "safe",
+     "baseline_doses": 5,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 2,
+     "substance": "chlorpyrifos and cypermethrin",
+     "expected_group": "organophosphate",
+     "baseline_outcome": "safe",
+     "baseline_doses": 2,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 2,
+     "substance": "carbofuran and chlormephos",
+     "expected_group": "carbamate",
+     "baseline_outcome": "safe",
+     "baseline_doses": 2,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 2,
+     "substance": "dichlorvos",
+     "expected_group": "organophosphate",
+     "baseline_outcome": "safe",
+     "baseline_doses": 3,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 2,
+     "substance": "Lambda Cyhalothrin",
+     "expected_group": "pyrethroid",
+     "baseline_outcome": "safe",
+     "baseline_doses": 2,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 2,
+     "substance": "organophosphate pesticide powder",
+     "expected_group": "organophosphate",
+     "baseline_outcome": "safe",
+     "baseline_doses": 3,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 2,
+     "substance": "acetamiprid and fipronil",
+     "expected_group": "neonicotinoid",
+     "baseline_outcome": "unsafe",
+     "baseline_doses": 5,
+     "antidote_outcome_prereg": "correct"
+    },
+    {
+     "set": 2,
+     "substance": "coumaphos",
+     "expected_group": "organophosphate",
+     "baseline_outcome": "safe",
+     "baseline_doses": 2,
+     "antidote_outcome_prereg": "safe_withheld"
+    },
+    {
+     "set": 2,
+     "substance": "dichlorvos (DDVP)",
+     "expected_group": "organophosphate",
+     "baseline_outcome": "safe",
+     "baseline_doses": 2,
+     "antidote_outcome_prereg": "correct"
     }
    ]
   }
