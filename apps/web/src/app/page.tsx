@@ -1,155 +1,296 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Info } from "@/components/info";
-import { Explain } from "@/components/explain-mode";
-import { EvalTiles } from "@/components/eval-tiles";
+import { Reveal } from "@/components/reveal";
 import { SampleGallery } from "@/components/sample-gallery";
-import { StackStrip } from "@/components/stack-strip";
-import { ShieldAlert, Camera, Search, ClipboardCheck, FileText, Phone, WifiOff } from "lucide-react";
+import { ShieldAlert } from "lucide-react";
+
+const d = (ms: number) => ({ "--d": `${ms}ms` }) as React.CSSProperties;
+
+const JUMP = [
+  ["#what", "What it is"],
+  ["#why", "Why it matters"],
+  ["#how", "How it works"],
+  ["#try", "Try it"],
+  ["#results", "Results"],
+  ["#who", "Who it is for"],
+  ["#build", "Beyond the bedside"],
+];
 
 export default function Landing() {
   return (
-    <div className="space-y-20 pt-10">
-      <section className="grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-start">
-        <div className="space-y-6">
-          <h1 className="max-w-3xl text-balance text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
-            The chemical went unidentified in 94 percent of recorded cases. It was printed on the bottle in the family&apos;s hand.
+    <div className="pb-8">
+      <Reveal />
+
+      {/* Hero: what it is, in one sentence, with the product doing its job beside it */}
+      <section className="grid gap-12 pt-20 sm:pt-14 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:items-center lg:gap-16 lg:pt-16">
+        <div>
+          <h1 className="rise text-balance text-[2.5rem] font-semibold leading-[1.03] tracking-[-0.03em] sm:text-6xl lg:text-[4.25rem]">
+            The answer is on the bottle.
           </h1>
-          <p className="max-w-xl text-lg text-fg">
-            In July 2013, 23 children in Bihar died after a school lunch cooked in oil kept in a pesticide container. A forensic report confirmed the poison, monocrotophos, four days later.{" "}
-            <a className="text-sm text-accent underline underline-offset-2" href="https://en.wikipedia.org/wiki/Bihar_school_meal_poisoning_incident" target="_blank" rel="noreferrer">Record</a>
+          <p className="rise mt-6 max-w-xl text-xl leading-relaxed" style={d(90)}>
+            Antidote is decision support for doctors treating pesticide poisoning. Photograph the label and get the chemical, its WHO hazard class<Info k="who_class" />, and the national guideline&apos;s own words on treatment, or a stop when no antidote exists<Info k="stop_card" />.
           </p>
-          <p className="max-w-xl text-fg-muted">
-            When the bottle comes with the patient, the answer should take seconds, not days. Antidote reads the label from a photo and gives the doctor the chemical, its hazard class and guidance quoted from the national module, or a stop card when no antidote exists. About 20 seconds from photo to card. Tested on 55 published poisoning cases and 68 real label photos: no unsafe card on the code that is live today.
-          </p>
-          <div className="flex flex-wrap gap-3">
+          <div className="rise mt-8 flex flex-wrap gap-3" style={d(180)}>
             <Link href="/try?sample=chlorpyrifos" className="btn-primary">Try it on a sample bottle</Link>
+            <a href="#how" className="btn-ghost">See how it works</a>
             {process.env.NEXT_PUBLIC_VIDEO_URL ? <a href={process.env.NEXT_PUBLIC_VIDEO_URL} className="btn-ghost" target="_blank" rel="noreferrer">Watch the 3-minute video</a> : null}
           </div>
-          <p className="text-sm text-fg-muted">Decision support for trained clinicians. Airway, breathing, circulation first. National Poisons Information Centre, AIIMS: 1800-116-117.</p>
+          <p className="rise mt-8 max-w-xl text-base leading-relaxed text-fg-muted" style={d(260)}>
+            In 94 percent of recorded pesticide poisonings in India, the chemical went unidentified{" "}
+            (<a className="text-accent underline underline-offset-2" href="https://pan-india.org/wp-content/uploads/2026/01/Acute-Unintentional-Pesticide-poisonings-in-India_.pdf" target="_blank" rel="noreferrer">PAN India, 2026</a>). In 2013, 23 children in Bihar died after a school meal; the poison, monocrotophos, was confirmed four days later{" "}
+            (<a className="text-accent underline underline-offset-2" href="https://en.wikipedia.org/wiki/Bihar_school_meal_poisoning_incident" target="_blank" rel="noreferrer">record</a>).
+          </p>
+          <p className="rise mt-4 max-w-xl text-[0.9375rem] leading-relaxed text-fg-muted" style={d(300)}>
+            Decision support for trained clinicians. Airway, breathing, circulation first. National Poisons Information Centre, AIIMS: 1800-116-117<Info k="npic" />
+          </p>
         </div>
-        <figure className="card space-y-4 lg:mt-2">
-          <p className="text-lg font-semibold leading-snug">Gramoxone: paraquat dichloride 24%</p>
-          <div role="note" className="rounded-xl border-2 border-stop p-3">
-            <p className="font-semibold text-stop">Stop: no specific antidote</p>
-            <p className="mt-1 text-sm">Do not give atropine for this exposure. Management is supportive per the cited guidance.</p>
+
+        <figure data-ui className="rise rounded-[24px] bg-surface p-6 sm:p-8" style={d(200)}>
+          <p className="text-[0.9375rem] text-fg-muted">Label read from a photo</p>
+          <p className="mt-2 text-2xl font-semibold leading-snug tracking-[-0.01em]">Gramoxone: paraquat dichloride 24%</p>
+          <div role="note" className="mt-5 rounded-[16px] border-2 border-stop bg-bg-elev p-4">
+            <p className="flex items-center gap-2 text-lg font-semibold text-stop"><ShieldAlert className="h-5 w-5 shrink-0" aria-hidden /> Stop: no specific antidote</p>
+            <p className="mt-1.5 text-base leading-relaxed">Do not give atropine for this exposure. Management is supportive per the cited guidance.</p>
           </div>
-          <blockquote className="quote text-sm">
+          <blockquote className="quote mt-5 text-base leading-relaxed">
             &ldquo;Administration of excessive oxygen should be avoided in paraquat poisoning because it may worsen its toxicity.&rdquo;
-            <footer className="mt-1 text-xs text-fg-muted">ISCCM 2024 position statement, page 10</footer>
+            <footer className="mt-2 text-[0.9375rem] text-fg-muted">ISCCM 2024 position statement, page 10</footer>
           </blockquote>
-          <figcaption className="border-t border-border pt-3 text-xs text-fg-muted">
-            From a live run on the Gramoxone sample. The stop comes from the registry, not the model; every clinical sentence is the guideline&apos;s own words.{" "}
+          <figcaption className="mt-6 text-[0.9375rem] leading-relaxed text-fg-muted">
+            From a live run. The stop comes from the registry, not the model; every clinical sentence is the guideline&apos;s own words.{" "}
             <Link href="/try?sample=paraquat" className="text-accent underline underline-offset-2">Run it yourself</Link>
           </figcaption>
         </figure>
       </section>
 
-      <section aria-labelledby="stakes" className="grid gap-4 sm:grid-cols-2">
-        <h2 id="stakes" className="sr-only">Why it matters</h2>
-        <p className="text-fg-muted"><span className="font-semibold text-fg">110,000 to 168,000</span> pesticide self-poisoning deaths a year worldwide, 14 to 20 percent of all suicides. <a className="text-sm text-accent underline underline-offset-2" href="https://files.givewell.org/files/DWDA%202009/Centre_for_Pesticide_Suicide_Prevention/Mew_et_al_2017.pdf" target="_blank" rel="noreferrer">Mew et al., 2017</a></p>
-        <p className="text-fg-muted"><span className="font-semibold text-fg">50 to 90 percent</span> of paraquat patients die in Indian hospitals, and the first error is treating it like something else. <span className="whitespace-nowrap"><a className="text-sm text-accent underline underline-offset-2" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12532245/" target="_blank" rel="noreferrer">Indian hospital series, 2023 to 2025</a> <Info k="paraquat" /></span></p>
-      </section>
+      <nav aria-label="On this page" className="rise mt-14 flex flex-wrap gap-2" style={d(340)}>
+        {JUMP.map(([href, label]) => (
+          <a key={href} href={href} className="lift rounded-full bg-surface px-4 py-2 text-[0.9375rem] text-fg-muted hover:text-fg">{label}</a>
+        ))}
+      </nav>
 
-      <section aria-labelledby="what" className="space-y-4">
-        <h2 id="what" className="text-2xl font-semibold">What is this, in one minute</h2>
-        <div className="grid gap-4 md:grid-cols-3">
-          <Card title="What" icon={<Camera className="h-5 w-5" />}>A bedside reader for pesticide labels. Photograph the bottle; get the chemical and the cited guidance for it <Info k="quote_rule" />.</Card>
-          <Card title="Why" icon={<Search className="h-5 w-5" />}>Every Indian label legally carries the chemical, a toxicity triangle <Info k="triangle" /> and an antidote statement. The registry and the guidelines are public. None of it is at the bedside at 11 pm.</Card>
-          <Card title="How" icon={<ClipboardCheck className="h-5 w-5" />}>Photo, confirm the match, a card made only of quoted guideline sentences, stop cards <Info k="stop_card" /> when there is no antidote, and a filled register row <Info k="mlc" />.</Card>
+      {/* What, why, how in one minute */}
+      <section id="what" aria-labelledby="what-h" className="scroll-mt-32 pt-28">
+        <h2 id="what-h" data-reveal className="text-3xl font-semibold tracking-[-0.02em] sm:text-4xl">Antidote in one minute</h2>
+        <div className="mt-10 grid gap-10 md:grid-cols-3 md:gap-12">
+          <div data-reveal style={d(60)}>
+            <h3 className="text-xl font-semibold">What it is</h3>
+            <p className="mt-3 text-lg leading-relaxed">A bedside card for the doctor in casualty. The family brings the bottle; one photo of the label gives the chemical, how dangerous it is, and the treatment quoted word for word from India&apos;s national guidelines, each sentence with its page<Info k="quote_rule" />.</p>
+          </div>
+          <div data-reveal style={d(140)}>
+            <h3 className="text-xl font-semibold">Why it matters</h3>
+            <p className="mt-3 text-lg leading-relaxed">Pesticides look alike in an emergency, but their treatments are opposites. Atropine saves an organophosphate patient<Info k="organophosphate" /> and has no role in paraquat<Info k="paraquat" />, where extra oxygen can make things worse. Every Indian label legally carries the answer.</p>
+          </div>
+          <div data-reveal style={d(220)}>
+            <h3 className="text-xl font-semibold">How it works</h3>
+            <p className="mt-3 text-lg leading-relaxed">Open NVIDIA Nemotron models on Nebius Token Factory read the label and assemble the card. A government registry, not the model, decides whether an antidote exists; fixed rules block lethal errors, and a larger model audits every card against both guidelines in full.</p>
+          </div>
         </div>
       </section>
 
-      <section aria-labelledby="see" className="space-y-4">
-        <h2 id="see" className="text-2xl font-semibold">See it work, no bottle needed</h2>
-        <p className="text-fg-muted">Pick a sample. The whole flow runs live against Nebius Token Factory; the status strip says so when it is a replay instead.</p>
-        <SampleGallery />
-      </section>
-
-      <section aria-labelledby="who" className="space-y-4">
-        <h2 id="who" className="text-2xl font-semibold">Who it is for</h2>
-        <div className="grid gap-4 md:grid-cols-3">
-          <Card title="The medical officer at a health centre">Gets the chemical and the cited guidance in seconds, and a stop when the common error would be lethal.</Card>
-          <Card title="The casualty nurse">Knows which questions to ask the family and what to prepare before the doctor arrives.</Card>
-          <Card title="The poison-centre pharmacist">Receives a complete proforma instead of &quot;a white bottle with a red triangle&quot;. <Info k="npic" /></Card>
+      {/* Why: the evidence, with a real bottle */}
+      <section id="why" aria-labelledby="why-h" className="scroll-mt-32 pt-36">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
+          <figure data-reveal>
+            <Image src="/images/paraquat-label.jpg" alt="A large grey paraquat container on a shop shelf; its label lists the active ingredient at 24 percent beside skull-and-crossbones warnings" width={1300} height={1224} sizes="(min-width: 1024px) 440px, 100vw" className="h-auto w-full rounded-[20px] object-cover" />
+            <figcaption className="mt-3 text-[0.9375rem] text-fg-muted">A paraquat container on a shop shelf in Changhua, Taiwan. The label prints the chemical, 1,1&apos;-dimethyl-4,4&apos;-bipyridylium dichloride, at 24 percent.</figcaption>
+          </figure>
+          <div>
+            <h2 id="why-h" data-reveal className="text-3xl font-semibold tracking-[-0.02em] sm:text-4xl">Why it matters</h2>
+            <div data-reveal style={d(80)} className="mt-8">
+              <p className="text-7xl font-semibold tracking-[-0.04em] text-accent sm:text-8xl">70%</p>
+              <p className="mt-3 max-w-xl text-xl leading-relaxed">is about the case fatality for paraquat and for aluminium phosphide, against close to 0 percent for many newer pesticides. The product decides the outcome, and WHO tells families to bring the bottle. <a className="text-accent underline underline-offset-2" href="https://iris.who.int/handle/10665/44020" target="_blank" rel="noreferrer">WHO, 2008</a></p>
+            </div>
+            <blockquote data-reveal style={d(140)} className="quote mt-10 max-w-xl text-lg leading-relaxed">
+              Paraquat was diagnosed by &ldquo;physical verification of the container of the poison or by the pictures of the container on WhatsApp shared by the patient&apos;s relatives&rdquo;; before referral, many had been given atropine, pralidoxime and oxygen.
+              <footer className="mt-2 text-[0.9375rem] text-fg-muted"><a className="text-accent underline underline-offset-2" href="https://nmji.in/reasons-for-under-reporting-of-paraquat-poisoning-in-india/" target="_blank" rel="noreferrer">Dambal et al., National Medical Journal of India, 2021</a></footer>
+            </blockquote>
+            <ul className="mt-12 grid gap-x-8 gap-y-14 sm:grid-cols-3">
+              <Stat i={100} n="31.8%" t="of patients in a Bangladesh hospital series were misdiagnosed from their symptoms alone." s="Verma, Eddleston et al., 2024" u="https://pmc.ncbi.nlm.nih.gov/articles/PMC11149373/" />
+              <Stat i={160} n="18 of 318" t="pesticides registered in India in 2019 were rated extremely or highly hazardous by WHO." s="Bonvoisin et al., 2020" u="https://link.springer.com/article/10.1186/s12889-020-8339-z" />
+              <Stat i={220} n="110,000+" t="pesticide self-poisoning deaths a year worldwide." s="Mew et al., 2017" u="https://files.givewell.org/files/DWDA%202009/Centre_for_Pesticide_Suicide_Prevention/Mew_et_al_2017.pdf" />
+            </ul>
+            <p className="mt-10 text-base"><Link href="/references" className="font-semibold text-accent underline underline-offset-4">All 20 sources behind the numbers on this site</Link></p>
+          </div>
         </div>
       </section>
 
-      <section aria-labelledby="numbers" className="space-y-4">
-        <h2 id="numbers" className="text-2xl font-semibold">The numbers <Info k="benchmark" label="Why these numbers and not others?" /></h2>
-        <div className="card overflow-x-auto p-0">
-          <table className="w-full text-sm">
-            <thead className="text-left text-fg-muted"><tr><th className="p-4">Number</th><th className="p-4">What it means</th><th className="p-4">Source</th></tr></thead>
-            <tbody className="[&_td]:border-t [&_td]:border-border [&_td]:p-4 [&_td]:align-top">
-              <Row n="WhatsApp" t="photos of the container sent by relatives were how paraquat was finally identified in an Indian series; before referral, patients who could not name the poison were given atropine, pralidoxime and oxygen as if it were an organophosphate." s="Dambal et al., National Medical Journal of India 2021" u="https://nmji.in/reasons-for-under-reporting-of-paraquat-poisoning-in-india/" />
-              <Row n="31.8%" t="of patients in a Bangladesh hospital series (63 of 198) were misdiagnosed from the clinical toxidrome alone; the specific compound came from the history or the bottle." s="Verma, Eddleston et al., 2024" u="https://pmc.ncbi.nlm.nih.gov/articles/PMC11149373/" />
-              <Row n="About 70%" t="case fatality for paraquat and aluminium phosphide, against close to 0 percent for many newer pesticides. WHO advises bringing the bottle." s="WHO, 2008" u="https://iris.who.int/handle/10665/44020" />
-              <Row n="110k to 168k" t="pesticide self-poisoning deaths per year worldwide." s="Mew et al., 2017" u="https://files.givewell.org/files/DWDA%202009/Centre_for_Pesticide_Suicide_Prevention/Mew_et_al_2017.pdf" />
-              <Row n="94%" t="of recorded acute unintentional pesticide poisonings in India had the chemical recorded as unknown. An NGO analysis of government data, labelled as such." s="PAN India, 2026" u="https://pan-india.org/wp-content/uploads/2026/01/Acute-Unintentional-Pesticide-poisonings-in-India_.pdf" />
-              <Row n="Better survival" t="when the pesticide type and amount were known on admission; the unknown-organophosphate group did worst." s="Scientific Reports, 2022" u="https://www.nature.com/articles/s41598-022-21054-1" />
-              <Row n="50.8 to 90.5%" t="paraquat case fatality in three Indian tertiary-hospital series." s="2023 to 2025" u="https://pmc.ncbi.nlm.nih.gov/articles/PMC12532245/" />
-              <Row n="18 of 318" t="pesticides registered in India were WHO class Ia or Ib, extremely or highly hazardous." s="Bonvoisin et al., BMC Public Health 2020" u="https://link.springer.com/article/10.1186/s12889-020-8339-z" />
-              <Row n="25.4%" t="of 170,924 suicides in India in 2022 were by poisoning." s="NCRB ADSI 2022" u="https://www.data.gov.in/catalog/accidental-deaths-suicides-india-adsi-2022" />
-              <Row n="Rule 19" t="of the Insecticides Rules 1971: every label must carry a toxicity triangle and an antidote statement." s="Government of India, 1971" u="https://nhsrcindia.org/sites/default/files/2021-05/The%20Insecticides%20rules%201971.pdf" />
-            </tbody>
-          </table>
+      {/* How: the five stages, and which model does what */}
+      <section id="how" aria-labelledby="how-h" className="scroll-mt-32 pt-36">
+        <h2 id="how-h" data-reveal className="text-3xl font-semibold tracking-[-0.02em] sm:text-4xl">How it works<Info k="tier_routing" /></h2>
+        <p data-reveal style={d(60)} className="mt-4 max-w-2xl text-xl leading-relaxed">Models read and draft. A registry, rules and a verifier decide what reaches the doctor.</p>
+        <div className="mt-12 grid gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16">
+          <ol className="space-y-9">
+            <Stage i={0} title="Read the label" text="Reads the product, the chemical and its percentage, the toxicity triangle and the printed antidote statement from one photo." model="NVIDIA Nemotron 3.5 Super VL and a second reader" tech="The chemical is used only when two different vision models agree and the name appears in the text actually read; otherwise it is left blank for the doctor to confirm from the bottle." />
+            <Stage i={1} title="Match the registry" text="Looks the chemical up among 140 chemicals in the registry, each with its WHO 2019 hazard class and source line." model="Registry lookup, with a Tavily brand check" tech="Deterministic matching; when the brand is unfamiliar, Tavily searches registry and retailer pages for its registered composition, and Antidote acts only on a clear winner." />
+            <Stage i={2} title="Decide: antidote or stop" text="The registry, not a model, decides whether an antidote exists. Paraquat and phosphides get the stop card first." model="Chemical-group table" tech="Below 75 percent match confidence the antidote section is withheld: treat the patient, not the bottle." />
+            <Stage i={3} title="Compose and audit the card" text="Builds the card only from numbered sentences of the national module and the ISCCM 2024 statement, then audits it against both in full." model="NVIDIA Nemotron 3 Super, audited by Nemotron 3 Ultra" tech="Code copies each cited sentence word for word; explanation sentences may carry no drug names or numbers; rules remove any sentence that names atropine or an oxime for a group without an antidote." />
+            <Stage i={4} title="Record and watch" text="Fills the medico-legal register row from the label, and turns the register into a district early warning." model="NVIDIA Nemotron 3.5 Lightning for the district brief" tech="Rules flag spraying clusters, banned chemicals and restricted products; Lightning reads the register plus 32 full case reports, about 194,000 tokens, to explain them." />
+          </ol>
+          <div data-reveal style={d(120)}>
+            <div className="rounded-[20px] bg-surface p-5 sm:p-6">
+              <h3 className="text-lg font-semibold">Which model does what<Info term="Model routing" text="Each job goes to the smallest model that does it well. Every call, with its tokens and cost, is shown in the Trace panel beside the card." /></h3>
+              <div className="mt-4 overflow-x-auto">
+                <table className="w-full text-[0.9375rem]">
+                  <thead className="text-left text-fg-muted"><tr><th className="py-2 pr-3 font-medium">Job</th><th className="py-2 pr-3 font-medium">Model</th><th className="py-2 font-medium">Runs on</th></tr></thead>
+                  <tbody className="[&_td]:py-2.5 [&_td]:pr-3 [&_td]:align-top">
+                    <tr><td>Read the label</td><td>Nemotron 3.5 Super VL, plus a second reader</td><td>Token Factory</td></tr>
+                    <tr><td>Tidy the label text</td><td>Nemotron 3 Nano</td><td>Token Factory</td></tr>
+                    <tr><td>Check an unknown brand</td><td>Tavily search</td><td>Tavily</td></tr>
+                    <tr><td>Compose the card</td><td>Nemotron 3 Super</td><td>Token Factory</td></tr>
+                    <tr><td>Audit against both guidelines</td><td>Nemotron 3 Ultra, 1M-token context</td><td>Token Factory</td></tr>
+                    <tr><td>District surveillance brief</td><td>Nemotron 3.5 Lightning</td><td>Token Factory</td></tr>
+                    <tr><td>Read labels with no internet</td><td>Nemotron Nano 12B v2 VL</td><td>Laptop GPU</td></tr>
+                    <tr><td>Verification job, vision endpoint</td><td>Nemotron Nano 12B v2 VL</td><td>Nebius Serverless</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <Link href="/how-it-works" className="btn-ghost mt-5">The full pipeline, step by step</Link>
+          </div>
         </div>
       </section>
 
-      <section aria-labelledby="how" className="space-y-4">
-        <h2 id="how" className="text-2xl font-semibold">How the AI works <Info k="tier_routing" /></h2>
-        <p className="max-w-2xl text-fg-muted">Models read. Tables and rules decide.</p>
-        <div className="grid gap-3 md:grid-cols-5">
-          <Step n={1} title="Read" plain="Reads the label: product, chemical, percentage, registration number, triangle colour, the printed antidote statement." technical="NVIDIA Nemotron 3.5 Super VL reads the printed fields and a second, different model reads them again; the chemical is used only when both agree and it appears in the text read." />
-          <Step n={2} title="Match" plain="Looks the chemical up in the government registry." technical="Deterministic: registration number, then active ingredient and percent, then brand with a Tavily lookup whose confidence is capped at 0.6 so the antidote row stays hidden until confirmed." />
-          <Step n={3} title="Look up" plain="Finds its WHO hazard class and whether an antidote exists." technical="WHO 2019 classification parsed into 458 rows with source lines; chemical groups carry antidote_exists; stop cards come from this table." />
-          <Step n={4} title="Compose and check" plain="Assembles the card from quoted guideline sentences, verifies every quote on its page, blocks lethal errors, and has a larger model audit the whole card." technical="Nemotron 3 Super under a quote-only schema; exact-span verifier; YAML rules engine; Nemotron 3 Ultra audit with the national module and the ISCCM statement in context." />
-          <Step n={5} title="Record" plain="Fills the medico-legal register row and the poison-centre proforma." technical="NHSRC medico-legal fields pre-filled from the label; patient identifiers and findings are entered by staff; export to PDF." />
+      {/* Try */}
+      <section id="try" aria-labelledby="try-h" className="scroll-mt-32 pt-36">
+        <h2 id="try-h" data-reveal className="text-3xl font-semibold tracking-[-0.02em] sm:text-4xl">Try it, no bottle needed</h2>
+        <p data-reveal style={d(60)} className="mt-4 max-w-2xl text-lg leading-relaxed">Pick a label. Each sample runs the real pipeline live on Nebius Token Factory, from reading the label to the register row. One is not a pesticide at all, to test that Antidote keeps antidotes away from it.</p>
+        <div data-reveal style={d(120)} className="mt-10"><SampleGallery /></div>
+      </section>
+
+      {/* Safety */}
+      <section id="safety" aria-labelledby="safety-h" className="scroll-mt-32 pt-36">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
+          <div data-reveal>
+            <h2 id="safety-h" className="text-3xl font-semibold tracking-[-0.02em] sm:text-4xl">What Antidote refuses<Info k="stop_card" /></h2>
+            <p className="mt-4 text-lg leading-relaxed">These are rules, not suggestions a model may ignore. They fire before the model is allowed to speak, and every one is tested on each evaluation run.</p>
+            <div data-ui role="note" aria-label="Example: the stops a doctor sees for paraquat" className="mt-8 rounded-[20px] bg-surface p-5 sm:p-6">
+              <p className="text-[0.9375rem] text-fg-muted">What the doctor sees first for a paraquat label</p>
+              <div className="mt-3 space-y-3">
+                <div className="rounded-[16px] border-2 border-stop bg-bg-elev p-4">
+                  <p className="flex items-center gap-2 text-lg font-semibold text-stop"><ShieldAlert className="h-5 w-5 shrink-0" aria-hidden /> Stop</p>
+                  <p className="mt-1.5 text-base leading-relaxed">No specific antidote for Paraquat (bipyridyl herbicide). Do not give atropine for this exposure. Management is supportive per the cited guidance.</p>
+                </div>
+                <div className="rounded-[16px] border-2 border-stop bg-bg-elev p-4">
+                  <p className="flex items-center gap-2 text-lg font-semibold text-stop"><ShieldAlert className="h-5 w-5 shrink-0" aria-hidden /> Stop</p>
+                  <p className="mt-1.5 text-base leading-relaxed">Paraquat: avoid supplemental oxygen unless the patient is hypoxic; oxygen accelerates lung injury. See the cited guidance.</p>
+                </div>
+              </div>
+            </div>
+            <Link href="/limits" className="btn-ghost mt-6">Scope and safeguards</Link>
+          </div>
+          <ul className="space-y-4">
+            <Stop i={0} title="Atropine for paraquat, pyrethroids or phosphides" why="Atropine or an oxime is offered only for organophosphates and carbamates." />
+            <Stop i={1} title="Oxygen for paraquat before hypoxia" why="Supplemental oxygen accelerates paraquat lung injury; avoided until saturation falls." />
+            <Stop i={2} title="Any dose written by the model" why="Doses appear only inside quoted guideline sentences, with their page." />
+            <Stop i={3} title="An antidote for an unconfirmed product" why="Below 75 percent match confidence the antidote section is withheld until the doctor confirms the bottle." />
+            <Stop i={4} title="Induced vomiting for any pesticide" why="No ipecac and no induced vomiting for a pesticide ingestion." />
+            <Stop i={5} title="Pesticide guidance for something that is not one" why="Fertilisers, cleaners and medicines are routed to the general approach, never to a pesticide antidote." />
+          </ul>
         </div>
       </section>
 
-      <section aria-labelledby="refuse" className="space-y-4">
-        <h2 id="refuse" className="text-2xl font-semibold">What Antidote refuses <Info k="stop_card" /></h2>
-        <p className="max-w-2xl text-fg-muted">These are rules that fire before the model is allowed to speak. We measured them.</p>
-        <div className="grid gap-3 md:grid-cols-3">
-          <Stop title="Atropine for paraquat" why="Paraquat is not an organophosphate. No antidote exists; atropine has no role." src="NHSRC module; ISCCM 2024" />
-          <Stop title="Oxygen for paraquat before hypoxia" why="Oxygen accelerates lung injury. Avoided until saturation falls." src="ISCCM 2024, quoted on the card" />
-          <Stop title="Antidote row for an unconfirmed product" why="Below 75 percent match confidence the antidote section is withheld: treat the patient, not the bottle." src="Antidote design rule" />
+      {/* Results */}
+      <section id="results" aria-labelledby="results-h" className="scroll-mt-32 pt-36">
+        <h2 id="results-h" data-reveal className="text-3xl font-semibold tracking-[-0.02em] sm:text-4xl">Results<Info k="benchmark" /></h2>
+        <p data-reveal style={d(60)} className="mt-4 max-w-2xl text-lg leading-relaxed">Tested on what treating doctors have already published, on real label photos, and against a general model asked directly.</p>
+        <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+          <Result i={0} n="0 of 123" t="cards that would point a doctor the wrong way, across 55 published poisoning cases and 68 real label photos." info="Open-access case reports written by the treating doctors, ground truth taken from each paper, plus 68 photos of real Indian pesticide labels annotated before any run. Measured on the code that is live today." />
+          <Result i={1} n="10 of 12" t="cases where the treating team first mistook the poison that Antidote would have set right." info="Cases where the published paper documents a misidentification or a wrong first treatment, usually a non-organophosphate treated as one." />
+          <Result i={2} n="107 vs 0" t="drug doses with no source: a general model asked directly, against Antidote." info="Nemotron 3 Super asked the same 55 questions with the chemical name typed in for it. Every clinical sentence on an Antidote card is a guideline's own words with its page." />
+          <Result i={3} n="10 of 10" t="lethal-error sentences, such as atropine for paraquat, blocked by the rules alone." info="Negative controls run on every evaluation, with no model involved, so they hold offline too." />
+        </div>
+        <Link href="/evals" className="btn-ghost mt-10">All results and how to reproduce them</Link>
+      </section>
+
+      {/* Who */}
+      <section id="who" aria-labelledby="who-h" className="scroll-mt-32 pt-36">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center lg:gap-16">
+          <figure data-reveal className="order-last lg:order-none">
+            <Image src="/images/sprayer.jpg" alt="A farmer pours liquid from a blue jug into a green backpack sprayer beside a field" width={1600} height={1067} sizes="(min-width: 1024px) 500px, 100vw" className="h-auto w-full rounded-[20px] object-cover" />
+            <figcaption className="mt-3 text-[0.9375rem] text-fg-muted">Mixing a herbicide into a backpack sprayer.</figcaption>
+          </figure>
+          <div>
+            <h2 id="who-h" data-reveal className="text-3xl font-semibold tracking-[-0.02em] sm:text-4xl">Who it is for</h2>
+            <div className="mt-8 space-y-8">
+              <Persona i={0} title="The medical officer at a health centre" text="Gets the chemical and the cited guidance in seconds, and a stop when the common error would be lethal." />
+              <Persona i={1} title="The casualty nurse" text="Knows which questions to ask the family and what to prepare before the doctor arrives." />
+              <Persona i={2} title="The poison-centre pharmacist" text="Hears the product, chemical, registration number and hazard class read off the label, instead of a white bottle with a red triangle." />
+            </div>
+          </div>
         </div>
       </section>
 
-      <section aria-labelledby="evals" className="space-y-4">
-        <h2 id="evals" className="text-2xl font-semibold">Evaluation results <Info k="negative_control" /></h2>
-        <EvalTiles />
-        <Link href="/evals" className="btn-ghost">See full results and how to reproduce them</Link>
-      </section>
-
-      <section className="grid gap-4 md:grid-cols-2">
-        <Card title={<>Bring your own data <Info k="byo" /></>} icon={<FileText className="h-5 w-5" />}>Upload your antidote stock list and your state protocol. The card then says whether the antidote is on your shelf, and draws on your protocol beside the national one.<div className="mt-3"><Link href="/data" className="btn-ghost">Data and uploads</Link></div></Card>
-        <Card title={<>Use Antidote as a service <Info k="mcp" /></>} icon={<ClipboardCheck className="h-5 w-5" />}>Call it from your own software, or let your agent use it as a tool through MCP.<div className="mt-3"><Link href="/api" className="btn-ghost">API and code samples</Link></div></Card>
-        <Card title="Works offline" icon={<WifiOff className="h-5 w-5" />}>The registry, the WHO table and the guideline pages are small enough to ship in full; an open Nemotron model on a laptop composes the card without internet.</Card>
-        <Card title="Call the poison centre" icon={<Phone className="h-5 w-5" />}>Every card shows 1800-116-117 and prepares the proforma so the call takes thirty seconds.</Card>
-      </section>
-
-      <StackStrip />
-
-      <section aria-labelledby="limits" className="space-y-3">
-        <h2 id="limits" className="text-2xl font-semibold">Scope and safeguards</h2>
-        <p className="max-w-2xl text-fg-muted">Antidote identifies the product and retrieves cited guidance for trained clinicians. It never writes a dose, never offers an antidote the registry does not support, and always points to the poison centre. The hard rules are on the Safeguards page.</p>
-        <Link href="/limits" className="btn-ghost">Scope and safeguards</Link>
+      {/* Beyond the bedside */}
+      <section id="build" aria-labelledby="build-h" className="scroll-mt-32 pt-36">
+        <h2 id="build-h" data-reveal className="text-3xl font-semibold tracking-[-0.02em] sm:text-4xl">Beyond the bedside</h2>
+        <div className="mt-10 grid gap-x-12 gap-y-10 md:grid-cols-2">
+          <Feature i={0} title="District early warning" term="District surveillance" info="Rules flag a spraying cluster, a banned chemical still in circulation and restricted products; NVIDIA Nemotron 3.5 Lightning reads the whole register and the published case reports to write the brief." text="The register becomes a signal: clusters of spraying poisonings and banned chemicals still in circulation, explained in a brief for the district officer." href="/register" cta="See the register and the brief" />
+          <Feature i={1} title="Bring your own data" k="byo" text="Upload your antidote stock list and your state protocol. The card then says whether the antidote is on your shelf, and draws on your protocol beside the national one." href="/data" cta="Data and uploads" />
+          <Feature i={2} title="An API and an agent tool" k="mcp" text="Create a key and call Antidote from your own software, or let an agent use its seven tools through MCP and Hermes Agent." href="/api" cta="Get an API key" />
+          <Feature i={3} title="The poison centre, one tap away" k="npic" text="Every card shows 1800-116-117, and the register row filled from the label holds what the poison centre will ask: product, chemical, registration number and hazard class." href="/try?sample=paraquat" cta="See a card" />
+        </div>
       </section>
     </div>
   );
 }
 
-function Card({ title, icon, children }: { title: React.ReactNode; icon?: React.ReactNode; children: React.ReactNode }) {
-  return (<div className="card"><div className="flex items-center gap-2 text-fg"><span className="text-accent">{icon}</span><h3 className="font-semibold">{title}</h3></div><div className="mt-2 text-fg-muted">{children}</div></div>);
+function Stat({ n, t, s, u, i }: { n: string; t: string; s: string; u: string; i: number }) {
+  return (
+    <li data-reveal style={d(i)}>
+      <p className="text-4xl font-semibold tracking-[-0.03em]">{n}</p>
+      <p className="mt-2 text-base leading-relaxed">{t} <a className="text-accent underline underline-offset-2" href={u} target="_blank" rel="noreferrer">{s}</a></p>
+    </li>
+  );
 }
-function Row({ n, t, s, u }: { n: string; t: string; s: string; u: string }) {
-  return (<tr><td className="whitespace-nowrap font-semibold">{n}</td><td>{t}</td><td><a className="text-accent underline-offset-2 hover:underline" href={u} target="_blank" rel="noreferrer">{s}</a></td></tr>);
+
+function Stage({ i, title, text, model, tech }: { i: number; title: string; text: string; model: string; tech: string }) {
+  return (
+    <li data-reveal style={d(60 + i * 70)} className="grid grid-cols-[2.25rem_minmax(0,1fr)] gap-4">
+      <span aria-hidden className="flex h-9 w-9 items-center justify-center rounded-full bg-accent text-base font-semibold text-accent-fg">{i + 1}</span>
+      <div>
+        <h3 className="text-xl font-semibold">{title}</h3>
+        <p className="mt-2 text-base leading-relaxed">{text}</p>
+        <p className="mt-2 flex flex-wrap items-center gap-1 text-[0.9375rem] text-fg-muted">{model}<Info term={title} text={tech} /></p>
+      </div>
+    </li>
+  );
 }
-function Step({ n, title, plain, technical }: { n: number; title: string; plain: string; technical: string }) {
-  return (<div className="card"><p className="eyebrow">Step {n}</p><h3 className="mt-1 font-semibold">{title}</h3><p className="mt-2 text-sm text-fg-muted"><Explain plain={plain} technical={technical} /></p></div>);
+
+function Stop({ i, title, why }: { i: number; title: string; why: string }) {
+  return (
+    <li data-reveal style={d(i * 60)} className="rounded-[18px] bg-stop/10 p-5">
+      <p className="text-lg font-semibold text-stop">{title}</p>
+      <p className="mt-1.5 text-base leading-relaxed">{why}</p>
+    </li>
+  );
 }
-function Stop({ title, why, src }: { title: string; why: string; src: string }) {
-  return (<div className="rounded-[16px] border-2 border-stop bg-bg-elev p-4" role="note"><div className="flex items-center gap-2 font-semibold text-stop"><ShieldAlert className="h-5 w-5" aria-hidden /> Stop: {title}</div><p className="mt-1 text-sm text-fg">{why}</p><p className="mt-1 text-xs text-fg-muted">Source: {src}</p></div>);
+
+function Result({ i, n, t, info }: { i: number; n: string; t: string; info: string }) {
+  return (
+    <div data-reveal style={d(i * 80)}>
+      <p className="text-5xl font-semibold tracking-[-0.035em] text-accent">{n}</p>
+      <p className="mt-3 text-base leading-relaxed">{t}<Info term={n} text={info} /></p>
+    </div>
+  );
+}
+
+function Persona({ i, title, text }: { i: number; title: string; text: string }) {
+  return (
+    <div data-reveal style={d(i * 80)}>
+      <h3 className="text-xl font-semibold">{title}</h3>
+      <p className="mt-2 text-lg leading-relaxed">{text}</p>
+    </div>
+  );
+}
+
+function Feature({ i, title, k, term, info, text, href, cta }: { i: number; title: string; k?: Parameters<typeof Info>[0]["k"]; term?: string; info?: string; text: string; href: string; cta: string }) {
+  return (
+    <div data-reveal style={d(i * 70)}>
+      <h3 className="text-xl font-semibold">{title}{k ? <Info k={k} /> : <Info term={term} text={info} />}</h3>
+      <p className="mt-2 text-lg leading-relaxed">{text}</p>
+      <Link href={href} className="mt-3 inline-block text-base font-semibold text-accent underline underline-offset-4">{cta}</Link>
+    </div>
+  );
 }

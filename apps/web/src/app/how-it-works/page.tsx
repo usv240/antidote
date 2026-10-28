@@ -12,7 +12,7 @@ const stages = [
   { t: "Verify", plain: "Every quoted sentence is checked against its page. If it is not there, it is replaced by a link to the page.", tech: "Exact-span verifier with punctuation and whitespace normalisation and a tight fuzzy tier. Citation integrity is reported per card and across the eval sets." },
   { t: "Gate", plain: "Rules block lethal errors: atropine for paraquat or any non-organophosphate, oximes for pyrethroids, induced vomiting, a dose written by the model.", tech: "YAML rules evaluated per sentence. Explanation sentences carrying a drug name or dose are removed. Measured: 10 of 10 lethal-error sentences blocked by rules alone." },
   { t: "Audit", plain: "The biggest model reads the entire national module and the ISCCM statement and approves or rejects each quoted sentence.", tech: "Nemotron 3 Ultra, 1M context, both documents in full; rejected sentences are demoted to a page reference with the reason shown." },
-  { t: "Record", plain: "The medico-legal register row and the poison-centre proforma are filled from the label.", tech: "NHSRC medico-legal fields; patient identifiers and findings stay with staff; JSONL store per workspace; MCP tool file_mlc_record." },
+  { t: "Record", plain: "The medico-legal register row is filled from the label.", tech: "NHSRC medico-legal fields; patient identifiers and findings stay with staff; JSONL store per workspace; MCP tool file_mlc_record." },
 ];
 
 export default function HowItWorks() {

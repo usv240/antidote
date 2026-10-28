@@ -51,7 +51,7 @@ export const GLOSSARY = {
   npic: {
     term: "Poison centre",
     plain: "The National Poisons Information Centre at AIIMS answers doctors around the clock on 1800-116-117. Antidote prepares what they will ask so the call takes thirty seconds.",
-    technical: "Antidote shows the number on every card and fills a call proforma: product, active ingredient, registration number, route, time since exposure, signs.",
+    technical: "Antidote shows the number on every card; the register row filled from the label carries the product, active ingredient, registration number and WHO class, with route, time since exposure and signs recorded by staff.",
   },
   quote_rule: {
     term: "Quotes only",

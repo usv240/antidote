@@ -24,3 +24,7 @@ Thumbs.db
 .vercel
 .env*
 data/outbreak_watch_state.json
+
+# design tooling
+apps/web/.taste-skill/
+apps/web/assets/
