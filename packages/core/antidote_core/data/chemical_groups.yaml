@@ -10,11 +10,15 @@ groups:
     antidote_exists: true
     gate: none
     retrieval_terms: ["organophosphorus", "organophosphate", "atropine", "pralidoxime", "cholinergic", "muscarinic", "oximes"]
+    # Pinned guideline sentence: restored to the card if composing or auditing ever drops the antidote. Verified against the page at run time.
+    antidote_quote: {doc: nhsrc-emergency-care-mo-poison-management, page: 35, text: "Inj. Atropine IV 3 – 5 mg to repeat based on the lung signs"}
   - id: carbamate
     name: Carbamate insecticide
     antidote_exists: true
     gate: none
     retrieval_terms: ["carbamate", "atropine", "cholinergic", "carbofuran", "pralidoxime controversial"]
+    # Pinned guideline sentence: restored to the card if composing or auditing ever drops the antidote. Verified against the page at run time.
+    antidote_quote: {doc: nhsrc-emergency-care-mo-poison-management, page: 35, text: "Inj. Atropine IV 3 – 5 mg to repeat based on the lung signs"}
   - id: pyrethroid
     name: Synthetic pyrethroid insecticide
     antidote_exists: false
@@ -40,6 +44,8 @@ groups:
     antidote_exists: true
     gate: none
     retrieval_terms: ["rodenticide", "anticoagulant", "vitamin K", "prothrombin", "INR", "brodifacoum", "bromadiolone"]
+    # Pinned guideline sentence: restored to the card if composing or auditing ever drops the antidote. Verified against the page at run time.
+    antidote_quote: {doc: nhsrc-emergency-care-mo-poison-management, page: 31, text: "Vitamin K – Coumadin anticoag. rodenticides"}
   - id: neonicotinoid
     name: Neonicotinoid insecticide
     antidote_exists: false

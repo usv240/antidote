@@ -21,13 +21,14 @@ from antidote_rules import RuleHit, RulesEngine, load_rules
 
 from .citations import verify_quote
 from .registry import ChemMatch, ChemRegistry, LabelFields
-from .schemas import AuditReport, CardSentence, LabelRead, ManagementCard
+from .schemas import AuditReport, CardSentence, Cite, LabelRead, ManagementCard
 from .tavily_tools import brand_votes, clear_winner, resolve_brand
 
 ROOT = Path(__file__).resolve().parents[3]
 RULES_PATH = ROOT / "packages/rules/antidote_rules/antidote.yaml"
 NPIC = "National Poisons Information Centre, AIIMS New Delhi: 1800-116-117 (24x7)"
 CONFIDENCE_THRESHOLD = 0.75
+ANTIDOTE_NAME_RE = re.compile(r"atropin|pralidoxim|oxime|obidoxim|\bPAM\b", re.IGNORECASE)
 
 
 def clean_label(raw: dict[str, Any] | None) -> dict[str, Any]:
@@ -262,6 +263,7 @@ class AntidotePipeline:
             if audit:
                 audit_report = self._audit(card, chosen.group if chosen else "unknown", trace_id)
                 card = self._apply_audit(card, audit_report)
+            card = self._antidote_guard(card, group, guarded, notes)
         elif self.client and not hits:
             notes.append("no guideline pages retrieved")
 
@@ -307,6 +309,36 @@ class AntidotePipeline:
                 s.text = f"See {s.cite.doc} page {s.cite.page} (quote could not be verified; page shown instead)."
                 s.kind = "explanation"
         return {"total": total, "verified": ok, "integrity": round(ok / total, 3) if total else None, "tiers": tiers, "failures": failures}
+
+    def _antidote_guard(self, card: ManagementCard, group: dict[str, Any] | None, guarded: bool, notes: list[str]) -> ManagementCard:
+        """The registry, not the composer or the auditor, decides whether the antidote is on the card.
+
+        No antidote for the group: any sentence naming atropine or an oxime goes, even a true one about another poison
+        (a run put "evidence about oximes in OP poisoning is inconsistent" on an endosulfan card). Antidote exists: if
+        composing or auditing left no sentence naming it (a run's auditor removed the only atropine line from a
+        chlorpyrifos card), the group's pinned guideline sentence is restored, verified against its page first.
+        """
+        if not group:
+            return card
+        if group.get("antidote_exists") is False:
+            for sec in ("identity", "expect", "manage", "cautions"):
+                kept = [s for s in getattr(card, sec) if not ANTIDOTE_NAME_RE.search(s.text)]
+                if len(kept) < len(getattr(card, sec)):
+                    notes.append(f"removed {len(getattr(card, sec)) - len(kept)} {sec} sentence(s) naming atropine or an oxime: this group has no specific antidote")
+                setattr(card, sec, kept)
+            return card
+        pin = group.get("antidote_quote")
+        if guarded or not pin:
+            return card
+        needed = re.compile(r"vitamin\s*k|phytomenadione|phytonadione", re.IGNORECASE) if group["id"] == "anticoagulant_rodenticide" else re.compile(r"atropin", re.IGNORECASE)
+        if any(needed.search(s.text) for _sec, _i, s in self._sentences(card)):
+            return card
+        if verify_quote(pin["text"], self.store.page_text(pin["doc"], pin["page"])).ok:
+            card.manage.insert(0, CardSentence(kind="quote", text=pin["text"], cite=Cite(doc=pin["doc"], page=pin["page"], quote=pin["text"])))
+            notes.append(f"antidote sentence restored from the registry's pinned guideline quote ({pin['doc']} page {pin['page']})")
+        else:
+            notes.append("pinned antidote quote could not be verified against its page; not shown")
+        return card
 
     def _gate(self, card: ManagementCard, hits_out: list[RuleHit]) -> ManagementCard:
         for sec, _i, s in self._sentences(card):
