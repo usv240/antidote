@@ -99,18 +99,34 @@ def fold_baseline(summary: dict[str, Any], sections: list[dict[str, Any]]) -> No
                      "columns": cols, "rows": [{k: r.get(k) for k in cols} for r in d["rows"]]})
 
 
+def fold_rerun(summary: dict[str, Any], sections: list[dict[str, Any]]) -> None:
+    """Every benchmark rerun on the current code after all fixes. The pre-registered results above are not replaced."""
+    for k in [k for k in summary if k.startswith("rerun_")]:
+        del summary[k]
+    c1, c2, lb = (OUT / f for f in ("case_reports_final.json", "case_reports_v2_final.json", "label_bench_final.json"))
+    if not (c1.exists() and c2.exists() and lb.exists()):
+        return
+    a, b, l = (json.loads(f.read_text(encoding="utf-8")) for f in (c1, c2, lb))
+    n, unsafe = a["n"] + b["n"], a["unsafe_cards"] + b["unsafe_cards"]
+    correct = a["outcomes"]["correct"] + b["outcomes"]["correct"]
+    doc, doc_ok = a["documented_error_cases"] + b["documented_error_cases"], a["documented_error_correct"] + b["documented_error_correct"]
+    summary["rerun_unsafe"] = {"value": f"{unsafe}/{n + l['n']}", "unit": "", "label": "Rerun on current code: unsafe cards, all 55 cases and 68 labels",
+                               "note": f"cases: {unsafe - l['unsafe']} unsafe, {correct} correct, misidentifications {doc_ok}/{doc}; labels: {l['unsafe']} unsafe, {l['outcomes'].get('correct', 0)} correct ({l['correct_when_chemical_legible']}% when legible, against the published run's 83.3: vision reads vary run to run). Set 2 is no longer held out after fixes, so the pre-registered numbers stay the headline"}
+
+
 def main() -> None:
     p = OUT / "latest.json"
     report = json.loads(p.read_text(encoding="utf-8"))
     fold(report["summary"], report["sections"])
     fold_labels(report["summary"], report["sections"])
     fold_baseline(report["summary"], report["sections"])
+    fold_rerun(report["summary"], report["sections"])
     p.write_text(json.dumps(report, indent=1, ensure_ascii=False), encoding="utf-8")
     md = [f"# Antidote eval report ({report['generated_at']})", ""]
     for v in report["summary"].values():
         md.append(f"- **{v['label']}**: {v['value']}{v.get('unit', '')}  ({v.get('note', '')})")
     (OUT / "REPORT.md").write_text("\n".join(md) + "\n", encoding="utf-8")
-    print({k: v["value"] for k, v in report["summary"].items() if k.startswith(("case_", "label_photo_", "baseline_"))})
+    print({k: v["value"] for k, v in report["summary"].items() if k.startswith(("case_", "label_photo_", "baseline_", "rerun_"))})
 
 
 if __name__ == "__main__":

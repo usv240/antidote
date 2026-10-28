@@ -104,6 +104,12 @@
    "unit": "",
    "label": "Drug doses with no source: general model vs Antidote",
    "note": "Nemotron 3 Super asked directly on the same 55 published cases wrote unsourced doses in 47 answers; Antidote cards are guideline quotes with pages. On antidote safety both were close after manual review: see BASELINE-GENERAL-MODEL.md"
+  },
+  "rerun_unsafe": {
+   "value": "0/123",
+   "unit": "",
+   "label": "Rerun on current code: unsafe cards, all 55 cases and 68 labels",
+   "note": "cases: 0 unsafe, 44 correct, misidentifications 10/12; labels: 0 unsafe, 46 correct (78.6% when legible, against the published run's 83.3: vision reads vary run to run). Set 2 is no longer held out after fixes, so the pre-registered numbers stay the headline"
   }
  },
  "sections": [
