@@ -29,7 +29,7 @@ const { chosen, stops, card, citations, trace } = await r.json();`;
 export default function ApiPage() {
   return (
     <div className="space-y-8 pt-8">
-      <div><h1 className="text-[1.625rem] font-semibold sm:text-3xl">Use Antidote as a service <Info k="mcp" /></h1><p className="mt-2 max-w-2xl text-fg-muted">The same pipeline the app uses, over HTTP. OpenAPI at <a className="text-accent underline underline-offset-2" href={`${API_BASE}/docs`} target="_blank" rel="noreferrer">{API_BASE}/docs</a>. Also an MCP server (classify_chemical, read_label_photo, analyze_label, read_guideline_page, file_mlc_record).</p></div>
+      <div><h1 className="text-[1.625rem] font-semibold sm:text-3xl">Use Antidote as a service <Info k="mcp" /></h1><p className="mt-2 max-w-2xl text-fg-muted">The same pipeline the app uses, over HTTP. OpenAPI at <a className="text-accent underline underline-offset-2" href={`${API_BASE}/docs`} target="_blank" rel="noreferrer">{API_BASE}/docs</a>. Also a hosted MCP server: add <code className="break-all font-mono text-fg">{API_BASE}/mcp</code> in Claude, Cursor or any MCP client and your own agent can call list_chemicals, bedside_card, read_guideline_page and surveillance_alerts, with no install. The full local MCP server adds label photos and register filing.</p></div>
       <ApiConsole presets={PRESETS} product="Antidote" />
       <div className="grid gap-4 md:grid-cols-2">
         <E m="POST" p="/v1/read-label" d="Multipart photo in; printed fields out. Nothing clinical is asked of the vision model." />

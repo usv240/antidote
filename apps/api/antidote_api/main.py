@@ -57,7 +57,7 @@ def _deny(body: dict[str, Any], status: int, extra: dict[str, str] | None = None
 @app.middleware("http")
 async def keys_and_limits(request: Request, call_next):
     path = request.url.path
-    if path.startswith("/v1/") and request.method != "OPTIONS":
+    if (path.startswith("/v1/") or path == "/mcp") and request.method != "OPTIONS":
         key = request.headers.get("x-api-key", "")
         if key and not _key_valid(key):
             return _deny({"error": "invalid API key: create one with POST /v1/keys"}, 401)
@@ -456,3 +456,10 @@ def surveillance_brief() -> dict[str, Any]:
     out["trace"] = LEDGER.trace(trace_id)
     return out
 
+
+# --- Hosted MCP server: any agent adds https://antidote-api.vercel.app/mcp by URL ---
+from starlette.routing import Route
+
+from antidote_api.mcp_remote import MCPEndpoint
+
+app.router.routes.append(Route("/mcp", endpoint=MCPEndpoint(), methods=["GET", "POST", "DELETE"]))

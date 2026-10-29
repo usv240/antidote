@@ -21,6 +21,7 @@ No sign-up and no key. Each row is one click.
 | Potential impact | [Validated against real-world evidence](#validated-against-real-world-evidence) | Published case series: Indian paraquat patients were first treated as organophosphate poisoning, and the diagnosis was finally made from photos of the bottle; in Bangladesh, 31.8 percent of patients were misdiagnosed from symptoms alone. Antidote reads that bottle. |
 | Quality of the idea | [The evals](https://antidote-bay.vercel.app/evals), then [the register](https://antidote-bay.vercel.app/register) | 0 unsafe cards on 55 published case reports and 68 real label photos; 10 of 12 documented misidentifications set right. The register turns the same records into a district early-warning signal for spraying clusters and banned chemicals. |
 | Your own data | [Your workspace](https://antidote-bay.vercel.app/data) | Add your hospital's own protocol and stock list; cards cite your protocol and show what is in stock. To call Antidote from your own system, create an API key on [the API page](https://antidote-bay.vercel.app/api). |
+| Your own agent | Add `https://antidote-api.vercel.app/mcp` as a remote MCP server in Claude, Cursor, VS Code or any MCP client | Four tools, no install: `list_chemicals`, `bedside_card` (the same quoted, rule-gated, Ultra-audited card), `read_guideline_page` to check a quote, and `surveillance_alerts`. |
 
 ## Live
 
