@@ -74,7 +74,9 @@ export function TryFlow() {
     if (!r.ok) { setReadMode(r.status === 413 ? "photo too large for the hosted API; type the label fields instead" : `label reader unavailable (${r.status})`); setBusy(null); return; }
     const j = await r.json();
     const cc = j.cross_check as { agreed?: boolean | null; first?: string | null; second?: string | null } | undefined;
-    setReadMode(cc && cc.agreed === false
+    setReadMode(cc && cc.agreed === false && !cc.first && !cc.second
+      ? "Two independent reads of this label could not find the chemical. Type it exactly as printed on the bottle."
+      : cc && cc.agreed === false
       ? `Two independent reads of this label disagreed (${cc.first ?? "unclear"} and ${cc.second ?? "unclear"}). Type the chemical exactly as printed on the bottle.`
       : cc && cc.agreed ? `${j.mode}; two independent reads agree` : j.mode);
     if (j.fields && Object.keys(j.fields).length) {
