@@ -105,7 +105,7 @@ export function TryFlow() {
 
   async function save() {
     if (!result) return;
-    const rec = { datetime: new Date().toISOString().slice(0, 16).replace("T", " "), alleged_history: `${String(label.product_name ?? "")} exposure, ${ctx.route ?? "route unknown"}, ${ctx.time_since_exposure ?? "time unknown"}. Signs: ${signs || "not recorded"}`, substance_product: String(label.product_name ?? ""), substance_active_ingredient: result.chosen?.active_ingredient ?? null, registration_number: String(label.registration_number ?? "") || null, who_class: result.chosen?.who_class ?? null, chemical_group: result.group?.name ?? null, banned_or_restricted: ["banned", "restricted"].includes(result.chosen?.india_status ?? ""), route: ctx.route ?? null, time_since_exposure: ctx.time_since_exposure ?? null, examination_findings: "", treatment_given: [], referral: null, doctor: null, poison_centre_called: false, ai_trace_id: result.trace_id, label_photo_attached: readMode !== null };
+    const rec = { datetime: new Date().toISOString().slice(0, 16).replace("T", " "), alleged_history: `${String(label.product_name ?? "")} exposure, ${ctx.route ?? "route unknown"}, ${ctx.time_since_exposure ?? "time unknown"}. Signs: ${signs || "not recorded"}`, substance_product: String(label.product_name ?? ""), substance_active_ingredient: result.chosen?.active_ingredient ?? null, registration_number: String(label.registration_number ?? "") || null, who_class: result.chosen?.who_class ?? null, chemical_group: result.chosen ? (result.group?.name ?? null) : null, banned_or_restricted: ["banned", "restricted"].includes(result.chosen?.india_status ?? ""), route: ctx.route ?? null, time_since_exposure: ctx.time_since_exposure ?? null, examination_findings: "", treatment_given: [], referral: null, doctor: null, poison_centre_called: false, ai_trace_id: result.trace_id, label_photo_attached: readMode !== null };
     const r = await fetch(apiUrl("/v1/records"), { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(rec) });
     const j = await r.json(); setSaved(j.id);
   }
@@ -162,7 +162,7 @@ export function TryFlow() {
                 </div>
               )}
               <div className="grid gap-2 sm:grid-cols-4 text-sm">
-                <Tile l="Chemical group" v={result.group?.name ?? "unknown"} />
+                <Tile l="Chemical group" v={result.chosen ? (result.group?.name ?? "unknown") : "not identified"} />
                 <Tile l={<>WHO class <Info k="who_class" /></>} v={result.chosen?.who_class ?? "n/a"} />
                 <Tile l={<>Label triangle <Info k="triangle" /></>} v={result.triangle ? `${result.triangle.label} (${result.triangle.signal})` : "not read"} />
                 <Tile l="India status (CIB&RC)" v={result.chosen?.india_status ?? "unknown"} />

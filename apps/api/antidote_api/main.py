@@ -189,7 +189,7 @@ def _result_json(res) -> dict[str, Any]:
         "label": res.label.model_dump(),
         "matches": [m.__dict__ for m in res.matches],
         "chosen": res.chosen.__dict__ if res.chosen else None,
-        "group": res.group,
+        "group": res.group if res.chosen else None,  # an unidentified product has no chemical group to report
         "triangle": res.triangle,
         "guarded": res.guarded,
         "stops": res.stops,
