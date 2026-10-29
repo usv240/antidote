@@ -63,7 +63,7 @@ export function TryFlow() {
     if (!sample) return;
     setLabel(sample.label);
     const ais = (sample.label.active_ingredients as { name: string; percent?: string }[] | undefined) ?? [];
-    setAiText(ais.map((a) => `${a.name}${a.percent ? ` ${a.percent}%` : ""}`).join(", "));
+    setAiText(ais.map((a) => `${a.name}${a.percent ? ` ${String(a.percent).replace(/%+$/, "")}%` : ""}`).join(", "));
     setCtx(sample.context); setSigns(sample.context.signs ?? ""); setResult(null);
   }, [sample]);
 
@@ -82,7 +82,7 @@ export function TryFlow() {
     if (j.fields && Object.keys(j.fields).length) {
       setLabel(j.fields);
       const ais = (j.fields.active_ingredients as { name: string; percent?: string }[] | undefined) ?? [];
-      setAiText(ais.map((a) => `${a.name}${a.percent ? ` ${a.percent}%` : ""}`).join(", "));
+      setAiText(ais.map((a) => `${a.name}${a.percent ? ` ${String(a.percent).replace(/%+$/, "")}%` : ""}`).join(", "));
     }
     setBusy(null);
   }
@@ -97,7 +97,7 @@ export function TryFlow() {
 
   async function analyze(chosen?: string) {
     setBusy("Matching the registry and assembling the cited card…");
-    const ais = aiText.split(",").map((s) => s.trim()).filter(Boolean).map((s) => { const m = s.match(/^(.*?)\s*(\d+(?:\.\d+)?)\s*%?$/); return m ? { name: m[1].trim(), percent: m[2] } : { name: s }; });
+    const ais = aiText.split(",").map((s) => s.trim()).filter(Boolean).map((s) => { const m = s.match(/^(.*?)\s*(\d+(?:\.\d+)?)\s*%*$/); return m ? { name: m[1].trim(), percent: m[2] } : { name: s }; });
     const body = { label: { ...label, active_ingredients: ais }, context: { ...ctx, signs }, chosen_ai: chosen ?? null, audit: true, workspace: workspace || null };
     const r = await fetch(apiUrl("/v1/analyze"), { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
     setResult(await r.json()); setBusy(null); setSaved(null);

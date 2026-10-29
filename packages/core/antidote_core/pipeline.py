@@ -149,10 +149,11 @@ AUDIT_SYSTEM = """You are an independent clinical auditor. You receive the compl
 
 
 def _audit_view(card: ManagementCard) -> dict[str, list[dict[str, Any]]]:
-    """What the auditor sees: each sentence with its document and page. Internal sentence ids are left out, since the
-    auditor reads the documents as plain pages and cannot resolve them."""
-    return {sec: [{"index": i, "kind": s.kind, "text": s.text, "document": s.cite.doc if s.cite else None, "page": s.cite.page if s.cite else None}
-                  for i, s in enumerate(getattr(card, sec))] for sec in ("identity", "expect", "manage", "cautions")}
+    """What the auditor sees: each quoted sentence, keeping its index in the card, with its document and page. Plain
+    explanation sentences are not guideline quotes and are gated by the rules instead, so they are not sent. Internal
+    sentence ids are left out, since the auditor reads the documents as plain pages and cannot resolve them."""
+    return {sec: [{"index": i, "text": s.text, "document": s.cite.doc if s.cite else None, "page": s.cite.page if s.cite else None}
+                  for i, s in enumerate(getattr(card, sec)) if s.kind == "quote"] for sec in ("identity", "expect", "manage", "cautions")}
 
 
 class AntidotePipeline:
@@ -408,7 +409,7 @@ class AntidotePipeline:
         for v in report.verdicts:
             if v.verdict == "reject":
                 sec = getattr(card, v.section, None)
-                if sec and 0 <= v.index < len(sec):
+                if sec and 0 <= v.index < len(sec) and sec[v.index].kind == "quote":  # only quotes are audited
                     s = sec[v.index]
                     # The auditor's reason is model-written free text; it stays in the audit report and the trace and is
                     # never printed on the card, where it would bypass the no-drug-names gate on explanations.
