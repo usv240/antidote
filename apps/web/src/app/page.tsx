@@ -39,8 +39,8 @@ export default function Landing() {
           </div>
           <p className="rise mt-8 max-w-xl text-base leading-relaxed text-fg-muted" style={d(260)}>
             In 94 percent of recorded pesticide poisonings in India, the chemical went unidentified{" "}
-            (<a className="text-accent underline underline-offset-2" href="https://pan-india.org/wp-content/uploads/2026/01/Acute-Unintentional-Pesticide-poisonings-in-India_.pdf" target="_blank" rel="noreferrer">PAN India, 2026</a>). In 2013, 23 children in Bihar died after a school meal; the poison, monocrotophos, was confirmed four days later{" "}
-            (<a className="text-accent underline underline-offset-2" href="https://en.wikipedia.org/wiki/Bihar_school_meal_poisoning_incident" target="_blank" rel="noreferrer">record</a>).
+            (<a className="text-accent underline underline-offset-2" href="https://pan-india.org/wp-content/uploads/2026/01/Acute-Unintentional-Pesticide-poisonings-in-India_.pdf" target="_blank" rel="noreferrer">PAN India, 2026</a>). In 2013, 23 children in Bihar died after a school meal; the poison, monocrotophos, was named four days later{" "}
+            (<a className="text-accent underline underline-offset-2" href="https://www.aljazeera.com/news/2013/7/21/pesticide-found-in-deadly-india-school-meal" target="_blank" rel="noreferrer">Al Jazeera</a>). Antidote names it from the label in under 30 seconds.
           </p>
           <p className="rise mt-4 max-w-xl text-[0.9375rem] leading-relaxed text-fg-muted" style={d(300)}>
             Decision support for trained clinicians. Airway, breathing, circulation first. National Poisons Information Centre, AIIMS: 1800-116-117<Info k="npic" />

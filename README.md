@@ -6,6 +6,8 @@
 
 Built for the Nebius x NVIDIA Global AI Hackathon on **Nebius Token Factory** with **NVIDIA Nemotron 3 Nano, Super, Ultra, 3.5 Lightning and 3.5 Super VL**. Apache-2.0.
 
+> **Four days to name the poison.** On 16 July 2013, 23 children died in Gandaman, Bihar, after a school lunch cooked in oil kept in a pesticide container. Police named the chemical, monocrotophos, from the forensic report four days later (Al Jazeera, 21 July 2013, https://www.aljazeera.com/news/2013/7/21/pesticide-found-in-deadly-india-school-meal). Antidote names the chemical from the label in under 30 seconds, with its WHO hazard class and the national guideline's own sentences, for about 4 US cents.
+>
 > In 94 percent of recorded acute pesticide poisonings in India the chemical went unidentified (PAN India analysis of government data, 2026). It was printed on the bottle in the family's hand. Paraquat kills 50 to 90 percent of patients in Indian hospitals, and the first error is treating it like an organophosphate.
 
 Decision support for trained clinicians. Airway, breathing, circulation first. National Poisons Information Centre, AIIMS: 1800-116-117.
@@ -43,7 +45,7 @@ Complete end to end: pipeline, API, MCP server, web app, published evaluation.
 
 ## Surveillance: the register as an early-warning signal
 
-In Yavatmal in 2017 about 800 farm workers were poisoned while spraying cotton, and more than 20 died, before the cluster was recognised. Every patient was in a hospital register. Antidote reads its register for that signal (Register page, `GET /v1/surveillance/alerts`, `POST /v1/surveillance/brief`):
+In Yavatmal in 2017 about 800 farm workers were admitted to hospital after spraying cotton, and more than 20 died, between July and October; the state ordered an investigation only at the beginning of October (Public Eye, https://toxicexports.publiceye.ch/). Every patient was in a hospital register. Antidote reads its register for that signal (Register page, `GET /v1/surveillance/alerts`, `POST /v1/surveillance/brief`):
 
 - **Fixed rules decide.** Three or more cases of one chemical group within seven days is a cluster, a spraying cluster when they came from skin or inhaled exposure. Banned chemicals still reaching patients and restricted-use chemicals are flagged. The same register always gives the same alerts, and tests enforce them.
 - **Nemotron 3.5 Lightning explains.** It reads the whole register, the alerts, the regulatory status of every chemical and the full text of every published case report about those chemicals, about 200,000 tokens in one call for about one cent, and writes a district brief. It cannot add or remove an alert, and the bedside safety rules remove any item that breaks them.
