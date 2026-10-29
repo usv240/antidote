@@ -145,7 +145,14 @@ COMPOSE_SYSTEM = """You assemble a bedside card for a trained doctor from the gu
 4. Never write a dose yourself. If a dose appears in a page, cite that sentence by id; otherwise say in an explanation that the dose is on the cited page.
 5. Keep each section to at most four sentences. Return the ManagementCard tool call."""
 
-AUDIT_SYSTEM = """You are an independent clinical auditor. You receive the complete national poison-management module, the ISCCM position statement, and a proposed card for a named chemical group. For each quote sentence decide approve (the quote is used for the correct chemical group and nothing in the documents contradicts it) or reject (wrong group, contradicted, or not clinical guidance). Be strict about atropine, pralidoxime, oxygen and decontamination statements. Return the AuditReport tool call."""
+AUDIT_SYSTEM = """You are an independent clinical auditor. You receive the complete national poison-management module, the ISCCM position statement, and a proposed card for a named chemical group. For each quote sentence decide approve (the quote is used for the correct chemical group and nothing in the documents contradicts it) or reject (wrong group, contradicted, or not clinical guidance). Be strict about atropine, pralidoxime, oxygen and decontamination statements. Each quote has already been matched word for word against its cited page by a deterministic verifier, so judge clinical meaning only: never reject for punctuation, spacing, page numbering or citation format. Return the AuditReport tool call."""
+
+
+def _audit_view(card: ManagementCard) -> dict[str, list[dict[str, Any]]]:
+    """What the auditor sees: each sentence with its document and page. Internal sentence ids are left out, since the
+    auditor reads the documents as plain pages and cannot resolve them."""
+    return {sec: [{"index": i, "kind": s.kind, "text": s.text, "document": s.cite.doc if s.cite else None, "page": s.cite.page if s.cite else None}
+                  for i, s in enumerate(getattr(card, sec))] for sec in ("identity", "expect", "manage", "cautions")}
 
 
 class AntidotePipeline:
@@ -390,7 +397,7 @@ class AntidotePipeline:
             return None
         corpus = "\n\n".join(parts)
         try:
-            return call_structured(self.client, Tier.DEEP, AuditReport, [{"role": "system", "content": AUDIT_SYSTEM}, {"role": "user", "content": f"CHEMICAL GROUP: {group}\n\nDOCUMENTS:\n{corpus}\n\nPROPOSED CARD:\n{card.model_dump_json(indent=1)}\n\nReturn the AuditReport tool call."}], purpose="audit.card", trace_id=trace_id, max_tokens=2000, context_tokens=len(corpus) // 3)
+            return call_structured(self.client, Tier.DEEP, AuditReport, [{"role": "system", "content": AUDIT_SYSTEM}, {"role": "user", "content": f"CHEMICAL GROUP: {group}\n\nDOCUMENTS:\n{corpus}\n\nPROPOSED CARD:\n{json.dumps(_audit_view(card), indent=1)}\n\nReturn the AuditReport tool call."}], purpose="audit.card", trace_id=trace_id, max_tokens=2000, context_tokens=len(corpus) // 3)
         except Exception:  # noqa: BLE001
             return None
 
