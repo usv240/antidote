@@ -364,7 +364,8 @@ class AntidotePipeline:
         # Clinical sections carry only the guideline's own sentences. A model-written sentence there (for example
         # "early irritation presents with vomiting") is clinical content without a source, so it is removed.
         system_notes = ("STOP:", "Removed by", "See ", "(removed", "Antidote guidance is withheld")
-        seen: set[str] = set()
+        # A sentence already quoted under "What it is" is not repeated in a later section.
+        seen: set[str] = {re.sub(r"\W+", " ", s.text.lower()).strip() for s in card.identity if s.kind == "quote"}
         for sec in ("expect", "manage", "cautions"):
             kept = []
             for s in getattr(card, sec):
