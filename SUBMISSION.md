@@ -5,6 +5,13 @@ Track: Best Apps and Agents. Bonus: Best Use of Tavily. Team: Ujwal Vanjare (cod
 ## Tagline
 Reads a pesticide label, names the chemical and its WHO hazard class, retrieves the cited antidote guidance or stops when there is none, and fills the medico-legal register. Decision support for trained clinicians on open NVIDIA Nemotron models.
 
+## Judge it in two minutes (no sign-up, no key)
+- **Technological implementation:** run the Gramoxone (paraquat) label live (https://antidote-bay.vercel.app/try?sample=paraquat). In under a minute the registry names the chemical and its WHO class, fixed rules raise the stop cards, Nemotron 3 Super assembles a card made only of guideline sentences quoted with their pages, Nemotron 3 Ultra audits it against both national guidelines in full, and the Trace panel lists every call with tokens, cost and seconds.
+- **Design:** on the landing page (https://antidote-bay.vercel.app), pick the bottle that came in with the patient and watch the toxicity triangle, WHO class, stop cards and quoted guideline line change. Then follow it from label to bedside card to register row.
+- **Potential impact:** published case series, under "Validated against real-world evidence" below. Indian paraquat patients were first treated as organophosphate poisoning until photos of the bottle settled it, and in Bangladesh 31.8 percent of patients were misdiagnosed from symptoms alone.
+- **Quality of the idea:** the evals page (https://antidote-bay.vercel.app/evals) shows 0 unsafe cards on 55 published case reports and 68 real label photos, with 10 of 12 documented misidentifications set right. The register (https://antidote-bay.vercel.app/register) turns the same records into a district early-warning signal.
+- **Your own data:** add your hospital's protocol and stock list on https://antidote-bay.vercel.app/data. Create your own API key on https://antidote-bay.vercel.app/api.
+
 ## First sentence (two numbers)
 On 55 published poisoning cases and 68 photos of real Indian pesticide labels, Antidote produced no card that would point a doctor the wrong way, and set right 10 of the 12 cases where the treating team first mistook the poison, usually for an organophosphate.
 

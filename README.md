@@ -10,6 +10,18 @@ Built for the Nebius x NVIDIA Global AI Hackathon on **Nebius Token Factory** wi
 
 Decision support for trained clinicians. Airway, breathing, circulation first. National Poisons Information Centre, AIIMS: 1800-116-117.
 
+## Judge it in two minutes
+
+No sign-up and no key. Each row is one click.
+
+| Criterion | Click | What you will see |
+|---|---|---|
+| Technological implementation | [Run the Gramoxone (paraquat) label live](https://antidote-bay.vercel.app/try?sample=paraquat) | In under a minute: the registry names the chemical and its WHO class, fixed rules raise the stop cards, Nemotron 3 Super assembles a card made only of guideline sentences quoted with their pages, Nemotron 3 Ultra audits it against both national guidelines in full, and the Trace panel lists every model call with tokens, cost and seconds. |
+| Design | [The landing page](https://antidote-bay.vercel.app) | Pick the bottle that came in with the patient; the toxicity triangle, WHO class, stop cards and the quoted guideline line change with it. Then the full flow from label to bedside card to register row, in light and dark, on a phone or a desktop. |
+| Potential impact | [Validated against real-world evidence](#validated-against-real-world-evidence) | Published case series: Indian paraquat patients were first treated as organophosphate poisoning, and the diagnosis was finally made from photos of the bottle; in Bangladesh, 31.8 percent of patients were misdiagnosed from symptoms alone. Antidote reads that bottle. |
+| Quality of the idea | [The evals](https://antidote-bay.vercel.app/evals), then [the register](https://antidote-bay.vercel.app/register) | 0 unsafe cards on 55 published case reports and 68 real label photos; 10 of 12 documented misidentifications set right. The register turns the same records into a district early-warning signal for spraying clusters and banned chemicals. |
+| Your own data | [Your workspace](https://antidote-bay.vercel.app/data) | Add your hospital's own protocol and stock list; cards cite your protocol and show what is in stock. To call Antidote from your own system, create an API key on [the API page](https://antidote-bay.vercel.app/api). |
+
 ## Live
 
 Web: https://antidote-bay.vercel.app. API: https://antidote-api.vercel.app (OpenAPI docs at `/docs`). Both run on Vercel's free plan; the API is a Python function with a 300 second budget, enough for the Nemotron 3 Ultra audit.
