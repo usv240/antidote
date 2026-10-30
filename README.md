@@ -2,123 +2,146 @@
 
 [![ci](https://github.com/usv240/antidote/actions/workflows/ci.yml/badge.svg)](https://github.com/usv240/antidote/actions/workflows/ci.yml) [![licence](https://img.shields.io/badge/licence-Apache--2.0-blue)](LICENSE)
 
-**Reads a pesticide label, names the chemical and its WHO hazard class, retrieves the cited antidote guidance or stops when there is none, and fills the medico-legal register.**
+**Photograph a pesticide bottle and get the chemical, its WHO hazard class and the national guideline's own words on treatment, or a stop when no antidote exists, in under 30 seconds.**
 
-Built for the Nebius x NVIDIA Global AI Hackathon on **Nebius Token Factory** with **NVIDIA Nemotron 3 Nano, Super, Ultra, 3.5 Lightning and 3.5 Super VL**. Apache-2.0.
+Built on **Nebius Token Factory** with **NVIDIA Nemotron 3 Nano, 3 Super, 3 Ultra, 3.5 Lightning and 3.5 Super VL**. Best Apps and Agents track. Apache-2.0.
 
-> **Four days to name the poison.** On 16 July 2013, 23 children died in Gandaman, Bihar, after a school lunch cooked in oil kept in a pesticide container. Police named the chemical, monocrotophos, from the forensic report four days later (Al Jazeera, 21 July 2013, https://www.aljazeera.com/news/2013/7/21/pesticide-found-in-deadly-india-school-meal). Antidote names the chemical from the label in under 30 seconds, with its WHO hazard class and the national guideline's own sentences, for about 4 US cents.
->
-> In 94 percent of recorded acute pesticide poisonings in India the chemical went unidentified (PAN India analysis of government data, 2026). It was printed on the bottle in the family's hand. Paraquat kills 50 to 90 percent of patients in Indian hospitals, and the first error is treating it like an organophosphate.
+> **Four days to name the poison.** In July 2013, 23 children in Gandaman, Bihar, died after a school lunch was cooked in oil kept in a pesticide container. Police named the chemical, monocrotophos, four days later ([Al Jazeera](https://www.aljazeera.com/news/2013/7/21/pesticide-found-in-deadly-india-school-meal)). On a pesticide bottle, the name is printed on the label. Antidote reads it, for about 4 US cents of model calls per card.
 
-Decision support for trained clinicians. Airway, breathing, circulation first. National Poisons Information Centre, AIIMS: 1800-116-117.
+Decision support for trained clinicians. Airway, breathing and circulation come first. Every clinical sentence on a card is quoted from a national guideline, with its page. National Poisons Information Centre, AIIMS: 1800-116-117.
 
-## Judge it in two minutes
+![Paraquat card: stop cards first, then guideline quotes with their pages](docs/gallery/2-paraquat-stop-card.png)
 
-No sign-up and no key. Each row is one click.
+## Try it in two minutes (no sign-up, no key)
 
-| Criterion | Click | What you will see |
+| What to try | Link | What you will see |
 |---|---|---|
-| Technological implementation | [Run the Gramoxone (paraquat) label live](https://antidote-bay.vercel.app/try?sample=paraquat) | In under a minute: the registry names the chemical and its WHO class, fixed rules raise the stop cards, Nemotron 3 Super assembles a card made only of guideline sentences quoted with their pages, Nemotron 3 Ultra audits it against both national guidelines in full, and the Trace panel lists every model call with tokens, cost and seconds. |
-| Design | [The landing page](https://antidote-bay.vercel.app) | Pick the bottle that came in with the patient; the toxicity triangle, WHO class, stop cards and the quoted guideline line change with it. Then the full flow from label to bedside card to register row, in light and dark, on a phone or a desktop. |
-| Potential impact | [Validated against real-world evidence](#validated-against-real-world-evidence) | Published case series: Indian paraquat patients were first treated as organophosphate poisoning, and the diagnosis was finally made from photos of the bottle; in Bangladesh, 31.8 percent of patients were misdiagnosed from symptoms alone. Antidote reads that bottle. |
-| Quality of the idea | [The evals](https://antidote-bay.vercel.app/evals), then [the register](https://antidote-bay.vercel.app/register) | 0 unsafe cards on 55 published case reports and 68 real label photos; 10 of 12 documented misidentifications set right. The register turns the same records into a district early-warning signal for spraying clusters and banned chemicals. |
-| Your own data | [Your workspace](https://antidote-bay.vercel.app/data) | Add your hospital's own protocol and stock list; cards cite your protocol and show what is in stock. To call Antidote from your own system, create an API key on [the API page](https://antidote-bay.vercel.app/api). |
-| Your own agent | Add `https://antidote-api.vercel.app/mcp` as a remote MCP server in Claude, Cursor, VS Code or any MCP client | Four tools, no install: `list_chemicals`, `bedside_card` (the same quoted, rule-gated, Ultra-audited card), `read_guideline_page` to check a quote, and `surveillance_alerts`. |
+| A real label, live | [Gramoxone (paraquat)](https://antidote-bay.vercel.app/try?sample=paraquat): click **ingested**, then **Build the card** | Two stop cards first (no antidote; no extra oxygen unless hypoxic), then a card made only of guideline quotes with their pages, an Ultra audit, and every model call with its cost |
+| Two bottles, two treatments | [Landing page](https://antidote-bay.vercel.app): switch between Gramoxone and Dursban | The toxicity triangle, WHO class, stop cards and guideline line change with the bottle |
+| The district view | [Register](https://antidote-bay.vercel.app/register) | A spraying-cluster alert and a district brief, from demo register rows marked as synthetic |
+| The results | [Evals page](https://antidote-bay.vercel.app/evals) | 0 unsafe cards on 123 test cases; 107 unsourced doses from a general model against 0 from Antidote |
+| Your own hospital | [Data page](https://antidote-bay.vercel.app/data) | Add your own protocol and stock list; cards cite your protocol |
+| Your own AI agent | Add `https://antidote-api.vercel.app/mcp` as a remote MCP server in Claude, Cursor or VS Code | Four tools, no install: `list_chemicals`, `bedside_card`, `read_guideline_page`, `surveillance_alerts` |
 
-## Live
+Web: https://antidote-bay.vercel.app. API: https://antidote-api.vercel.app (OpenAPI docs at [`/docs`](https://antidote-api.vercel.app/docs)). Demo video: https://youtu.be/S8XQYCcvGmM
 
-Web: https://antidote-bay.vercel.app. API: https://antidote-api.vercel.app (OpenAPI docs at `/docs`). Both run on Vercel's free plan; the API is a Python function with a 300 second budget, enough for the Nemotron 3 Ultra audit.
+## Why it matters
 
-## Status
+In **94 percent** of recorded acute pesticide poisonings in India, the chemical went unidentified ([PAN India, 2026](https://pan-india.org/wp-content/uploads/2026/01/Acute-Unintentional-Pesticide-poisonings-in-India_.pdf)). Yet every Indian pesticide label must carry the active ingredient, a colour-coded toxicity triangle and an antidote statement. The chemical decides the treatment:
 
-Complete end to end: pipeline, API, MCP server, web app, published evaluation.
+- In an Indian paraquat series, patients who could not name the poison were first treated for organophosphate poisoning, with atropine and oxygen, and oxygen worsens paraquat injury. The diagnosis was made from the bottle, or from **photos of it shared on WhatsApp** by relatives ([Dambal et al., 2021](https://nmji.in/reasons-for-under-reporting-of-paraquat-poisoning-in-india/)).
+- In a Bangladesh hospital series, **63 of 198 patients (31.8 percent)** were misdiagnosed from symptoms alone ([Verma, Eddleston et al., 2024](https://pmc.ncbi.nlm.nih.gov/articles/PMC11149373/)).
+- Case fatality ranges from **around 70 percent for paraquat** to close to 0 for many newer pesticides; WHO tells families to "take along the bottle" ([WHO, 2008](https://iris.who.int/handle/10665/44020)).
+- Where poison-centre guidance reaches the bedside, **patients leave hospital 3.43 days sooner** on average ([Galvão et al., 2011](https://pmc.ncbi.nlm.nih.gov/articles/PMC10865900/)).
+- In Yavatmal in 2017, about 800 cotton farm workers were admitted to hospital after spraying and more than 20 died before an investigation was ordered ([Public Eye](https://toxicexports.publiceye.ch/)). Every one of them was in a hospital register.
 
-| Area | State |
+The full reference list is on the live site at [/references](https://antidote-bay.vercel.app/references).
+
+## What it does
+
+1. **Photograph the label.** Two different vision models read it. The chemical is used only when both reads agree and it appears in the text read.
+2. **Name the chemical.** Antidote matches it to India's pesticide registry, with its WHO hazard class and Indian regulatory status. Tavily checks unknown brands.
+3. **Stop first when it matters.** If no antidote exists (paraquat, for example), a stop card comes first. Deadly mistakes, such as atropine for paraquat, are blocked by fixed rules, not by the AI.
+4. **Build the bedside card.** Every clinical sentence is quoted word for word from the NHSRC poison-management module or the ISCCM 2024 position statement, with its page. The model never writes a dose.
+5. **Get a second opinion.** Nemotron 3 Ultra reads both guidelines in full and audits the card.
+6. **Refuse to guess.** A smudged or torn label gets a guarded card asking the doctor to confirm from the bottle.
+7. **Fill the paperwork.** One click saves the medico-legal register row, pre-filled from the label.
+8. **Warn the district.** Fixed rules flag a spraying cluster (3 cases of one chemical group in 7 days), banned chemicals still reaching patients, and restricted ones. Nemotron 3.5 Lightning writes the district officer's brief.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    A["Label photo"] --> B["Two vision reads<br/>Nemotron 3.5 Super VL + second model"]
+    B -->|both agree| C["Registry match<br/>chemical, WHO class, India status"]
+    C --> D{"Antidote exists?<br/>fixed rules"}
+    D -->|no| S["Stop card first"]
+    D --> E["Find guideline sentences<br/>NHSRC + ISCCM 2024"]
+    S --> E
+    E --> F["Nemotron 3 Super<br/>card made only of quotes"]
+    F --> G["Quote checker<br/>word for word on its page"]
+    G --> H["Nemotron 3 Ultra<br/>audits against both guidelines"]
+    H --> I["Bedside card"]
+    I --> J["Register row"]
+    J --> K["District alerts<br/>+ Nemotron 3.5 Lightning brief"]
+```
+
+**The design rule: AI reads and drafts; rules decide.** The registry decides the chemical and whether an antidote exists, fixed rules raise the stop cards and block lethal errors, and the quote checker replaces any quote not found on its page with the page itself.
+
+| Stage | Model or tool | Where it runs |
+|---|---|---|
+| Label reading | `nvidia/Nemotron-3.5-Super-VL`, cross-checked by `openbmb/MiniCPM-V-4_5` | Nebius Token Factory |
+| Label normalisation | `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B` | Nebius Token Factory |
+| Card from quotes only | `nvidia/nemotron-3-super-120b-a12b` | Nebius Token Factory |
+| Audit against both guidelines in full | `nvidia/Nemotron-3-Ultra-550b-a55b` (1M-token context) | Nebius Token Factory |
+| District brief (about 194,000 tokens, about one cent) | `nvidia/Nemotron-3_5-Lightning` | Nebius Token Factory |
+| Offline label reading | `NVIDIA-Nemotron-Nano-12B-v2-VL` via llama.cpp | Laptop GPU |
+| Brand check, ban watch, document fetching | Tavily search and extract | Tavily API |
+
+Every call is written to a ledger (model, tokens, US dollars, seconds) and shown in the app's Trace panel.
+
+**Data.** The registry covers 35 active ingredients in 12 chemical groups with Indian status. The WHO 2019 hazard classification is parsed into 649 chemicals, each with its source line. The guideline corpus is 349 pages. The WHO and Indian CIB&RC documents block automated downloads, so Tavily extract fetched them.
+
+**Nebius AI Cloud.** A Serverless Endpoint served NVIDIA Nemotron Nano 12B v2 VL with vLLM on one L40S for a single-reader run of the label benchmark, and a Serverless Job cloned both of our repositories, ran every test and called the live APIs, PASS (records in the Sieve repository: [endpoint](https://github.com/usv240/sieve/blob/main/infra/endpoint-vl/RUN.md), [job](https://github.com/usv240/sieve/blob/main/infra/job-verify/RUN.md)).
+
+**Agents.** Antidote is a hosted MCP server (above) and a local MCP server with 7 tools (`apps/mcp/antidote_mcp.py`), registered with Hermes Agent. `scripts/outbreak_watch.py` (daily) and `scripts/ban_watch.py` (weekly, Tavily search for new ban notices) run as Hermes cron jobs. The district brief also ran inside an NVIDIA OpenShell sandbox that can reach only Token Factory ([`infra/openshell/DEMONSTRATED.md`](infra/openshell/DEMONSTRATED.md)), and Hermes ran in an NVIDIA NemoClaw sandbox ([`infra/nemoclaw/DEMONSTRATED.md`](infra/nemoclaw/DEMONSTRATED.md)).
+
+## Results
+
+Ground truth comes from published papers and real label photos, not from Antidote's own registry. Every number, its raw output file and the command that reruns it are in [EVIDENCE.md](EVIDENCE.md).
+
+| Test | Result |
 |---|---|
-| Design rule | Models read; tables and rules decide. Every clinical sentence on a card is a verbatim quote from a cited guideline page, checked by a deterministic verifier and audited by Nemotron 3 Ultra. The model never writes a dose. |
-| Registry | 35 active ingredients across 12 chemical groups with India status; WHO 2019 classification parsed into 649 rows with source lines (96.9 percent agreement with the hand-seeded classes); CIB&RC Major Uses tables for insecticides and herbicides. |
-| Corpus | NHSRC poison-management module, ISCCM 2024 position statement, NHSRC medico-legal guideline, Insecticides Rules 1971, WHO 2019 text, CIB&RC tables: 349 pages. WHO and CIB&RC documents block automated download; they were fetched server-side with Tavily extract. |
-| Safety rules | 9 deterministic rules: atropine or oximes for any non-cholinergic group, paraquat oxygen caution, induced vomiting, model-written doses, identify-before-antidote. |
-| Pipeline | Read label (NVIDIA Nemotron 3.5 Super VL, cross-checked by a second model; the chemical is used only when both agree), Nemotron 3 Nano normalisation, deterministic registry match with Tavily brand fallback, table-driven stop cards, Nemotron 3 Super quote-only composition, verifier, rules gate, Nemotron 3 Ultra audit with both guideline documents in context, register row. |
-| Web | Landing that teaches the domain, Try flow with six samples, register, evals, how it works, scope and safeguards, references, about, data, API. Light and dark, phone and desktop, info buttons from one glossary. |
-| Eval | Lethal-error sentences blocked 10 of 10 by rules alone. No-antidote labels: stop card 20 of 20 and zero atropine or oxime mentions in the card 20 of 20. Non-pesticides routed away from antidotes 10 of 10. Organophosphates never falsely stopped 10 of 10. Citation integrity 100 percent: a quote not found word for word on its page is replaced by the page itself. **Published case reports, two pre-registered sets:** 55 open-access poisoning case reports, verified quote by quote. On the live code: 0 unsafe cards, 44 specific and correct, 10 of 12 documented misidentifications set right, every other case held safely for confirmation; two judges found 83.6 and 98.1 percent of cards consistent with the authors' management. With cholinergic signs recorded, the class-level rule guided both class-only organophosphate cases correctly. **Real label photos:** 68 photos of Indian pesticide bottles from product pages, annotated by eye before any run. 0 unsafe cards, 49 read correctly (83.3 percent when the chemical is legible), the rest held for the doctor to confirm from the bottle. The safeguards: two independent reads that must agree, a grounding gate so only chemicals actually read reach the registry, a Tavily check of the brand's registered composition, and a rule that the organophosphate leads any mixture. See `eval/results/`. |
+| 55 open-access poisoning case reports, two pre-registered sets ([`eval/PREREG-case-reports.md`](eval/PREREG-case-reports.md), [`v2`](eval/PREREG-case-reports-v2.md)) | **0 unsafe cards**; 44 specific and correct; **10 of 12** cases where the treating team first mistook the poison set right; every other case held for confirmation |
+| Agreement with the treating doctors' management | Two independent judges: 83.6 and 98.1 percent of cards consistent |
+| 68 photos of real Indian pesticide labels | **0 unsafe cards**; 49 read correctly (83.3 percent when the chemical is legible); the rest held for the doctor to confirm from the bottle |
+| Against a general model, same 55 cases ([`eval/PREREG-baseline-general-model.md`](eval/PREREG-baseline-general-model.md)) | Nemotron 3 Super asked directly wrote **107 drug doses with no source** in 47 of 55 answers. Antidote's cards: **0** |
+| Safety controls | Lethal-error sentences blocked by rules 10 of 10; no-antidote labels raise a stop card 20 of 20; non-pesticides kept away from antidotes 10 of 10; organophosphates never falsely stopped 10 of 10 |
+| Citations and classes | Quote integrity 100 percent; WHO class agreement 96.9 percent |
 
-## Surveillance: the register as an early-warning signal
+## Run it locally
 
-In Yavatmal in 2017 about 800 farm workers were admitted to hospital after spraying cotton, and more than 20 died, between July and October; the state ordered an investigation only at the beginning of October (Public Eye, https://toxicexports.publiceye.ch/). Every patient was in a hospital register. Antidote reads its register for that signal (Register page, `GET /v1/surveillance/alerts`, `POST /v1/surveillance/brief`):
+You need Python 3.12+, [uv](https://docs.astral.sh/uv/) and Node 20+.
 
-- **Fixed rules decide.** Three or more cases of one chemical group within seven days is a cluster, a spraying cluster when they came from skin or inhaled exposure. Banned chemicals still reaching patients and restricted-use chemicals are flagged. The same register always gives the same alerts, and tests enforce them.
-- **Nemotron 3.5 Lightning explains.** It reads the whole register, the alerts, the regulatory status of every chemical and the full text of every published case report about those chemicals, about 200,000 tokens in one call for about one cent, and writes a district brief. It cannot add or remove an alert, and the bedside safety rules remove any item that breaks them.
-- **OpenShell contains it.** On our laptop the brief also runs in a sandbox that can reach only Token Factory (`infra/openshell/DEMONSTRATED.md`).
-- **A general model knows the textbook; Antidote reads the bottle.** Pre-registered against Nemotron 3 Super asked directly, on the same 55 published cases with the chemical name typed in for it: the general model wrote 107 drug doses with no source in 47 of 55 answers and never held back when the product was unknown. Antidote's cards contain only quoted guideline sentences with their pages, and in real hospitals the chemical name is the part that is missing (`eval/results/BASELINE-GENERAL-MODEL.md`).
-- **Hermes keeps watch.** `scripts/outbreak_watch.py` (daily, silent unless something new) and `scripts/ban_watch.py` (weekly, Tavily search for new ban notices, changes nothing) are written as Hermes cron jobs. The demo register rows are synthetic and marked.
-
-## Where the models run
-
-| Stage | Model | Platform |
-|---|---|---|
-| Label normalisation | `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B` | Nebius Token Factory (EU) |
-| Card composition from quotes | `nvidia/nemotron-3-super-120b-a12b` | Nebius Token Factory (US) |
-| Audit against the full national module and ISCCM statement | `nvidia/Nemotron-3-Ultra-550b-a55b`, 1M context | Nebius Token Factory (US) |
-| Label photo reading | `nvidia/Nemotron-3.5-Super-VL`, cross-checked by `openbmb/MiniCPM-V-4_5`; offline `NVIDIA-Nemotron-Nano-12B-v2-VL` via llama.cpp | Nebius Token Factory; laptop GPU offline |
-| Brand resolution and document fetching | Tavily search and extract | Tavily API |
-
-Every call is written to a ledger (tier, model, tokens, USD, latency) and shown in the app's Trace panel.
-
-## Nebius Serverless, run and stopped
-
-- **Job: verify both entries from a clean machine.** A Serverless Job cloned both public repositories, ran every test and the published safety checks, and called both live APIs. Result PASS in about 3 minutes (`sieve/infra/job-verify/RUN.md`).
-- **Endpoint: an open NVIDIA vision model on our own GPU.** A Serverless Endpoint served NVIDIA Nemotron Nano 12B v2 VL with vLLM on one L40S, and both photo benchmarks were rerun with it as the only reader. It read 92.9 percent of legible Indian pesticide labels correctly on its own, and showed why Antidote pairs two independent reads with a brand check: together they give 0 unsafe cards in 68 (`sieve/infra/endpoint-vl/RUN.md`). Stopped after the run; about $1 in total.
-
-## Where Token Factory accelerated our workflow
-
-- **Four NVIDIA models behind one key and one API shape.** Nemotron 3 Nano normalises labels, 3 Super assembles cards, 3 Ultra audits them and 3.5 Super VL reads photos, all through the same OpenAI-compatible call. Moving a stage between tiers is a one-line change.
-- **An auditor that reads both national guidelines at once.** Nemotron 3 Ultra checks every card against the complete NHSRC module and ISCCM 2024 statement in one long-context call. Hosting a 550B model ourselves was out of reach.
-- **Evaluation on every change.** The case-report benchmark, the label-photo benchmark and the negative controls each cost cents to a few dollars per run, so every safety change was checked against all of them, and every run is in the repository.
-- **A vision model appeared mid-hackathon and we switched in a day.** Nemotron 3.5 Super VL arrived in the catalog; adopting it took a model id and one request flag, and it fixed label misreads the previous reader made.
-- **One ledger.** Every call records tier, model, tokens, dollars and latency, shown to the doctor in the Trace panel. That transparency came almost free because every model sits behind one endpoint.
-
-## Screenshots
-
-`docs/screenshots/landing-dark.jpg`, `docs/screenshots/landing-light.jpg`, and the paraquat stop cards in `docs/screenshots/try-paraquat-dark.jpg`.
-
-## Quick start
-
-```
+```bash
 git clone https://github.com/usv240/antidote && cd antidote
-cp .env.example .env            # add NEBIUS_API_KEY and TAVILY_API_KEY
-make setup
-make test                       # 49 tests
-make eval                       # writes eval/results/latest.json and REPORT.md
-make dev                        # API on :8010, OpenAPI at /docs
-cd apps/web && npm install && npm run dev   # web on :3010
+cp .env.example .env        # add NEBIUS_API_KEY and TAVILY_API_KEY
+make setup                  # install Python packages
+make test                   # 57 tests, no key needed
+make fetch-corpus           # download the public guideline PDFs
+make ingest                 # build the search index
+make dev                    # API on http://localhost:8000, docs at /docs
+cd apps/web && npm install && npm run dev   # web on http://localhost:3000
 ```
 
-The guideline PDFs the public can fetch are pulled by `scripts/fetch_corpus.sh`; the WHO and CIB&RC texts arrive via Tavily extract. `make ingest` rebuilds the index.
+Other commands:
 
-## Prior art, named
+- `make eval` reruns the evaluation and writes `eval/results/latest.json`.
+- `make smoke` makes one real Token Factory call per model tier and prints tokens and cost.
 
-webPOISONCONTROL triages consumers in the United States from barcodes. SprayWise, a student hackathon project, reads labels for farmers' harvest intervals. Poison-information centres and textbooks hold the knowledge. Nothing reads the bottle for the doctor at the bedside, matches it to the Indian registry and the WHO class, assembles guidance from quoted sentences only, stops on the lethal errors, and fills the medico-legal register.
+## Repository
 
-## Validated against real-world evidence
+| Path | What it holds |
+|---|---|
+| `apps/api` | FastAPI service, hosted MCP endpoint |
+| `apps/web` | Next.js web app |
+| `apps/mcp` | Local MCP server |
+| `packages/core` | The card pipeline, registry, surveillance and the WHO table |
+| `packages/rules` | Clinical safety rules (`antidote.yaml`) and the rules engine |
+| `packages/retrieval` | Guideline ingestion and search |
+| `packages/llm` | Token Factory client, model router and cost ledger |
+| `packages/vision` | Two-reader label reading |
+| `packages/eval` | Benchmarks; results in `eval/results` |
+| `infra` | OpenShell and NemoClaw sandboxes |
+| `scripts` | Hermes watch jobs and data collection |
+| `tests` | Test suite, run in CI on every push |
 
-Antidote is checked against what treating doctors have already published: 55 open-access poisoning case reports in two pre-registered sets, each run through Antidote and compared with the authors' own management by two independent judges, plus 68 photos of real Indian pesticide labels. Its clinical text comes only from the NHSRC poison-management module and the ISCCM 2024 position statement, quoted word for word with the page.
+More: [EVIDENCE.md](EVIDENCE.md) (every number and how to rerun it), [FEEDBACK.md](FEEDBACK.md) (our notes on Nebius and NVIDIA tools), [DEPLOY.md](DEPLOY.md) (how the live site is deployed).
 
-### What the published evidence says
+## Prior work
 
-- **Doctors treat the wrong poison when nobody can name it, and the bottle settles it.** In an Indian paraquat series, many patients could not name the agent, so initial treatment was directed at organophosphorus poisoning: before referral they received atropine, pralidoxime and oxygen, and "oxygen therapy is known to cause free radical injury and increased mortality in these patients". The diagnosis was made from the container, or from pictures of it shared on WhatsApp by relatives (Dambal et al., National Medical Journal of India 2021, https://nmji.in/reasons-for-under-reporting-of-paraquat-poisoning-in-india/). That photo is exactly what Antidote reads.
-- **The toxidrome alone misleads.** In a Bangladesh hospital series, 63 of 198 patients (31.8 percent) were misdiagnosed from the clinical toxidrome; "identification of the specific compound is essential for anticipating and reducing complications, administering appropriate and timely management" (Verma, Lamb, Sattar, Ghose, Eddleston, Trans R Soc Trop Med Hyg 2024, https://pmc.ncbi.nlm.nih.gov/articles/PMC11149373/).
-- **The product decides the outcome.** Case fatality ranges from around 70 percent for paraquat and aluminium phosphide to close to 0 percent for many newer pesticides; WHO tells families to "take along the bottle" (WHO, Clinical management of acute pesticide intoxication, 2008, https://iris.who.int/handle/10665/44020).
-- **The specific chemical is rarely recorded.** A systematic review of lethal poisoning in India found pesticides behind 94.5 percent of the poisoning deaths studied, yet "few papers identified the specific organophosphorus insecticide responsible" (Karunarathne et al., BMC Public Health 2021, https://link.springer.com/article/10.1186/s12889-021-11156-2).
-- **Highly hazardous products are still on the shelf.** Of 318 pesticides registered in India in 2019, 18 were WHO class Ia or Ib (Bonvoisin et al., BMC Public Health 2020, https://link.springer.com/article/10.1186/s12889-020-8339-z). Antidote shows the WHO class and the Indian regulatory status on every card.
-- **Expert guidance is scarce, and it works.** Most emergency physicians surveyed in south and east India reported having no poison centre, and most there were unaware of the national hotline (Blanchard et al., Toxicology Communications 2019, https://doi.org/10.1080/24734306.2019.1635725). Where poison-centre guidance is available, patients stay in hospital 3.43 days less on average (Galvão et al., Sao Paulo Medical Journal 2011, https://pmc.ncbi.nlm.nih.gov/articles/PMC10865900/). Antidote puts the national guideline's own sentences, and the poison-centre number, on every card.
-
-## Documents
-
-- [EVIDENCE.md](EVIDENCE.md): every published number, its raw output file, and the command that reruns it.
-
-`docs/IDEA.md`, `docs/PLAN.md`, `docs/TECHNICAL-DESIGN.md`, `docs/UX-DESIGN.md`, `FEEDBACK.md`, `DEPLOY.md`. Shared platform with Sieve, our other entry: different domain, practitioner, corpus and record.
+webPOISONCONTROL triages consumers in the United States from barcodes, and SprayWise reads labels for farmers' harvest intervals. Antidote is built for the doctor at the bedside: it matches the label to the Indian registry and WHO class, builds guidance only from quoted guideline sentences, stops on lethal errors, and fills the medico-legal register.
 
 ## Licence and data
 
-Apache-2.0. Government of India documents are reproduced with acknowledgement; WHO text is quoted with attribution; the ISCCM statement is open access. Patient identifiers never enter the system; the register stores substance fields only.
+Apache-2.0. Government of India documents are reproduced with acknowledgement; WHO text is quoted with attribution; the ISCCM statement is open access. Patient identifiers never enter the system; the register stores substance fields only, and the demo register rows are synthetic and marked.
