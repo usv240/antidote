@@ -39,7 +39,7 @@ Yes. Token Factory was the fastest path from idea to a measured result we have u
 - Installed on native Windows via `uv tool install hermes-agent --with "mcp>=1.2"`; the PyPI release (0.19.0) does not include the mcp SDK, so MCP servers fail with a clear message until the extra is added.
 - 0.19.0 predates the built-in `nebius-token-factory` provider documented on the site; `provider: custom` with the US base URL and `key_env: NEBIUS_API_KEY` works for Nemotron 3 Super.
 - Config lives in `%LOCALAPPDATA%\hermes` on Windows, not `~/.hermes`; `hermes config path` tells you.
-- `hermes mcp test antidote` discovered all six Antidote tools; a one-shot `hermes -z` diagnosis on Nemotron 3 Super called identify_device and analyze_fault correctly.
+- `hermes mcp test antidote` discovered all six Antidote tools: classify_chemical, read_label_photo, analyze_label, read_guideline_page, file_mlc_record and surveillance_alerts.
 - Cron `--script` runs under Hermes's own interpreter and home directory; a two-line wrapper that calls the repo's venv was needed. Worth documenting.
 
 ## NVIDIA OpenShell and NemoClaw (2026-10-14)
